@@ -1,0 +1,9 @@
+{
+  "name": "Route 1",
+  "encounters": [
+    {"creature_id": "zapprat", "level_min": 2, "level_max": 5, "weight": 40},
+    {"creature_id": "fluffowl", "level_min": 2, "level_max": 4, "weight": 30},
+    {"creature_id": "bugbean", "level_min": 2, "level_max": 4, "weight": 25},
+    {"creature_id": "pebblite", "level_min": 3, "level_max": 5, "weight": 5}
+  ]
+}

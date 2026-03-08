@@ -1,0 +1,73 @@
+{
+  "zapprat": {
+    "name": "Zapprat",
+    "description": "A small electric rodent found in tall grass.",
+    "types": ["electric"],
+    "base_hp": 35,
+    "base_attack": 40,
+    "base_defense": 30,
+    "base_sp_attack": 50,
+    "base_sp_defense": 35,
+    "base_speed": 60,
+    "base_exp": 55,
+    "learnset": [
+      {"level": 1, "move_id": "tackle"},
+      {"level": 4, "move_id": "thunder_shock"},
+      {"level": 8, "move_id": "quick_attack"},
+      {"level": 12, "move_id": "spark"}
+    ]
+  },
+  "fluffowl": {
+    "name": "Fluffowl",
+    "description": "A round bird covered in soft down feathers.",
+    "types": ["normal", "flying"],
+    "base_hp": 40,
+    "base_attack": 45,
+    "base_defense": 35,
+    "base_sp_attack": 35,
+    "base_sp_defense": 35,
+    "base_speed": 50,
+    "base_exp": 50,
+    "learnset": [
+      {"level": 1, "move_id": "tackle"},
+      {"level": 3, "move_id": "growl"},
+      {"level": 7, "move_id": "gust"},
+      {"level": 11, "move_id": "quick_attack"}
+    ]
+  },
+  "pebblite": {
+    "name": "Pebblite",
+    "description": "A living rock with stubby arms. Very slow but tough.",
+    "types": ["rock"],
+    "base_hp": 45,
+    "base_attack": 55,
+    "base_defense": 70,
+    "base_sp_attack": 25,
+    "base_sp_defense": 40,
+    "base_speed": 20,
+    "base_exp": 58,
+    "learnset": [
+      {"level": 1, "move_id": "tackle"},
+      {"level": 4, "move_id": "harden"},
+      {"level": 8, "move_id": "rock_throw"},
+      {"level": 12, "move_id": "headbutt"}
+    ]
+  },
+  "bugbean": {
+    "name": "Bugbean",
+    "description": "A cheerful bug creature shaped like a bean. Very common.",
+    "types": ["bug"],
+    "base_hp": 40,
+    "base_attack": 35,
+    "base_defense": 40,
+    "base_sp_attack": 30,
+    "base_sp_defense": 40,
+    "base_speed": 45,
+    "base_exp": 40,
+    "learnset": [
+      {"level": 1, "move_id": "tackle"},
+      {"level": 3, "move_id": "string_shot"},
+      {"level": 7, "move_id": "bug_bite"}
+    ]
+  }
+}
