@@ -38,7 +38,17 @@ func _setup_debug_party() -> void:
 	var starter := CreatureInstance.create("flame_squire", 5)
 	starter.nickname = "Flame Squire"
 	player_party.append(starter)
-	print("[GameManager] Debug company created: %s (Lv.%d)" % [starter.nickname, starter.level])
+
+	var second := CreatureInstance.create("grove_druid", 4)
+	second.nickname = "Grove Druid"
+	player_party.append(second)
+
+	var third := CreatureInstance.create("tide_cleric", 5)
+	third.nickname = "Tide Cleric"
+	player_party.append(third)
+
+	for c in player_party:
+		print("[GameManager] Debug company: %s (Lv.%d)" % [c.nickname, c.level])
 
 
 # ─── State Management ────────────────────────────────────────────
@@ -59,6 +69,24 @@ func get_first_alive_creature() -> CreatureInstance:
 		if not creature.is_fainted():
 			return creature
 	return null
+
+
+func get_battle_team(max_active: int = 3) -> Dictionary:
+	## Returns {"active": Array, "reserves": Array} of CreatureInstance objects.
+	## Active team is the first N alive creatures, reserves are the rest.
+	## Note: Uses untyped arrays to avoid Godot 4 typed-array-through-Dictionary issues.
+	var active: Array = []
+	var reserves: Array = []
+
+	for creature in player_party:
+		if creature.is_fainted():
+			continue
+		if active.size() < max_active:
+			active.append(creature)
+		else:
+			reserves.append(creature)
+
+	return {"active": active, "reserves": reserves}
 
 
 func add_creature_to_party(creature: CreatureInstance) -> bool:
@@ -134,8 +162,10 @@ func load_game(slot: int = 0) -> bool:
 
 	var data: Dictionary = json.data
 	player_name = data.get("player_name", "Captain")
-	gold = data.get("gold", 500)
-	guild_ranks = data.get("guild_ranks", [])
+	gold = int(data.get("gold", 500))
+	guild_ranks.clear()
+	for rank in data.get("guild_ranks", []):
+		guild_ranks.append(String(rank))
 	story_flags = data.get("story_flags", {})
 	inventory = data.get("inventory", {})
 
@@ -144,11 +174,11 @@ func load_game(slot: int = 0) -> bool:
 	for creature_data in data.get("party", []):
 		var creature := CreatureInstance.create(
 			creature_data["creature_id"],
-			creature_data["level"]
+			int(creature_data["level"])
 		)
 		creature.nickname = creature_data.get("nickname", creature.nickname)
-		creature.current_hp = creature_data.get("current_hp", creature.max_hp)
-		creature.experience = creature_data.get("experience", 0)
+		creature.current_hp = int(creature_data.get("current_hp", creature.max_hp))
+		creature.experience = int(creature_data.get("experience", 0))
 		player_party.append(creature)
 
 	print("[GameManager] Game loaded from %s" % path)
