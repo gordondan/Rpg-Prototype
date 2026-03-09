@@ -21,10 +21,10 @@
       {"level": 12, "move_id": "lightning_stab"}
     ]
   },
-  "wind_scout": {
-    "name": "Wind Scout",
-    "description": "A wandering archer who rides the wind. Light on their feet and deadly at range.",
-    "types": ["normal", "flying"],
+  "goblin_firebomber": {
+    "name": "Goblin Firebomber",
+    "description": "A reckless goblin that hurls crude firebombs at anything that moves. Dangerously unpredictable.",
+    "types": ["normal"],
     "base_hp": 40,
     "base_attack": 45,
     "base_defense": 35,
@@ -32,14 +32,14 @@
     "base_sp_defense": 35,
     "base_speed": 50,
     "base_exp": 50,
-    "class": "ranger",
+    "class": "monster",
     "recruit_method": "defeat",
     "recruit_chance": 0.35,
-    "recruit_dialogue": "Not bad! I've been looking for a worthy leader. Count me in.",
+    "recruit_dialogue": "Oi! You beat me fair n' square. Fine... I'll throw bombs for YOU now!",
     "learnset": [
       {"level": 1, "move_id": "dagger_jab"},
       {"level": 3, "move_id": "war_cry"},
-      {"level": 7, "move_id": "gale_shot"},
+      {"level": 6, "move_id": "fire_bolt"},
       {"level": 11, "move_id": "swift_strike"}
     ]
   },
@@ -105,6 +105,28 @@
       {"level": 1, "move_id": "dagger_jab"},
       {"level": 3, "move_id": "binding_hex"},
       {"level": 7, "move_id": "venom_fang"}
+    ]
+  },
+  "wind_scout": {
+    "name": "Wind Scout",
+    "description": "A swift ranger who rides the gales. Scouts ahead of caravans and strikes from above.",
+    "types": ["normal", "flying"],
+    "base_hp": 40,
+    "base_attack": 47,
+    "base_defense": 35,
+    "base_sp_attack": 35,
+    "base_sp_defense": 35,
+    "base_speed": 70,
+    "base_exp": 52,
+    "class": "ranger",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.25,
+    "recruit_dialogue": "You caught me? Impressive speed. I'll fly with you — for now.",
+    "learnset": [
+      {"level": 1, "move_id": "swift_strike"},
+      {"level": 1, "move_id": "war_cry"},
+      {"level": 5, "move_id": "gale_shot"},
+      {"level": 10, "move_id": "cross_slash"}
     ]
   }
 }

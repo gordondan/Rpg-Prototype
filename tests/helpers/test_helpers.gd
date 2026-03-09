@@ -19,7 +19,10 @@ static func make_creature(overrides: Dictionary = {}) -> CreatureInstance:
 	c.base_sp_defense = overrides.get("base_sp_defense", 50)
 	c.base_speed = overrides.get("base_speed", 50)
 
-	c.types = overrides.get("types", ["normal"])
+	var raw_types: Array = overrides.get("types", ["normal"])
+	c.types.clear()
+	for t in raw_types:
+		c.types.append(String(t))
 
 	# Calculate stats from base stats and level
 	c.max_hp = overrides.get("max_hp", int(((2.0 * c.base_hp + 31.0) * c.level / 100.0) + c.level + 10))
@@ -30,7 +33,11 @@ static func make_creature(overrides: Dictionary = {}) -> CreatureInstance:
 	c.speed = overrides.get("speed", int(((2.0 * c.base_speed + 31.0) * c.level / 100.0) + 5))
 
 	c.current_hp = overrides.get("current_hp", c.max_hp)
-	c.moves = overrides.get("moves", [])
+
+	var raw_moves: Array = overrides.get("moves", [])
+	c.moves.clear()
+	for m in raw_moves:
+		c.moves.append(m)
 
 	return c
 
