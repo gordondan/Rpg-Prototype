@@ -1,0 +1,11 @@
+{
+  "dirs": [
+    "res://tests/unit",
+    "res://tests/component",
+    "res://tests/integration"
+  ],
+  "prefix": "test_",
+  "suffix": ".gd",
+  "should_maximize": false,
+  "log_level": 1
+}
