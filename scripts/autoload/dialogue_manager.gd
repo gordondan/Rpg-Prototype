@@ -146,6 +146,40 @@ func _on_choice_made(choice_index: int, choice_id: String) -> void:
 					_dialogue_box.replace_upcoming_lines([
 						{"text": "You don't have enough gold for a room. Come back when you've got 25 gold.", "speaker": "Tavern Keeper"}
 					])
+		"recruit_fairy":
+			_recruit_creature("mischievous_fairy", 5, "fairy_recruited", "MischievousFairy")
+
+
+func _recruit_creature(creature_id: String, level: int, flag_name: String, npc_node_name: String = "") -> void:
+	## Create a creature and add it to the player's party. Sets a story flag to track recruitment.
+	## If npc_node_name is provided, removes that NPC from the map once dialogue ends.
+	var creature := CreatureInstance.create(creature_id, level)
+	var added_to_party := GameManager.add_creature_to_party(creature)
+
+	GameManager.set_flag(flag_name)
+
+	if added_to_party:
+		print("[DialogueManager] Recruited %s (Lv.%d) — added to party!" % [creature.nickname, level])
+	else:
+		print("[DialogueManager] Recruited %s (Lv.%d) — party full, sent to barracks." % [creature.nickname, level])
+		# Swap the follow-up to mention barracks
+		if _dialogue_box and is_instance_valid(_dialogue_box):
+			_dialogue_box.replace_upcoming_lines([
+				{"text": "%s joined your company! Your party is full, so they headed to the barracks." % creature.nickname, "speaker": ""}
+			])
+
+	# Remove the NPC from the map after dialogue finishes
+	if npc_node_name != "":
+		dialogue_ended.connect(_remove_npc_node.bind(npc_node_name), CONNECT_ONE_SHOT)
+
+
+func _remove_npc_node(npc_node_name: String) -> void:
+	## Find and remove a recruited NPC from the scene tree.
+	for npc in get_tree().get_nodes_in_group("npc"):
+		if npc.name == npc_node_name:
+			npc.queue_free()
+			print("[DialogueManager] Removed NPC node: %s" % npc_node_name)
+			return
 
 
 func get_dialogue_data(dialogue_id: String) -> Dictionary:

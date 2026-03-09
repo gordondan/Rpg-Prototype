@@ -129,6 +129,60 @@
     ]
   },
 
+  "mischievous_fairy": {
+    "name": "Mischievous Fairy",
+    "lines": [
+      {
+        "text": "Hee hee hee! You can see me? Most humans walk right past!",
+        "speaker": "Mischievous Fairy"
+      },
+      {
+        "text": "I've been SO bored hanging around this village. Nobody fun to play tricks on anymore.",
+        "speaker": "Mischievous Fairy"
+      },
+      {
+        "text": "You look like you're going on an adventure! Can I come? Pleeease?",
+        "speaker": "Mischievous Fairy",
+        "choices": [
+          {
+            "text": "Sure, welcome aboard!",
+            "id": "recruit_fairy",
+            "next": [
+              {
+                "text": "YAY! You won't regret this! ...Probably!",
+                "speaker": "Mischievous Fairy"
+              },
+              {
+                "text": "Mischievous Fairy joined your party!",
+                "speaker": ""
+              }
+            ]
+          },
+          {
+            "text": "Maybe later.",
+            "id": "decline_fairy",
+            "next": [
+              {
+                "text": "Aww... Fine. I'll be right here if you change your mind! *pouts*",
+                "speaker": "Mischievous Fairy"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "mischievous_fairy_recruited": {
+    "name": "Mischievous Fairy",
+    "lines": [
+      {
+        "text": "Hee hee! I'm already in your party, silly! Let's go cause some trouble!",
+        "speaker": "Mischievous Fairy"
+      }
+    ]
+  },
+
   "mysterious_stranger": {
     "name": "???",
     "requires_flag": "",

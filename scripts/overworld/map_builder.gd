@@ -423,6 +423,10 @@ func _place_npcs() -> void:
 	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 18))
 	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(30, 22))
 
+	# Recruitable NPCs — only show if not yet recruited
+	if not GameManager.get_flag("fairy_recruited"):
+		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14))
+
 
 func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i) -> void:
 	var npc := CharacterBody2D.new()
@@ -485,6 +489,8 @@ func _get_npc_color(npc_name: String) -> Color:
 			return Color(0.8, 0.6, 0.2)  # Orange
 		"Mysterious Stranger":
 			return Color(0.2, 0.2, 0.4)  # Dark blue
+		"Mischievous Fairy":
+			return Color(0.9, 0.5, 0.9)  # Pink/magenta
 		_:
 			return Color(0.5, 0.5, 0.5)  # Gray
 

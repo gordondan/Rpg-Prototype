@@ -50,11 +50,6 @@ func _setup_debug_party() -> void:
 	third.nickname = "Tide Cleric"
 	player_party.append(third)
 
-	# 4th party member (will be a reserve in battle since only 3 can be active)
-	var fourth := CreatureInstance.create("mischievous_fairy", 5)
-	fourth.nickname = "Mischievous Fairy"
-	player_party.append(fourth)
-
 	for c in player_party:
 		print("[GameManager] Debug party: %s (Lv.%d)" % [c.nickname, c.level])
 	for c in barracks:

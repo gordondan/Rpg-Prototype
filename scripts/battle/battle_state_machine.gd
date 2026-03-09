@@ -64,7 +64,7 @@ func start_battle(players: Array, enemies: Array,
 	else:
 		battle_message.emit("The enemy commanders send forth their warriors!")
 
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(2.0).timeout
 	_start_new_round()
 
 
@@ -206,7 +206,7 @@ func _do_enemy_action(turn_data: Dictionary) -> void:
 
 	if available_moves.is_empty():
 		battle_message.emit("%s has no moves left!" % creature.nickname)
-		await get_tree().create_timer(0.8).timeout
+		await get_tree().create_timer(1.2).timeout
 		_current_turn_idx += 1
 		_process_next_turn()
 		return
@@ -273,10 +273,30 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 	if not is_player_attacking:
 		attacker_label = "Enemy " + attacker.nickname
 
-	battle_message.emit("%s casts %s on %s!" % [
-		attacker_label, move_data.get("name", "???"), defender.nickname
-	])
-	await get_tree().create_timer(0.8).timeout
+	var move_category: String = move_data.get("category", "physical")
+	var move_name: String = move_data.get("name", "???")
+
+	# Status moves target differently — some target self
+	var effect: Dictionary = move_data.get("effect", {})
+	var targets_self: bool = effect.get("target", "enemy") == "self"
+
+	if targets_self:
+		battle_message.emit("%s uses %s!" % [attacker_label, move_name])
+	else:
+		battle_message.emit("%s casts %s on %s!" % [attacker_label, move_name, defender.nickname])
+	await get_tree().create_timer(1.2).timeout
+
+	# Handle status moves separately from damaging moves
+	if move_category == "status":
+		# Accuracy check for status moves
+		var accuracy: int = move_data.get("accuracy", 100)
+		if accuracy < 100 and randi() % 100 >= accuracy:
+			battle_message.emit("But it missed!")
+			await get_tree().create_timer(1.0).timeout
+			return
+
+		await _apply_status_effect(attacker, defender, move_data, is_player_attacking, target_index)
+		return
 
 	var result := BattleCalculator.calculate_damage(attacker, defender, move_data)
 
@@ -290,19 +310,26 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 
 		if result["critical"]:
 			battle_message.emit("A critical hit!")
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.8).timeout
 
 		if result["effectiveness_text"] != "":
 			battle_message.emit(result["effectiveness_text"])
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.8).timeout
 
-	await get_tree().create_timer(0.4).timeout
+		# Check for damaging moves that also have status side-effects (e.g. fire_bolt burn chance)
+		var dmg_effect: Dictionary = move_data.get("effect", {})
+		var effect_chance: int = move_data.get("effect_chance", 0)
+		if not dmg_effect.is_empty() and effect_chance > 0:
+			if randi() % 100 < effect_chance:
+				await _apply_status_effect(attacker, defender, move_data, is_player_attacking, target_index)
+
+	await get_tree().create_timer(0.6).timeout
 
 	# Check if defender fainted
 	if defender.is_fainted():
 		battle_message.emit("%s has been defeated!" % defender.nickname)
 		creature_fainted.emit(not is_player_attacking, target_index)
-		await get_tree().create_timer(0.8).timeout
+		await get_tree().create_timer(1.2).timeout
 
 		# If a player creature defeated an enemy, gain EXP
 		if is_player_attacking and not attacker.is_fainted():
@@ -310,15 +337,15 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 			var leveled_up: bool = attacker.gain_experience(exp_amount)
 			battle_message.emit("%s gained %d EXP!" % [attacker.nickname, exp_amount])
 			exp_gained.emit(attacker, exp_amount, leveled_up)
-			await get_tree().create_timer(0.6).timeout
+			await get_tree().create_timer(1.0).timeout
 
 			if leveled_up:
 				battle_message.emit("%s reached level %d!" % [attacker.nickname, attacker.level])
-				await get_tree().create_timer(0.8).timeout
+				await get_tree().create_timer(1.2).timeout
 			else:
 				var remaining: int = attacker._exp_for_next_level() - attacker.experience
 				battle_message.emit("%d more EXP to level %d" % [remaining, attacker.level + 1])
-				await get_tree().create_timer(0.6).timeout
+				await get_tree().create_timer(1.0).timeout
 
 		# If player ally fainted, try to swap in a reserve
 		if not is_player_attacking:
@@ -328,7 +355,7 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 func _attempt_escape() -> void:
 	if not is_wild_battle:
 		battle_message.emit("There's no retreating from this duel!")
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.5).timeout
 		_waiting_for_player = true
 		var turn_data: Dictionary = _turn_order[_current_turn_idx]
 		request_player_action.emit(turn_data["creature"], int(turn_data["index"]))
@@ -348,12 +375,12 @@ func _attempt_escape() -> void:
 
 	if randf() < escape_chance:
 		battle_message.emit("Your party retreated safely!")
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.5).timeout
 		_set_state(BattleState.RUN)
 		battle_ended.emit("run")
 	else:
 		battle_message.emit("The enemies cut off your retreat!")
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.5).timeout
 		_current_turn_idx += 1
 		_process_next_turn()
 
@@ -371,7 +398,7 @@ func _try_swap_reserve(fallen_index: int) -> void:
 			battle_message.emit("%s steps up to fight!" % replacement.nickname)
 			creature_hp_changed.emit(true, fallen_index,
 				replacement.current_hp, replacement.max_hp)
-			await get_tree().create_timer(1.0).timeout
+			await get_tree().create_timer(1.5).timeout
 			return
 
 
@@ -398,7 +425,7 @@ func _do_swap(turn_data: Dictionary, reserve_index: int) -> void:
 		active_creature.nickname, incoming.nickname
 	])
 	creature_hp_changed.emit(true, active_idx, incoming.current_hp, incoming.max_hp)
-	await get_tree().create_timer(1.2).timeout
+	await get_tree().create_timer(1.5).timeout
 
 
 # --- End-of-round ---
@@ -432,12 +459,12 @@ func _resolve_round() -> void:
 			creature_hp_changed.emit(data["is_player"], data["index"],
 				creature.current_hp, creature.max_hp)
 			battle_message.emit(status_msg)
-			await get_tree().create_timer(0.6).timeout
+			await get_tree().create_timer(1.0).timeout
 
 			if creature.is_fainted():
 				battle_message.emit("%s has been defeated!" % creature.nickname)
 				creature_fainted.emit(data["is_player"], data["index"])
-				await get_tree().create_timer(0.6).timeout
+				await get_tree().create_timer(1.2).timeout
 				if data["is_player"]:
 					await _try_swap_reserve(data["index"])
 
@@ -459,7 +486,7 @@ func _check_battle_end() -> bool:
 
 	if all_enemies_down:
 		battle_message.emit("All enemies have been defeated!")
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(2.0).timeout
 		_set_state(BattleState.WIN)
 		battle_ended.emit("win")
 		return true
@@ -478,12 +505,109 @@ func _check_battle_end() -> bool:
 
 	if all_players_down:
 		battle_message.emit("Your entire party has fallen!")
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(2.0).timeout
 		_set_state(BattleState.LOSE)
 		battle_ended.emit("lose")
 		return true
 
 	return false
+
+
+# --- Status effect handling ---
+
+func _apply_status_effect(attacker, defender, move_data: Dictionary,
+		is_player_attacking: bool, target_index: int) -> void:
+	## Apply status move effects (stat changes, status conditions) and show messages.
+	var effect: Dictionary = move_data.get("effect", {})
+	if effect.is_empty():
+		battle_message.emit("But nothing happened!")
+		await get_tree().create_timer(1.0).timeout
+		return
+
+	var targets_self: bool = effect.get("target", "enemy") == "self"
+	var target_creature = attacker if targets_self else defender
+	var target_label: String = target_creature.nickname
+
+	# Stat stage changes (e.g. war_cry lowers attack, iron_guard raises defense)
+	if effect.has("stat"):
+		var stat_name: String = effect["stat"]
+		var stages: int = int(effect.get("stages", 0))
+
+		# Apply the stat change to the creature's actual stats
+		_apply_stat_stages(target_creature, stat_name, stages)
+
+		# Build a descriptive message
+		var stat_display := _get_stat_display_name(stat_name)
+		var change_text: String
+		if stages >= 2:
+			change_text = "rose sharply!"
+		elif stages == 1:
+			change_text = "rose!"
+		elif stages == -1:
+			change_text = "fell!"
+		elif stages <= -2:
+			change_text = "fell sharply!"
+		else:
+			change_text = "changed!"
+
+		battle_message.emit("%s's %s %s" % [target_label, stat_display, change_text])
+		await get_tree().create_timer(1.2).timeout
+
+	# Status conditions (e.g. poison, burn, sleep)
+	if effect.has("status"):
+		var status: String = effect["status"]
+		if target_creature.status_effect != "":
+			battle_message.emit("%s is already affected by %s!" % [target_label, target_creature.status_effect])
+			await get_tree().create_timer(1.0).timeout
+		else:
+			target_creature.status_effect = status
+			target_creature.status_turns = 0
+			var status_msg := _get_status_inflict_message(target_label, status)
+			battle_message.emit(status_msg)
+			await get_tree().create_timer(1.2).timeout
+
+
+func _apply_stat_stages(creature, stat_name: String, stages: int) -> void:
+	## Apply stat stage multiplier to a creature's current stats.
+	## Each stage is roughly a 50% change (multiply by 1.5 for +1, 0.67 for -1).
+	var multiplier := 1.0
+	if stages > 0:
+		multiplier = 1.0 + (stages * 0.5)  # +1 = 1.5x, +2 = 2.0x
+	elif stages < 0:
+		multiplier = 1.0 / (1.0 + (abs(stages) * 0.5))  # -1 = 0.67x, -2 = 0.5x
+
+	match stat_name:
+		"attack":
+			creature.attack = max(1, int(creature.attack * multiplier))
+		"defense":
+			creature.defense = max(1, int(creature.defense * multiplier))
+		"sp_attack":
+			creature.sp_attack = max(1, int(creature.sp_attack * multiplier))
+		"sp_defense":
+			creature.sp_defense = max(1, int(creature.sp_defense * multiplier))
+		"speed":
+			creature.speed = max(1, int(creature.speed * multiplier))
+
+
+func _get_stat_display_name(stat_name: String) -> String:
+	match stat_name:
+		"attack": return "Attack"
+		"defense": return "Defense"
+		"sp_attack": return "Sp. Attack"
+		"sp_defense": return "Sp. Defense"
+		"speed": return "Speed"
+		"accuracy": return "Accuracy"
+		_: return stat_name.capitalize()
+
+
+func _get_status_inflict_message(target_label: String, status: String) -> String:
+	match status:
+		"poison": return "%s was poisoned!" % target_label
+		"burn": return "%s was burned!" % target_label
+		"sleep": return "%s fell asleep!" % target_label
+		"paralysis": return "%s was paralyzed!" % target_label
+		"freeze": return "%s was frozen solid!" % target_label
+		_: return "%s was inflicted with %s!" % [target_label, status]
 
 
 # --- Helpers ---
