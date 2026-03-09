@@ -23,13 +23,13 @@ func _load_all_data() -> void:
 
 
 func _load_creatures(path: String) -> void:
-	var data := _load_json(path)
+	var data = _load_json(path)
 	if data is Dictionary:
 		_creatures.merge(data)
 
 
 func _load_moves(path: String) -> void:
-	var data := _load_json(path)
+	var data = _load_json(path)
 	if data is Dictionary:
 		_moves.merge(data)
 
@@ -44,7 +44,7 @@ func _load_encounter_tables(dir_path: String) -> void:
 	var file_name := dir.get_next()
 	while file_name != "":
 		if file_name.ends_with(".json"):
-			var map_data := _load_json(dir_path + file_name)
+			var map_data = _load_json(dir_path + file_name)
 			if map_data is Dictionary:
 				var table_id := file_name.get_basename()
 				_encounter_tables[table_id] = map_data.get("encounters", [])

@@ -1,15 +1,32 @@
 extends CharacterBody2D
-## Grid-based player controller for a Pokémon-style overworld.
-## The player moves tile-by-tile using a tween for smooth animation.
+## Grid-based player controller with animated character sprite.
+## Uses the Fan-tasy Tileset character sprite sheets loaded at runtime.
 
 const TILE_SIZE := 16
 const MOVE_SPEED := 4.0  # Tiles per second
 
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+# Character sprite sheet paths
+const IDLE_SHEET := "res://assets/sprites/tilesets/The Fan-tasy Tileset (Free)/Art/Characters/Main Character/Character_Idle.png"
+const WALK_SHEET := "res://assets/sprites/tilesets/The Fan-tasy Tileset (Free)/Art/Characters/Main Character/Character_Walk.png"
+
+# Sprite sheets: 4 columns x 4 rows = 40x48 per frame
+# Row 0 = down, Row 1 = left, Row 2 = right, Row 3 = up
+const FRAME_COLS := 4
+const FRAME_ROWS := 4
+const ANIM_FPS := 8.0  # Frames per second for walk animation
+
 @onready var ray: RayCast2D = $RayCast2D
 
 var is_moving := false
 var facing_direction := Vector2.DOWN
+
+# Sprite references
+var _char_sprite: Sprite2D
+var _idle_texture: ImageTexture
+var _walk_texture: ImageTexture
+var _anim_timer := 0.0
+var _current_frame := 0
+var _is_walking := false
 
 # Signals
 signal player_moved(new_position: Vector2)
@@ -17,11 +34,48 @@ signal player_interacted(facing_tile: Vector2)
 
 
 func _ready() -> void:
-	# Snap to grid on start
+	add_to_group("player")
 	position = position.snapped(Vector2(TILE_SIZE, TILE_SIZE))
+	_load_character_sprites()
+	_update_sprite_frame()
 
 
-func _physics_process(_delta: float) -> void:
+func _load_character_sprites() -> void:
+	_idle_texture = _load_texture(IDLE_SHEET)
+	_walk_texture = _load_texture(WALK_SHEET)
+
+	# Create the character Sprite2D
+	_char_sprite = Sprite2D.new()
+	_char_sprite.name = "CharacterSprite"
+	_char_sprite.hframes = FRAME_COLS
+	_char_sprite.vframes = FRAME_ROWS
+	_char_sprite.texture = _idle_texture
+	# Offset so feet align with tile position
+	_char_sprite.offset = Vector2(0, -8)
+	add_child(_char_sprite)
+
+
+func _load_texture(res_path: String) -> ImageTexture:
+	var global_path := ProjectSettings.globalize_path(res_path)
+	var image := Image.new()
+	var err := image.load(global_path)
+	if err != OK:
+		err = image.load(res_path)
+	if err != OK:
+		push_warning("Player: Failed to load sprite: %s" % res_path)
+		return null
+	return ImageTexture.create_from_image(image)
+
+
+func _physics_process(delta: float) -> void:
+	# Handle walk animation frame cycling
+	if _is_walking:
+		_anim_timer += delta
+		if _anim_timer >= 1.0 / ANIM_FPS:
+			_anim_timer -= 1.0 / ANIM_FPS
+			_current_frame = (_current_frame + 1) % FRAME_COLS
+			_update_sprite_frame()
+
 	if is_moving:
 		return
 
@@ -29,25 +83,36 @@ func _physics_process(_delta: float) -> void:
 
 	if input_direction != Vector2.ZERO:
 		facing_direction = input_direction
-		_update_animation("walk")
+		_set_walking(true)
 		_update_raycast()
 
-		# Force raycast update to check collision immediately
 		ray.force_raycast_update()
 
 		if not ray.is_colliding():
 			_move_to(position + input_direction * TILE_SIZE)
 		else:
-			_update_animation("idle")
+			_set_walking(false)
 	else:
-		_update_animation("idle")
+		_set_walking(false)
 
 	if Input.is_action_just_pressed("interact"):
-		player_interacted.emit(position + facing_direction * TILE_SIZE)
+		var target_pos := position + facing_direction * TILE_SIZE
+		# Try to talk to an NPC first; only emit signal if no NPC found
+		if not _try_interact_with_npc(target_pos):
+			player_interacted.emit(target_pos)
+
+
+func _try_interact_with_npc(target_pos: Vector2) -> bool:
+	## Check if there's an NPC at the target position and interact with them.
+	for npc in get_tree().get_nodes_in_group("npc"):
+		if npc.position.distance_to(target_pos) < TILE_SIZE:
+			if npc.has_method("interact"):
+				npc.interact()
+				return true
+	return false
 
 
 func _get_input_direction() -> Vector2:
-	## Returns a single direction vector based on input priority.
 	if Input.is_action_pressed("move_up"):
 		return Vector2.UP
 	elif Input.is_action_pressed("move_down"):
@@ -60,9 +125,7 @@ func _get_input_direction() -> Vector2:
 
 
 func _move_to(target: Vector2) -> void:
-	## Smoothly move to the target position using a tween.
 	is_moving = true
-
 	var tween := create_tween()
 	tween.tween_property(self, "position", target, 1.0 / MOVE_SPEED)
 	tween.tween_callback(_on_move_finished)
@@ -74,29 +137,36 @@ func _on_move_finished() -> void:
 	player_moved.emit(position)
 
 
-func _update_animation(state: String) -> void:
-	## Update sprite animation based on state and facing direction.
-	var dir_name := _direction_to_string(facing_direction)
-	var anim_name := "%s_%s" % [state, dir_name]
+func _set_walking(walking: bool) -> void:
+	if walking == _is_walking:
+		return
+	_is_walking = walking
+	if walking:
+		_char_sprite.texture = _walk_texture
+		_current_frame = 0
+		_anim_timer = 0.0
+	else:
+		_char_sprite.texture = _idle_texture
+		_current_frame = 0
+	_update_sprite_frame()
 
-	if sprite.sprite_frames and sprite.sprite_frames.has_animation(anim_name):
-		sprite.play(anim_name)
-	elif sprite.sprite_frames and sprite.sprite_frames.has_animation(state):
-		sprite.play(state)
+
+func _update_sprite_frame() -> void:
+	if not _char_sprite:
+		return
+	var row := _direction_to_row(facing_direction)
+	_char_sprite.frame = row * FRAME_COLS + _current_frame
+
+
+func _direction_to_row(dir: Vector2) -> int:
+	if dir == Vector2.UP:
+		return 3
+	elif dir == Vector2.LEFT:
+		return 1
+	elif dir == Vector2.RIGHT:
+		return 2
+	return 0  # DOWN
 
 
 func _update_raycast() -> void:
-	## Point the raycast in the direction the player is facing.
 	ray.target_position = facing_direction * TILE_SIZE
-
-
-func _direction_to_string(dir: Vector2) -> String:
-	if dir == Vector2.UP:
-		return "up"
-	elif dir == Vector2.DOWN:
-		return "down"
-	elif dir == Vector2.LEFT:
-		return "left"
-	elif dir == Vector2.RIGHT:
-		return "right"
-	return "down"

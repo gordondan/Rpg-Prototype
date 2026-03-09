@@ -57,7 +57,10 @@ static func create(id: String, lvl: int) -> CreatureInstance:
 	instance.base_sp_defense = data.get("base_sp_defense", 65)
 	instance.base_speed = data.get("base_speed", 45)
 
-	instance.types = data.get("types", ["normal"])
+	var raw_types: Array = data.get("types", ["normal"])
+	instance.types.clear()
+	for t in raw_types:
+		instance.types.append(String(t))
 
 	instance._calculate_stats()
 	instance.current_hp = instance.max_hp
@@ -89,7 +92,7 @@ func _learn_moves_for_level(learnset: Array) -> void:
 			learnable.append(entry)
 
 	# Take the last 4
-	var start_idx := max(0, learnable.size() - 4)
+	var start_idx: int = max(0, learnable.size() - 4)
 	for i in range(start_idx, learnable.size()):
 		var move_data = DataLoader.get_move_data(learnable[i]["move_id"])
 		if not move_data.is_empty():

@@ -9,15 +9,15 @@ signal battle_finished(result: String)
 
 
 func start_wild_battle(creature_id: String, level: int) -> void:
-	## Initiate a wild battle with the given creature.
+	## Initiate a hostile encounter with a wandering character.
 	var player_creature := GameManager.get_first_alive_creature()
 	if player_creature == null:
-		push_error("No alive creatures in party!")
+		push_error("No alive allies in company!")
 		return
 
 	var wild_creature := CreatureInstance.create(creature_id, level)
 
-	print("[BattleManager] Wild battle: %s (Lv.%d) vs %s (Lv.%d)" % [
+	print("[BattleManager] Encounter: %s (Lv.%d) vs %s (Lv.%d)" % [
 		player_creature.nickname, player_creature.level,
 		wild_creature.nickname, wild_creature.level
 	])
@@ -26,9 +26,9 @@ func start_wild_battle(creature_id: String, level: int) -> void:
 	battle_started.emit()
 
 	# Load battle scene
-	var battle_scene := load(BATTLE_SCENE_PATH)
+	var battle_scene = load(BATTLE_SCENE_PATH)
 	if battle_scene:
-		var instance := battle_scene.instantiate()
+		var instance: Node = battle_scene.instantiate()
 		get_tree().current_scene.add_child(instance)
 
 		# If the battle scene has a setup function, call it
@@ -38,20 +38,20 @@ func start_wild_battle(creature_id: String, level: int) -> void:
 		push_error("Could not load battle scene: %s" % BATTLE_SCENE_PATH)
 
 
-func start_trainer_battle(trainer_creature_id: String, trainer_level: int) -> void:
-	## Same as wild but flagged as trainer battle (can't run).
-	var player_creature := GameManager.get_first_alive_creature()
+func start_rival_battle(rival_creature_id: String, rival_level: int) -> void:
+	## Duel with an NPC rival or boss — can't retreat.
+	var player_creature = GameManager.get_first_alive_creature()
 	if player_creature == null:
 		return
 
-	var enemy := CreatureInstance.create(trainer_creature_id, trainer_level)
+	var enemy = CreatureInstance.create(rival_creature_id, rival_level)
 
 	GameManager.set_state(GameManager.GameState.BATTLE)
 	battle_started.emit()
 
-	var battle_scene := load(BATTLE_SCENE_PATH)
+	var battle_scene = load(BATTLE_SCENE_PATH)
 	if battle_scene:
-		var instance := battle_scene.instantiate()
+		var instance: Node = battle_scene.instantiate()
 		get_tree().current_scene.add_child(instance)
 		if instance.has_method("setup_battle"):
 			instance.setup_battle(player_creature, enemy, false)

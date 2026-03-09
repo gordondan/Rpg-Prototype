@@ -1,0 +1,144 @@
+extends Node
+## Global dialogue manager — loads dialogue data and controls the dialogue UI.
+## Autoloaded as "DialogueManager".
+
+signal dialogue_started()
+signal dialogue_ended()
+signal choice_selected(choice_id: String)
+
+const DIALOGUE_BOX_SCENE := "res://scenes/ui/dialogue_box.tscn"
+
+var _dialogue_data: Dictionary = {}
+var _dialogue_box: Node = null
+var _is_active := false
+
+
+func _ready() -> void:
+	_load_dialogue_data()
+
+
+func _load_dialogue_data() -> void:
+	var dir_path := "res://data/dialogue/"
+	var dir := DirAccess.open(dir_path)
+	if not dir:
+		push_warning("Could not open dialogue directory: %s" % dir_path)
+		return
+
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if file_name.ends_with(".json"):
+			var path := dir_path + file_name
+			var file := FileAccess.open(path, FileAccess.READ)
+			if file:
+				var json := JSON.new()
+				if json.parse(file.get_as_text()) == OK and json.data is Dictionary:
+					_dialogue_data.merge(json.data)
+					print("[DialogueManager] Loaded dialogue from: %s" % file_name)
+		file_name = dir.get_next()
+
+	print("[DialogueManager] Total dialogue entries: %d" % _dialogue_data.size())
+
+
+# ─── Public API ──────────────────────────────────────────────────
+
+func start_dialogue(dialogue_id: String) -> void:
+	## Start a dialogue sequence from the data files by ID.
+	if _is_active:
+		push_warning("Dialogue already active!")
+		return
+
+	var data: Dictionary = _dialogue_data.get(dialogue_id, {})
+	if data.is_empty():
+		push_warning("Dialogue not found: %s" % dialogue_id)
+		return
+
+	# Check if this dialogue requires a story flag
+	var required_flag: String = data.get("requires_flag", "")
+	if required_flag != "" and not GameManager.get_flag(required_flag):
+		return
+
+	var lines: Array = data.get("lines", [])
+	if lines.is_empty():
+		return
+
+	_begin_dialogue(lines)
+
+
+func show_lines(lines: Array) -> void:
+	## Show a quick sequence of lines without needing a dialogue ID.
+	## Accepts an array of Strings or Dictionaries.
+	if _is_active:
+		push_warning("Dialogue already active!")
+		return
+
+	if lines.is_empty():
+		return
+
+	_begin_dialogue(lines)
+
+
+func show_line(text: String, speaker: String = "") -> void:
+	## Show a single line of dialogue.
+	var entry: Variant
+	if speaker != "":
+		entry = {"text": text, "speaker": speaker}
+	else:
+		entry = text
+	show_lines([entry])
+
+
+func is_active() -> bool:
+	return _is_active
+
+
+# ─── Internal ────────────────────────────────────────────────────
+
+func _begin_dialogue(lines: Array) -> void:
+	_is_active = true
+	GameManager.set_state(GameManager.GameState.DIALOGUE)
+	dialogue_started.emit()
+
+	# Create dialogue box if it doesn't exist
+	if _dialogue_box == null or not is_instance_valid(_dialogue_box):
+		var scene := load(DIALOGUE_BOX_SCENE)
+		if not scene:
+			push_error("Could not load dialogue box scene!")
+			_is_active = false
+			return
+		_dialogue_box = scene.instantiate()
+		get_tree().current_scene.add_child(_dialogue_box)
+
+	# Connect signals
+	if not _dialogue_box.dialogue_finished.is_connected(_on_dialogue_finished):
+		_dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
+	if not _dialogue_box.choice_made.is_connected(_on_choice_made):
+		_dialogue_box.choice_made.connect(_on_choice_made)
+
+	_dialogue_box.show_dialogue(lines)
+
+
+func _on_dialogue_finished() -> void:
+	_is_active = false
+	GameManager.set_state(GameManager.GameState.OVERWORLD)
+	dialogue_ended.emit()
+
+	# Clean up
+	if _dialogue_box and is_instance_valid(_dialogue_box):
+		_dialogue_box.queue_free()
+		_dialogue_box = null
+
+
+func _on_choice_made(choice_index: int, choice_id: String) -> void:
+	choice_selected.emit(choice_id)
+
+	# Handle special choice actions
+	match choice_id:
+		"rest":
+			# Heal the party when the player rests at the tavern
+			GameManager.heal_all_party()
+			print("[DialogueManager] Party healed!")
+
+
+func get_dialogue_data(dialogue_id: String) -> Dictionary:
+	return _dialogue_data.get(dialogue_id, {})

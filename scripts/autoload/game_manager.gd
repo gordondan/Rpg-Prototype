@@ -8,16 +8,16 @@ signal game_state_changed(new_state: GameState)
 
 var current_state: GameState = GameState.OVERWORLD
 
-# Player party (up to 6 creatures)
+# Player's company (up to 6 allies)
 var player_party: Array[CreatureInstance] = []
 
 # Player inventory
 var inventory: Dictionary = {}  # {item_id: quantity}
 
 # Player info
-var player_name: String = "Red"
-var money: int = 3000
-var badges: Array[String] = []
+var player_name: String = "Captain"
+var gold: int = 500
+var guild_ranks: Array[String] = []  # Replaces "badges" — earned from guild halls
 
 # Story flags — tracks events, defeated trainers, etc.
 var story_flags: Dictionary = {}
@@ -34,11 +34,11 @@ func _ready() -> void:
 
 func _setup_debug_party() -> void:
 	## Create a starter party for testing. Remove this once you have a proper
-	## intro sequence with professor/starter selection.
-	var starter := CreatureInstance.create("emberaptor", 5)
-	starter.nickname = "Emberaptor"
+	## intro sequence with guild master / ally selection.
+	var starter := CreatureInstance.create("flame_squire", 5)
+	starter.nickname = "Flame Squire"
 	player_party.append(starter)
-	print("[GameManager] Debug party created: %s (Lv.%d)" % [starter.nickname, starter.level])
+	print("[GameManager] Debug company created: %s (Lv.%d)" % [starter.nickname, starter.level])
 
 
 # ─── State Management ────────────────────────────────────────────
@@ -65,7 +65,7 @@ func add_creature_to_party(creature: CreatureInstance) -> bool:
 	if player_party.size() < 6:
 		player_party.append(creature)
 		return true
-	return false  # Party is full — would need PC storage
+	return false  # Company is full — would need a guild hall / barracks
 
 
 func heal_all_party() -> void:
@@ -107,8 +107,8 @@ func return_from_battle() -> void:
 func save_game(slot: int = 0) -> void:
 	var save_data := {
 		"player_name": player_name,
-		"money": money,
-		"badges": badges,
+		"gold": gold,
+		"guild_ranks": guild_ranks,
 		"story_flags": story_flags,
 		"party": _serialize_party(),
 		"inventory": inventory,
@@ -133,9 +133,9 @@ func load_game(slot: int = 0) -> bool:
 		return false
 
 	var data: Dictionary = json.data
-	player_name = data.get("player_name", "Red")
-	money = data.get("money", 3000)
-	badges = data.get("badges", [])
+	player_name = data.get("player_name", "Captain")
+	gold = data.get("gold", 500)
+	guild_ranks = data.get("guild_ranks", [])
 	story_flags = data.get("story_flags", {})
 	inventory = data.get("inventory", {})
 

@@ -1,69 +1,79 @@
 extends CharacterBody2D
-## Basic NPC with dialogue and optional trainer battle.
+## NPC with dialogue (simple or branching) and optional rival battle.
 
-@export var npc_name: String = "NPC"
-@export var dialogue_lines: Array[String] = ["Hello there!"]
-@export var is_trainer: bool = false
-@export var trainer_creature_id: String = ""
-@export var trainer_creature_level: int = 5
-@export var defeated_flag: String = ""  # Story flag set when this trainer is beaten
-@export var line_of_sight_range: int = 4  # Tiles
+@export var npc_name: String = "Villager"
+@export var dialogue_id: String = ""  # References data/dialogue/*.json
+@export var simple_lines: Array[String] = []  # Fallback if no dialogue_id
+
+@export var is_rival: bool = false
+@export var rival_creature_id: String = ""
+@export var rival_creature_level: int = 5
+@export var defeated_flag: String = ""
+@export var line_of_sight_range: int = 4
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var sight_ray: RayCast2D = $SightRay
 
 var facing_direction := Vector2.DOWN
-var _current_line := 0
 
 
 func _ready() -> void:
 	add_to_group("npc")
-	if is_trainer and sight_ray:
+	if is_rival and sight_ray:
 		_update_sight_ray()
 
 
 func _physics_process(_delta: float) -> void:
-	if is_trainer and sight_ray and not _is_defeated():
+	if is_rival and sight_ray and not _is_defeated():
 		sight_ray.force_raycast_update()
 		if sight_ray.is_colliding():
 			var collider := sight_ray.get_collider()
 			if collider.is_in_group("player"):
-				_initiate_trainer_battle()
+				_initiate_rival_duel()
 
 
 func interact() -> void:
 	## Called when the player presses interact facing this NPC.
-	if is_trainer and not _is_defeated():
-		_show_dialogue_then_battle()
+	if DialogueManager.is_active():
+		return
+
+	if is_rival and not _is_defeated():
+		_start_dialogue_then_battle()
 	else:
-		_show_dialogue()
+		_start_dialogue()
 
 
-func _show_dialogue() -> void:
-	if _current_line < dialogue_lines.size():
-		# You'd connect this to a dialogue UI system
-		print("[%s] %s" % [npc_name, dialogue_lines[_current_line]])
-		_current_line += 1
-
-		if _current_line >= dialogue_lines.size():
-			_current_line = 0
-
-
-func _show_dialogue_then_battle() -> void:
-	_show_dialogue()
-	# After dialogue finishes, start battle
-	# In a full implementation, you'd wait for the dialogue to close
-	BattleManager.start_trainer_battle(trainer_creature_id, trainer_creature_level)
-	BattleManager.battle_finished.connect(_on_trainer_defeated, CONNECT_ONE_SHOT)
+func _start_dialogue() -> void:
+	## Start dialogue using the dialogue system.
+	if dialogue_id != "":
+		DialogueManager.start_dialogue(dialogue_id)
+	elif simple_lines.size() > 0:
+		# Convert simple strings into dialogue entries with speaker name
+		var lines: Array = []
+		for line in simple_lines:
+			lines.append({"text": line, "speaker": npc_name})
+		DialogueManager.show_lines(lines)
+	else:
+		DialogueManager.show_line("...", npc_name)
 
 
-func _initiate_trainer_battle() -> void:
-	# Exclamation mark animation, walk toward player, etc.
-	print("[%s] spotted the player!" % npc_name)
-	_show_dialogue_then_battle()
+func _start_dialogue_then_battle() -> void:
+	_start_dialogue()
+	# Wait for dialogue to finish, then start the battle
+	DialogueManager.dialogue_ended.connect(_on_dialogue_ended_start_battle, CONNECT_ONE_SHOT)
 
 
-func _on_trainer_defeated(result: String) -> void:
+func _on_dialogue_ended_start_battle() -> void:
+	BattleManager.start_rival_battle(rival_creature_id, rival_creature_level)
+	BattleManager.battle_finished.connect(_on_rival_defeated, CONNECT_ONE_SHOT)
+
+
+func _initiate_rival_duel() -> void:
+	print("[%s] challenges the player to a duel!" % npc_name)
+	_start_dialogue_then_battle()
+
+
+func _on_rival_defeated(result: String) -> void:
 	if result == "win" and defeated_flag != "":
 		GameManager.set_flag(defeated_flag)
 

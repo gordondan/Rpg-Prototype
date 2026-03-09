@@ -104,8 +104,8 @@ static func get_effectiveness(attack_type: String, defender_types: Array) -> flo
 	var multiplier := 1.0
 
 	for def_type in defender_types:
-		var atk_type_lower := attack_type.to_lower()
-		var def_type_lower := def_type.to_lower()
+		var atk_type_lower: String = attack_type.to_lower()
+		var def_type_lower: String = String(def_type).to_lower()
 
 		if atk_type_lower in _chart:
 			if def_type_lower in _chart[atk_type_lower]:

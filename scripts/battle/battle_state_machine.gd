@@ -13,7 +13,7 @@ enum BattleState {
 	WIN,
 	LOSE,
 	RUN,
-	CATCH_ATTEMPT,
+	RECRUIT_ATTEMPT,
 }
 
 signal state_changed(new_state: BattleState)
@@ -38,8 +38,8 @@ func start_battle(player: CreatureInstance, enemy: CreatureInstance, wild: bool 
 	is_wild_battle = wild
 	_set_state(BattleState.INTRO)
 
-	battle_message.emit("A wild %s appeared!" % enemy_creature.nickname if wild
-		else "Trainer sent out %s!" % enemy_creature.nickname)
+	battle_message.emit("A hostile %s blocks your path!" % enemy_creature.nickname if wild
+		else "The enemy commander sends forth %s!" % enemy_creature.nickname)
 
 	# Small delay then move to player turn
 	await get_tree().create_timer(1.5).timeout
@@ -71,20 +71,20 @@ func _execute_turn() -> void:
 		if is_wild_battle:
 			var escape_chance := _calculate_escape_chance()
 			if randf() < escape_chance:
-				battle_message.emit("Got away safely!")
+				battle_message.emit("You retreated safely!")
 				await get_tree().create_timer(1.0).timeout
 				_set_state(BattleState.RUN)
 				battle_ended.emit("run")
 				return
 			else:
-				battle_message.emit("Can't escape!")
+				battle_message.emit("The enemy cuts off your retreat!")
 				await get_tree().create_timer(1.0).timeout
 				# Enemy still gets to attack
 				await _do_enemy_turn()
 				await _resolve_turn()
 				return
 		else:
-			battle_message.emit("Can't run from a trainer battle!")
+			battle_message.emit("There's no retreating from this duel!")
 			await get_tree().create_timer(1.0).timeout
 			_set_state(BattleState.PLAYER_TURN)
 			return
@@ -94,14 +94,14 @@ func _execute_turn() -> void:
 
 	if player_goes_first:
 		await _do_player_turn()
-		if not _check_battle_end():
+		if not await _check_battle_end():
 			await _do_enemy_turn()
 	else:
 		await _do_enemy_turn()
-		if not _check_battle_end():
+		if not await _check_battle_end():
 			await _do_player_turn()
 
-	if not _check_battle_end():
+	if not await _check_battle_end():
 		await _resolve_turn()
 
 
@@ -120,7 +120,7 @@ func _do_player_turn() -> void:
 	# Deduct PP
 	player_creature.moves[_player_move_index]["current_pp"] -= 1
 
-	battle_message.emit("%s used %s!" % [player_creature.nickname, move_data.get("name", "???")])
+	battle_message.emit("%s casts %s!" % [player_creature.nickname, move_data.get("name", "???")])
 	await get_tree().create_timer(0.8).timeout
 
 	var result := BattleCalculator.calculate_damage(player_creature, enemy_creature, move_data)
@@ -164,7 +164,7 @@ func _do_enemy_turn() -> void:
 
 	enemy_creature.moves[chosen_index]["current_pp"] -= 1
 
-	battle_message.emit("Enemy %s used %s!" % [enemy_creature.nickname, move_data.get("name", "???")])
+	battle_message.emit("Enemy %s unleashes %s!" % [enemy_creature.nickname, move_data.get("name", "???")])
 	await get_tree().create_timer(0.8).timeout
 
 	var result := BattleCalculator.calculate_damage(enemy_creature, player_creature, move_data)
@@ -194,23 +194,23 @@ func _resolve_turn() -> void:
 		if creature.is_fainted():
 			continue
 
-		var is_player := creature == player_creature
+		var is_player: bool = (creature == player_creature)
 
 		match creature.status_effect:
 			"poison":
-				var poison_damage := max(1, creature.max_hp / 8)
+				var poison_damage: int = max(1, creature.max_hp / 8)
 				creature.take_damage(poison_damage)
 				creature_hp_changed.emit(is_player, creature.current_hp, creature.max_hp)
 				battle_message.emit("%s is hurt by poison!" % creature.nickname)
 				await get_tree().create_timer(0.8).timeout
 			"burn":
-				var burn_damage := max(1, creature.max_hp / 16)
+				var burn_damage: int = max(1, creature.max_hp / 16)
 				creature.take_damage(burn_damage)
 				creature_hp_changed.emit(is_player, creature.current_hp, creature.max_hp)
 				battle_message.emit("%s is hurt by its burn!" % creature.nickname)
 				await get_tree().create_timer(0.8).timeout
 
-	if not _check_battle_end():
+	if not await _check_battle_end():
 		_set_state(BattleState.PLAYER_TURN)
 
 
@@ -218,7 +218,7 @@ func _check_battle_end() -> bool:
 	_set_state(BattleState.CHECK_END)
 
 	if enemy_creature.is_fainted():
-		battle_message.emit("Enemy %s fainted!" % enemy_creature.nickname)
+		battle_message.emit("Enemy %s has been defeated!" % enemy_creature.nickname)
 		await get_tree().create_timer(1.0).timeout
 
 		var exp_amount := BattleCalculator.calculate_exp_yield(enemy_creature, is_wild_battle)
@@ -228,7 +228,7 @@ func _check_battle_end() -> bool:
 
 		if leveled_up:
 			await get_tree().create_timer(0.8).timeout
-			battle_message.emit("%s grew to level %d!" % [player_creature.nickname, player_creature.level])
+			battle_message.emit("%s has reached level %d!" % [player_creature.nickname, player_creature.level])
 
 		await get_tree().create_timer(1.5).timeout
 		_set_state(BattleState.WIN)
@@ -236,7 +236,7 @@ func _check_battle_end() -> bool:
 		return true
 
 	if player_creature.is_fainted():
-		battle_message.emit("%s fainted!" % player_creature.nickname)
+		battle_message.emit("%s has fallen in battle!" % player_creature.nickname)
 		await get_tree().create_timer(1.5).timeout
 		_set_state(BattleState.LOSE)
 		battle_ended.emit("lose")
@@ -253,7 +253,7 @@ func _get_move_data(creature: CreatureInstance, index: int) -> Dictionary:
 
 func _calculate_escape_chance() -> float:
 	## Simplified escape formula based on speed comparison.
-	var speed_ratio := float(player_creature.speed) / max(1.0, float(enemy_creature.speed))
+	var speed_ratio: float = float(player_creature.speed) / max(1.0, float(enemy_creature.speed))
 	return clamp(speed_ratio * 0.5 + 0.25, 0.2, 1.0)
 
 

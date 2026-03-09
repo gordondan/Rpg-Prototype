@@ -1,7 +1,7 @@
 {
-  "zapprat": {
-    "name": "Zapprat",
-    "description": "A small electric rodent found in tall grass.",
+  "spark_thief": {
+    "name": "Spark Thief",
+    "description": "A quick-fingered rogue who channels lightning through stolen gemstones. Found lurking on trade roads.",
     "types": ["electric"],
     "base_hp": 35,
     "base_attack": 40,
@@ -10,16 +10,20 @@
     "base_sp_defense": 35,
     "base_speed": 60,
     "base_exp": 55,
+    "class": "rogue",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.3,
+    "recruit_dialogue": "Heh... you're tougher than you look. Fine, I'll tag along. Could use the coin.",
     "learnset": [
-      {"level": 1, "move_id": "tackle"},
-      {"level": 4, "move_id": "thunder_shock"},
-      {"level": 8, "move_id": "quick_attack"},
-      {"level": 12, "move_id": "spark"}
+      {"level": 1, "move_id": "dagger_jab"},
+      {"level": 4, "move_id": "shock_bolt"},
+      {"level": 8, "move_id": "swift_strike"},
+      {"level": 12, "move_id": "lightning_stab"}
     ]
   },
-  "fluffowl": {
-    "name": "Fluffowl",
-    "description": "A round bird covered in soft down feathers.",
+  "wind_scout": {
+    "name": "Wind Scout",
+    "description": "A wandering archer who rides the wind. Light on their feet and deadly at range.",
     "types": ["normal", "flying"],
     "base_hp": 40,
     "base_attack": 45,
@@ -28,16 +32,20 @@
     "base_sp_defense": 35,
     "base_speed": 50,
     "base_exp": 50,
+    "class": "ranger",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.35,
+    "recruit_dialogue": "Not bad! I've been looking for a worthy leader. Count me in.",
     "learnset": [
-      {"level": 1, "move_id": "tackle"},
-      {"level": 3, "move_id": "growl"},
-      {"level": 7, "move_id": "gust"},
-      {"level": 11, "move_id": "quick_attack"}
+      {"level": 1, "move_id": "dagger_jab"},
+      {"level": 3, "move_id": "war_cry"},
+      {"level": 7, "move_id": "gale_shot"},
+      {"level": 11, "move_id": "swift_strike"}
     ]
   },
-  "pebblite": {
-    "name": "Pebblite",
-    "description": "A living rock with stubby arms. Very slow but tough.",
+  "stone_sentinel": {
+    "name": "Stone Sentinel",
+    "description": "A stoic guardian in heavy stone armor. Painfully slow but nearly impossible to bring down.",
     "types": ["rock"],
     "base_hp": 45,
     "base_attack": 55,
@@ -46,16 +54,41 @@
     "base_sp_defense": 40,
     "base_speed": 20,
     "base_exp": 58,
+    "class": "guardian",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.2,
+    "recruit_dialogue": "...You have strength. I will guard you, as I once guarded these ruins.",
     "learnset": [
-      {"level": 1, "move_id": "tackle"},
-      {"level": 4, "move_id": "harden"},
-      {"level": 8, "move_id": "rock_throw"},
+      {"level": 1, "move_id": "staff_bash"},
+      {"level": 4, "move_id": "iron_guard"},
+      {"level": 8, "move_id": "boulder_hurl"},
       {"level": 12, "move_id": "headbutt"}
     ]
   },
-  "bugbean": {
-    "name": "Bugbean",
-    "description": "A cheerful bug creature shaped like a bean. Very common.",
+  "goblin": {
+    "name": "Goblin",
+    "description": "A scrappy, foul-tempered creature that attacks travelers on sight. Too wild and treacherous to ever be trusted.",
+    "types": ["poison"],
+    "base_hp": 38,
+    "base_attack": 42,
+    "base_defense": 32,
+    "base_sp_attack": 25,
+    "base_sp_defense": 30,
+    "base_speed": 52,
+    "base_exp": 38,
+    "class": "monster",
+    "recruitable": false,
+    "learnset": [
+      {"level": 1, "move_id": "dagger_jab"},
+      {"level": 1, "move_id": "war_cry"},
+      {"level": 5, "move_id": "poison_scratch"},
+      {"level": 9, "move_id": "dirty_trick"},
+      {"level": 13, "move_id": "venom_fang"}
+    ]
+  },
+  "hex_weaver": {
+    "name": "Hex Weaver",
+    "description": "A timid apprentice witch found in the woods. Weaves minor curses and charms from spider silk.",
     "types": ["bug"],
     "base_hp": 40,
     "base_attack": 35,
@@ -64,10 +97,14 @@
     "base_sp_defense": 40,
     "base_speed": 45,
     "base_exp": 40,
+    "class": "witch",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.4,
+    "recruit_dialogue": "P-please don't hurt me anymore! I'll help you, I promise! I know useful spells!",
     "learnset": [
-      {"level": 1, "move_id": "tackle"},
-      {"level": 3, "move_id": "string_shot"},
-      {"level": 7, "move_id": "bug_bite"}
+      {"level": 1, "move_id": "dagger_jab"},
+      {"level": 3, "move_id": "binding_hex"},
+      {"level": 7, "move_id": "venom_fang"}
     ]
   }
 }

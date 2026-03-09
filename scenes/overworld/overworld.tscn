@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0overworld"]
+
+[ext_resource type="Script" path="res://scripts/overworld/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/overworld/map_builder.gd" id="2_map"]
+[ext_resource type="Script" path="res://scripts/overworld/test_battle_trigger.gd" id="3_test"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(12, 12)
+
+[node name="Overworld" type="Node2D"]
+
+[node name="MapBuilder" type="Node2D" parent="."]
+script = ExtResource("2_map")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(320, 192)
+script = ExtResource("1_player")
+
+[node name="RayCast2D" type="RayCast2D" parent="Player"]
+target_position = Vector2(0, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2, 2)
+limit_left = 0
+limit_top = 0
+limit_right = 640
+limit_bottom = 480
+
+[node name="TestBattleTrigger" type="Node" parent="."]
+script = ExtResource("3_test")

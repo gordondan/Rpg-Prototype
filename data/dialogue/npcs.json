@@ -1,0 +1,146 @@
+{
+  "village_guard": {
+    "name": "Village Guard",
+    "lines": [
+      {
+        "text": "Halt! The road ahead is crawling with goblins and bandits.",
+        "speaker": "Village Guard"
+      },
+      {
+        "text": "Are you sure you want to head out there?",
+        "speaker": "Village Guard",
+        "choices": [
+          {
+            "text": "I can handle myself.",
+            "id": "brave",
+            "next": [
+              {
+                "text": "Ha! I like your spirit. Just keep your wits about you, and don't let the goblins surround you.",
+                "speaker": "Village Guard"
+              },
+              {
+                "text": "Here, take this. A little something to keep you on your feet.",
+                "speaker": "Village Guard"
+              }
+            ]
+          },
+          {
+            "text": "What can you tell me about the dangers?",
+            "id": "info",
+            "next": [
+              {
+                "text": "Goblins are the most common threat. Nasty little things — they'll try to poison you with their filthy blades.",
+                "speaker": "Village Guard"
+              },
+              {
+                "text": "But if you're lucky, you might cross paths with a wandering sell-sword or scout. Some of them can be persuaded to join a worthy cause.",
+                "speaker": "Village Guard"
+              },
+              {
+                "text": "There's even rumors of a Stone Sentinel deep in the ruins. Ancient guardian, nearly indestructible. Wouldn't want to face that one alone.",
+                "speaker": "Village Guard"
+              }
+            ]
+          },
+          {
+            "text": "Maybe I'll stay in town a bit longer.",
+            "id": "stay",
+            "next": [
+              {
+                "text": "Smart. No shame in preparing properly. The blacksmith might have something useful for you.",
+                "speaker": "Village Guard"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "old_scholar": {
+    "name": "Old Scholar",
+    "lines": [
+      {
+        "text": "Ah, a young adventurer! Tell me, do you know about elemental affinities?",
+        "speaker": "Old Scholar"
+      },
+      {
+        "text": "Fire burns through nature's warriors. Water douses flame. And the earth swallows lightning whole.",
+        "speaker": "Old Scholar"
+      },
+      {
+        "text": "Remember this, and you'll have the upper hand in any skirmish.",
+        "speaker": "Old Scholar"
+      }
+    ]
+  },
+
+  "tavern_keeper": {
+    "name": "Tavern Keeper",
+    "lines": [
+      {
+        "text": "Welcome to The Rusty Flagon! You look like you've been through a scrap or two.",
+        "speaker": "Tavern Keeper"
+      },
+      {
+        "text": "Can I get you anything?",
+        "speaker": "Tavern Keeper",
+        "choices": [
+          {
+            "text": "I need to rest. My companions are wounded.",
+            "id": "rest",
+            "next": [
+              {
+                "text": "Of course. Head upstairs, second room on the left. Your company will be fighting fit by morning.",
+                "speaker": "Tavern Keeper"
+              }
+            ]
+          },
+          {
+            "text": "Any rumors worth hearing?",
+            "id": "rumors",
+            "next": [
+              {
+                "text": "Well... a Spark Thief's been spotted on the King's Road. Quick as lightning, that one. But I hear she's looking for work.",
+                "speaker": "Tavern Keeper"
+              },
+              {
+                "text": "Defeat her in a fair fight and she might just respect you enough to join your company.",
+                "speaker": "Tavern Keeper"
+              }
+            ]
+          },
+          {
+            "text": "Just passing through.",
+            "id": "leave",
+            "next": [
+              {
+                "text": "Safe travels then, adventurer. Watch the roads.",
+                "speaker": "Tavern Keeper"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "mysterious_stranger": {
+    "name": "???",
+    "requires_flag": "",
+    "lines": [
+      {
+        "text": "...",
+        "speaker": "???"
+      },
+      {
+        "text": "You've got an interesting look about you. Like someone who doesn't know what they've gotten into.",
+        "speaker": "???"
+      },
+      {
+        "text": "A word of advice — not everything that fights you is your enemy. And not everything that smiles at you is your friend.",
+        "speaker": "???"
+      }
+    ]
+  }
+}

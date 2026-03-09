@@ -1,226 +1,236 @@
 {
-  "tackle": {
-    "name": "Tackle",
+  "sword_strike": {
+    "name": "Sword Strike",
     "type": "normal",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
     "pp": 35,
-    "description": "A physical attack where the user charges at the target."
+    "description": "A basic slash with a blade. Reliable and straightforward."
   },
-  "scratch": {
-    "name": "Scratch",
+  "staff_bash": {
+    "name": "Staff Bash",
     "type": "normal",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
     "pp": 35,
-    "description": "Scratches the target with sharp claws."
+    "description": "A solid strike with a wooden staff."
   },
-  "growl": {
-    "name": "Growl",
+  "dagger_jab": {
+    "name": "Dagger Jab",
+    "type": "normal",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "description": "A quick stab with a short blade."
+  },
+  "war_cry": {
+    "name": "War Cry",
     "type": "normal",
     "category": "status",
     "power": 0,
     "accuracy": 100,
     "pp": 40,
-    "description": "Growls at the target to lower its Attack stat.",
+    "description": "A fierce shout that shakes the enemy's resolve, lowering their Attack.",
     "effect": {"stat": "attack", "stages": -1, "target": "enemy"}
   },
-  "tail_whip": {
-    "name": "Tail Whip",
+  "weaken_armor": {
+    "name": "Weaken Armor",
     "type": "normal",
     "category": "status",
     "power": 0,
     "accuracy": 100,
     "pp": 30,
-    "description": "Wags tail to lower the target's Defense.",
+    "description": "Finds gaps in the enemy's armor, lowering their Defense.",
     "effect": {"stat": "defense", "stages": -1, "target": "enemy"}
   },
-  "ember": {
-    "name": "Ember",
+  "fire_bolt": {
+    "name": "Fire Bolt",
     "type": "fire",
     "category": "special",
     "power": 40,
     "accuracy": 100,
     "pp": 25,
-    "description": "A small flame attack that may cause a burn.",
+    "description": "Hurls a small bolt of fire. May inflict a burn.",
     "effect_chance": 10,
     "effect": {"status": "burn", "target": "enemy"}
   },
-  "fire_fang": {
-    "name": "Fire Fang",
+  "blazing_blade": {
+    "name": "Blazing Blade",
     "type": "fire",
     "category": "physical",
     "power": 65,
     "accuracy": 95,
     "pp": 15,
-    "description": "Bites with flame-covered fangs."
+    "description": "Strikes with a sword wreathed in flames."
   },
-  "flamethrower": {
-    "name": "Flamethrower",
+  "inferno": {
+    "name": "Inferno",
     "type": "fire",
     "category": "special",
     "power": 90,
     "accuracy": 100,
     "pp": 15,
-    "description": "A powerful stream of fire."
+    "description": "Unleashes a devastating torrent of fire magic."
   },
-  "smokescreen": {
-    "name": "Smokescreen",
+  "smoke_bomb": {
+    "name": "Smoke Bomb",
     "type": "normal",
     "category": "status",
     "power": 0,
     "accuracy": 100,
     "pp": 20,
-    "description": "Lowers the target's accuracy with smoke."
+    "description": "Throws a smoke bomb that clouds the enemy's vision, lowering accuracy."
   },
-  "slash": {
-    "name": "Slash",
+  "cross_slash": {
+    "name": "Cross Slash",
     "type": "normal",
     "category": "physical",
     "power": 70,
     "accuracy": 100,
     "pp": 20,
-    "description": "Slashes with claws. High critical-hit ratio."
+    "description": "A powerful X-shaped slash. High critical-hit ratio."
   },
-  "water_gun": {
-    "name": "Water Gun",
+  "water_bolt": {
+    "name": "Water Bolt",
     "type": "water",
     "category": "special",
     "power": 40,
     "accuracy": 100,
     "pp": 25,
-    "description": "Shoots a jet of water at the target."
+    "description": "Launches a concentrated bolt of water magic."
   },
-  "bite": {
-    "name": "Bite",
+  "shadow_bite": {
+    "name": "Shadow Bite",
     "type": "dark",
     "category": "physical",
     "power": 60,
     "accuracy": 100,
     "pp": 25,
-    "description": "Bites with sharp fangs. May cause flinching."
+    "description": "Strikes from the shadows with dark energy. May cause flinching."
   },
-  "aqua_jet": {
-    "name": "Aqua Jet",
+  "tidal_rush": {
+    "name": "Tidal Rush",
     "type": "water",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
     "pp": 20,
-    "description": "A quick water charge that always goes first."
+    "description": "Charges forward on a surge of water. Always strikes first.",
+    "priority": 1
   },
-  "surf": {
-    "name": "Surf",
+  "tidal_wave": {
+    "name": "Tidal Wave",
     "type": "water",
     "category": "special",
     "power": 90,
     "accuracy": 100,
     "pp": 15,
-    "description": "A large wave crashes down on the target."
+    "description": "Summons a massive wave to crash upon the enemy."
   },
-  "vine_whip": {
-    "name": "Vine Whip",
+  "thorn_lash": {
+    "name": "Thorn Lash",
     "type": "grass",
     "category": "physical",
     "power": 45,
     "accuracy": 100,
     "pp": 25,
-    "description": "Strikes the target with slender vines."
+    "description": "Conjures thorny vines that whip the target."
   },
-  "leech_seed": {
-    "name": "Leech Seed",
+  "life_drain": {
+    "name": "Life Drain",
     "type": "grass",
     "category": "status",
     "power": 0,
     "accuracy": 90,
     "pp": 10,
-    "description": "Plants a seed that drains HP each turn."
+    "description": "Plants a parasitic seed that siphons the enemy's life force each turn."
   },
-  "razor_leaf": {
-    "name": "Razor Leaf",
+  "leaf_barrage": {
+    "name": "Leaf Barrage",
     "type": "grass",
     "category": "physical",
     "power": 55,
     "accuracy": 95,
     "pp": 25,
-    "description": "Launches sharp leaves. High critical-hit ratio."
+    "description": "Launches a volley of razor-sharp enchanted leaves."
   },
-  "sleep_powder": {
-    "name": "Sleep Powder",
+  "slumber_spore": {
+    "name": "Slumber Spore",
     "type": "grass",
     "category": "status",
     "power": 0,
     "accuracy": 75,
     "pp": 15,
-    "description": "Scatters sleep-inducing powder.",
+    "description": "Releases a cloud of magical spores that put the enemy to sleep.",
     "effect": {"status": "sleep", "target": "enemy"}
   },
-  "solar_beam": {
-    "name": "Solar Beam",
+  "solar_wrath": {
+    "name": "Solar Wrath",
     "type": "grass",
     "category": "special",
     "power": 120,
     "accuracy": 100,
     "pp": 10,
-    "description": "Absorbs light, then fires a powerful beam."
+    "description": "Channels the raw energy of the sun into a devastating beam of light."
   },
-  "thunder_shock": {
-    "name": "Thunder Shock",
+  "shock_bolt": {
+    "name": "Shock Bolt",
     "type": "electric",
     "category": "special",
     "power": 40,
     "accuracy": 100,
     "pp": 30,
-    "description": "A small jolt of electricity."
+    "description": "Fires a small bolt of crackling lightning."
   },
-  "spark": {
-    "name": "Spark",
+  "lightning_stab": {
+    "name": "Lightning Stab",
     "type": "electric",
     "category": "physical",
     "power": 65,
     "accuracy": 100,
     "pp": 20,
-    "description": "A charged tackle that may paralyze."
+    "description": "Drives a lightning-charged dagger into the target. May paralyze."
   },
-  "quick_attack": {
-    "name": "Quick Attack",
+  "swift_strike": {
+    "name": "Swift Strike",
     "type": "normal",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
     "pp": 30,
-    "description": "A lightning-fast attack that always goes first.",
+    "description": "A lightning-fast attack that always strikes first.",
     "priority": 1
   },
-  "gust": {
-    "name": "Gust",
+  "gale_shot": {
+    "name": "Gale Shot",
     "type": "flying",
     "category": "special",
     "power": 40,
     "accuracy": 100,
     "pp": 35,
-    "description": "Whips up a gust of wind to strike the target."
+    "description": "Fires an arrow carried by a powerful gust of wind."
   },
-  "harden": {
-    "name": "Harden",
+  "iron_guard": {
+    "name": "Iron Guard",
     "type": "normal",
     "category": "status",
     "power": 0,
     "accuracy": 100,
     "pp": 30,
-    "description": "Stiffens the body to raise Defense.",
+    "description": "Raises a heavy shield, greatly increasing Defense.",
     "effect": {"stat": "defense", "stages": 1, "target": "self"}
   },
-  "rock_throw": {
-    "name": "Rock Throw",
+  "boulder_hurl": {
+    "name": "Boulder Hurl",
     "type": "rock",
     "category": "physical",
     "power": 50,
     "accuracy": 90,
     "pp": 15,
-    "description": "Hurls a rock at the target."
+    "description": "Hurls a massive rock at the target."
   },
   "headbutt": {
     "name": "Headbutt",
@@ -229,25 +239,46 @@
     "power": 70,
     "accuracy": 100,
     "pp": 15,
-    "description": "A charging headbutt attack."
+    "description": "A devastating charging headbutt."
   },
-  "string_shot": {
-    "name": "String Shot",
+  "binding_hex": {
+    "name": "Binding Hex",
     "type": "bug",
     "category": "status",
     "power": 0,
     "accuracy": 95,
     "pp": 40,
-    "description": "Lowers the target's Speed with sticky string.",
+    "description": "Weaves a sticky hex that greatly slows the target.",
     "effect": {"stat": "speed", "stages": -2, "target": "enemy"}
   },
-  "bug_bite": {
-    "name": "Bug Bite",
+  "venom_fang": {
+    "name": "Venom Fang",
     "type": "bug",
     "category": "physical",
     "power": 60,
     "accuracy": 100,
     "pp": 20,
-    "description": "Bites the target with sharp mandibles."
+    "description": "Bites with magically venomous fangs."
+  },
+  "poison_scratch": {
+    "name": "Poison Scratch",
+    "type": "poison",
+    "category": "physical",
+    "power": 45,
+    "accuracy": 100,
+    "pp": 25,
+    "description": "Rakes the target with filthy, poisoned claws.",
+    "effect_chance": 20,
+    "effect": {"status": "poison", "target": "enemy"}
+  },
+  "dirty_trick": {
+    "name": "Dirty Trick",
+    "type": "normal",
+    "category": "status",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 20,
+    "description": "Throws dirt in the enemy's eyes, sharply lowering their accuracy.",
+    "effect": {"stat": "accuracy", "stages": -1, "target": "enemy"}
   }
 }

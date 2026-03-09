@@ -1,5 +1,6 @@
 extends Area2D
-## Tall grass zone that triggers random wild encounters when the player walks through.
+## Encounter zone that triggers random hostile encounters when the player walks through.
+## Can represent tall grass, dense forest, ruins, or any dangerous terrain.
 
 @export var encounter_rate: float = 0.15  # 15% chance per step
 @export var encounter_table_id: String = "route_1"  # References data/maps/*.json

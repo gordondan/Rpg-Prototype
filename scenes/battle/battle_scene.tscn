@@ -1,0 +1,181 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0battlescene"]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_scene.gd" id="1_battle"]
+[ext_resource type="Script" path="res://scripts/battle/battle_state_machine.gd" id="2_sm"]
+
+[node name="BattleScene" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_battle")
+
+[node name="BattleStateMachine" type="Node" parent="."]
+script = ExtResource("2_sm")
+
+[node name="BattleBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.2, 1)
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattleField" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EnemySprite" type="TextureRect" parent="UI/BattleField"]
+layout_mode = 1
+offset_left = 270.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 140.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EnemyPanel" type="PanelContainer" parent="UI/BattleField"]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 220.0
+offset_bottom = 80.0
+
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/EnemyPanel"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="UI/BattleField/EnemyPanel/VBox"]
+layout_mode = 2
+text = "Enemy"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/EnemyPanel/VBox"]
+layout_mode = 2
+text = "Lv.5"
+horizontal_alignment = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/EnemyPanel/VBox"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="PlayerSprite" type="TextureRect" parent="UI/BattleField"]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 100.0
+offset_right = 190.0
+offset_bottom = 220.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerPanel" type="PanelContainer" parent="UI/BattleField"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -110.0
+offset_right = -16.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/PlayerPanel"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="UI/BattleField/PlayerPanel/VBox"]
+layout_mode = 2
+text = "Ally"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/PlayerPanel/VBox"]
+layout_mode = 2
+text = "Lv.5"
+horizontal_alignment = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/PlayerPanel/VBox"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="UI/BattleField/PlayerPanel/VBox"]
+layout_mode = 2
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="BottomArea" type="PanelContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MessageLabel" type="Label" parent="UI/BottomArea"]
+layout_mode = 2
+text = "What will you do?"
+autowrap_mode = 2
+
+[node name="ActionPanel" type="HBoxContainer" parent="UI/BottomArea"]
+visible = false
+layout_mode = 2
+
+[node name="FightButton" type="Button" parent="UI/BottomArea/ActionPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "FIGHT"
+
+[node name="RunButton" type="Button" parent="UI/BottomArea/ActionPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "RETREAT"
+
+[node name="MovePanel" type="VBoxContainer" parent="UI/BottomArea"]
+visible = false
+layout_mode = 2
+
+[node name="TopRow" type="HBoxContainer" parent="UI/BottomArea/MovePanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MoveButton1" type="Button" parent="UI/BottomArea/MovePanel/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Skill 1"
+
+[node name="MoveButton2" type="Button" parent="UI/BottomArea/MovePanel/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Skill 2"
+
+[node name="BottomRow" type="HBoxContainer" parent="UI/BottomArea/MovePanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MoveButton3" type="Button" parent="UI/BottomArea/MovePanel/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Skill 3"
+
+[node name="MoveButton4" type="Button" parent="UI/BottomArea/MovePanel/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Skill 4"
+
+[node name="BackButton" type="Button" parent="UI/BottomArea/MovePanel"]
+layout_mode = 2
+text = "BACK"

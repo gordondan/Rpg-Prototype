@@ -1,7 +1,7 @@
 {
-  "emberaptor": {
-    "name": "Emberaptor",
-    "description": "A small fire lizard with a flame on its tail. Loyal and brave.",
+  "flame_squire": {
+    "name": "Flame Squire",
+    "description": "A young knight-in-training who wields a blazing short sword. Eager to prove themselves in battle.",
     "types": ["fire"],
     "base_hp": 44,
     "base_attack": 52,
@@ -10,23 +10,25 @@
     "base_sp_defense": 50,
     "base_speed": 65,
     "base_exp": 62,
+    "class": "warrior",
     "evolution": {
-      "creature_id": "blazeraptor",
-      "level": 16
+      "creature_id": "inferno_knight",
+      "level": 16,
+      "flavor": "After proving their valor, the Flame Squire is promoted to Inferno Knight."
     },
     "learnset": [
-      {"level": 1, "move_id": "scratch"},
-      {"level": 1, "move_id": "growl"},
-      {"level": 6, "move_id": "ember"},
-      {"level": 10, "move_id": "smokescreen"},
-      {"level": 15, "move_id": "fire_fang"},
-      {"level": 20, "move_id": "slash"},
-      {"level": 25, "move_id": "flamethrower"}
+      {"level": 1, "move_id": "sword_strike"},
+      {"level": 1, "move_id": "war_cry"},
+      {"level": 6, "move_id": "fire_bolt"},
+      {"level": 10, "move_id": "smoke_bomb"},
+      {"level": 15, "move_id": "blazing_blade"},
+      {"level": 20, "move_id": "cross_slash"},
+      {"level": 25, "move_id": "inferno"}
     ]
   },
-  "tidalup": {
-    "name": "Tidalup",
-    "description": "A playful water pup that loves to splash. Very friendly.",
+  "tide_cleric": {
+    "name": "Tide Cleric",
+    "description": "A novice healer from the coastal temples. Commands the power of the sea to protect allies.",
     "types": ["water"],
     "base_hp": 50,
     "base_attack": 48,
@@ -35,23 +37,25 @@
     "base_sp_defense": 52,
     "base_speed": 43,
     "base_exp": 63,
+    "class": "cleric",
     "evolution": {
-      "creature_id": "tsunahound",
-      "level": 16
+      "creature_id": "storm_priest",
+      "level": 16,
+      "flavor": "Through devotion and study, the Tide Cleric rises to become a Storm Priest."
     },
     "learnset": [
-      {"level": 1, "move_id": "tackle"},
-      {"level": 1, "move_id": "growl"},
-      {"level": 6, "move_id": "water_gun"},
-      {"level": 10, "move_id": "tail_whip"},
-      {"level": 15, "move_id": "bite"},
-      {"level": 20, "move_id": "aqua_jet"},
-      {"level": 25, "move_id": "surf"}
+      {"level": 1, "move_id": "staff_bash"},
+      {"level": 1, "move_id": "war_cry"},
+      {"level": 6, "move_id": "water_bolt"},
+      {"level": 10, "move_id": "weaken_armor"},
+      {"level": 15, "move_id": "shadow_bite"},
+      {"level": 20, "move_id": "tidal_rush"},
+      {"level": 25, "move_id": "tidal_wave"}
     ]
   },
-  "sproutlet": {
-    "name": "Sproutlet",
-    "description": "A tiny plant creature with a seed on its back. Calm and sturdy.",
+  "grove_druid": {
+    "name": "Grove Druid",
+    "description": "An apprentice of the ancient forest order. Draws power from the earth and living things.",
     "types": ["grass"],
     "base_hp": 50,
     "base_attack": 49,
@@ -60,18 +64,20 @@
     "base_sp_defense": 55,
     "base_speed": 40,
     "base_exp": 64,
+    "class": "druid",
     "evolution": {
-      "creature_id": "thornbloom",
-      "level": 16
+      "creature_id": "elder_warden",
+      "level": 16,
+      "flavor": "Bonded deeply with nature, the Grove Druid becomes an Elder Warden."
     },
     "learnset": [
-      {"level": 1, "move_id": "tackle"},
-      {"level": 1, "move_id": "growl"},
-      {"level": 6, "move_id": "vine_whip"},
-      {"level": 10, "move_id": "leech_seed"},
-      {"level": 15, "move_id": "razor_leaf"},
-      {"level": 20, "move_id": "sleep_powder"},
-      {"level": 25, "move_id": "solar_beam"}
+      {"level": 1, "move_id": "staff_bash"},
+      {"level": 1, "move_id": "war_cry"},
+      {"level": 6, "move_id": "thorn_lash"},
+      {"level": 10, "move_id": "life_drain"},
+      {"level": 15, "move_id": "leaf_barrage"},
+      {"level": 20, "move_id": "slumber_spore"},
+      {"level": 25, "move_id": "solar_wrath"}
     ]
   }
 }
