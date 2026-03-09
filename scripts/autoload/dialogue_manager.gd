@@ -135,9 +135,17 @@ func _on_choice_made(choice_index: int, choice_id: String) -> void:
 	# Handle special choice actions
 	match choice_id:
 		"rest":
-			# Heal the party when the player rests at the tavern
-			GameManager.heal_all_party()
-			print("[DialogueManager] Party healed!")
+			var cost := 25
+			if GameManager.gold >= cost:
+				GameManager.gold -= cost
+				GameManager.heal_all_party()
+				print("[DialogueManager] Party healed! -%d gold (remaining: %d)" % [cost, GameManager.gold])
+			else:
+				# Not enough gold — swap the follow-up lines to a rejection
+				if _dialogue_box and is_instance_valid(_dialogue_box):
+					_dialogue_box.replace_upcoming_lines([
+						{"text": "You don't have enough gold for a room. Come back when you've got 25 gold.", "speaker": "Tavern Keeper"}
+					])
 
 
 func get_dialogue_data(dialogue_id: String) -> Dictionary:

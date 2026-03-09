@@ -35,6 +35,7 @@ signal player_interacted(facing_tile: Vector2)
 
 func _ready() -> void:
 	add_to_group("player")
+	z_index = 5  # Render above map objects (trees, buildings, props are z_index 0)
 	position = position.snapped(Vector2(TILE_SIZE, TILE_SIZE))
 	_load_character_sprites()
 	_update_sprite_frame()
@@ -54,6 +55,16 @@ func _load_character_sprites() -> void:
 	_char_sprite.offset = Vector2(0, -8)
 	add_child(_char_sprite)
 
+	# Fallback: if textures failed to load, show a colored placeholder
+	if _idle_texture == null:
+		push_warning("Player: Sprite textures failed to load — showing placeholder")
+		var placeholder := ColorRect.new()
+		placeholder.name = "Placeholder"
+		placeholder.color = Color(0.2, 0.5, 1.0, 0.9)  # Blue square
+		placeholder.size = Vector2(12, 14)
+		placeholder.position = Vector2(-6, -14)
+		add_child(placeholder)
+
 
 func _load_texture(res_path: String) -> ImageTexture:
 	var global_path := ProjectSettings.globalize_path(res_path)
@@ -67,6 +78,22 @@ func _load_texture(res_path: String) -> ImageTexture:
 	return ImageTexture.create_from_image(image)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not GameManager.is_player_free():
+		return
+
+	if event.is_action_pressed("inventory"):
+		_open_party_editor()
+		get_viewport().set_input_as_handled()
+		return
+
+	if event.is_action_pressed("interact") and not is_moving:
+		var target_pos := position + facing_direction * TILE_SIZE
+		if not _try_interact_with_npc(target_pos):
+			player_interacted.emit(target_pos)
+		get_viewport().set_input_as_handled()
+
+
 func _physics_process(delta: float) -> void:
 	# Handle walk animation frame cycling
 	if _is_walking:
@@ -77,6 +104,10 @@ func _physics_process(delta: float) -> void:
 			_update_sprite_frame()
 
 	if is_moving:
+		return
+
+	# Don't process input when player isn't free (menu, battle, dialogue, etc.)
+	if not GameManager.is_player_free():
 		return
 
 	var input_direction := _get_input_direction()
@@ -94,12 +125,6 @@ func _physics_process(delta: float) -> void:
 			_set_walking(false)
 	else:
 		_set_walking(false)
-
-	if Input.is_action_just_pressed("interact"):
-		var target_pos := position + facing_direction * TILE_SIZE
-		# Try to talk to an NPC first; only emit signal if no NPC found
-		if not _try_interact_with_npc(target_pos):
-			player_interacted.emit(target_pos)
 
 
 func _try_interact_with_npc(target_pos: Vector2) -> bool:
@@ -159,13 +184,24 @@ func _update_sprite_frame() -> void:
 
 
 func _direction_to_row(dir: Vector2) -> int:
-	if dir == Vector2.UP:
+	# Sprite sheet rows: 0=Left, 1=Right, 2=Up, 3=Down
+	if dir == Vector2.DOWN:
 		return 3
-	elif dir == Vector2.LEFT:
-		return 1
-	elif dir == Vector2.RIGHT:
+	elif dir == Vector2.UP:
 		return 2
-	return 0  # DOWN
+	elif dir == Vector2.LEFT:
+		return 0
+	elif dir == Vector2.RIGHT:
+		return 1
+	return 3  # Default to down
+
+
+func _open_party_editor() -> void:
+	var editor_scene := load("res://scenes/ui/party_editor.tscn")
+	if editor_scene:
+		GameManager.set_state(GameManager.GameState.MENU)
+		var instance: Node = editor_scene.instantiate()
+		get_tree().current_scene.add_child(instance)
 
 
 func _update_raycast() -> void:

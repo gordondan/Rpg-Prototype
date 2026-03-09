@@ -280,5 +280,42 @@
     "pp": 20,
     "description": "Throws dirt in the enemy's eyes, sharply lowering their accuracy.",
     "effect": {"stat": "accuracy", "stages": -1, "target": "enemy"}
+  },
+  "pixie_dust": {
+    "name": "Pixie Dust",
+    "type": "flying",
+    "category": "special",
+    "power": 45,
+    "accuracy": 100,
+    "pp": 25,
+    "description": "Blows a sparkling cloud of enchanted dust that stings the target."
+  },
+  "giggle_hex": {
+    "name": "Giggle Hex",
+    "type": "normal",
+    "category": "status",
+    "power": 0,
+    "accuracy": 95,
+    "pp": 20,
+    "description": "A mischievous curse that makes the target laugh uncontrollably, lowering their Sp.Attack.",
+    "effect": {"stat": "sp_attack", "stages": -1, "target": "enemy"}
+  },
+  "fae_wind": {
+    "name": "Fae Wind",
+    "type": "flying",
+    "category": "special",
+    "power": 65,
+    "accuracy": 95,
+    "pp": 15,
+    "description": "Summons an otherworldly gale infused with fairy magic."
+  },
+  "starfall": {
+    "name": "Starfall",
+    "type": "flying",
+    "category": "special",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "description": "Calls down a shower of brilliant falling stars upon the enemy."
   }
 }

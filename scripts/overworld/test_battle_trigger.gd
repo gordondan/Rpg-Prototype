@@ -1,6 +1,6 @@
 extends Node
 ## Temporary test script for triggering battles and dialogue.
-## Space = random battle | 1-4 = test different NPC dialogues
+## B = random battle | 1-4 = test different NPC dialogues | Space = talk to NPCs
 ## Remove this once you have proper NPCs and encounter zones.
 
 var _test_dialogues := ["village_guard", "old_scholar", "tavern_keeper", "mysterious_stranger"]
@@ -10,12 +10,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not GameManager.is_player_free():
 		return
 
-	if event.is_action_pressed("interact"):
-		_start_test_battle()
-
-	# Number keys 1-4 trigger test dialogues
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
+			KEY_B:
+				_start_test_battle()
 			KEY_1:
 				_start_test_dialogue(0)
 			KEY_2:
@@ -41,27 +39,11 @@ func _start_test_battle() -> void:
 	if DialogueManager.is_active():
 		return
 
-	var encounters: Array = DataLoader.get_encounter_table("route_1")
-
-	if encounters.is_empty():
-		print("[TEST] No encounters found in route_1 table!")
-		return
-
-	var total_weight := 0.0
-	for entry in encounters:
-		total_weight += entry.get("weight", 1.0)
-
-	var roll := randf() * total_weight
-	var cumulative := 0.0
-
-	for entry in encounters:
-		cumulative += entry.get("weight", 1.0)
-		if roll <= cumulative:
-			var creature_id: String = entry["creature_id"]
-			var level_min: int = entry.get("level_min", 2)
-			var level_max: int = entry.get("level_max", 5)
-			var level := randi_range(level_min, level_max)
-
-			print("[TEST] Triggering battle with %s (Lv.%d)" % [creature_id, level])
-			BattleManager.start_wild_battle(creature_id, level)
-			return
+	# Random 1-3 enemies (60% chance of 1, 30% chance of 2, 10% chance of 3)
+	var roll := randf()
+	var enemy_count := 1
+	if roll < 0.1:
+		enemy_count = 3
+	elif roll < 0.4:
+		enemy_count = 2
+	BattleManager.start_wild_battle("route_1", enemy_count)

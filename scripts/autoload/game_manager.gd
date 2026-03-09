@@ -8,8 +8,11 @@ signal game_state_changed(new_state: GameState)
 
 var current_state: GameState = GameState.OVERWORLD
 
-# Player's company (up to 6 allies)
+# Player's active company (up to 6: first 3 active in battle, rest are reserves)
 var player_party: Array[CreatureInstance] = []
+
+# Barracks — all recruited creatures not currently in the party
+var barracks: Array[CreatureInstance] = []
 
 # Player inventory
 var inventory: Dictionary = {}  # {item_id: quantity}
@@ -47,8 +50,15 @@ func _setup_debug_party() -> void:
 	third.nickname = "Tide Cleric"
 	player_party.append(third)
 
+	# 4th party member (will be a reserve in battle since only 3 can be active)
+	var fourth := CreatureInstance.create("mischievous_fairy", 5)
+	fourth.nickname = "Mischievous Fairy"
+	player_party.append(fourth)
+
 	for c in player_party:
-		print("[GameManager] Debug company: %s (Lv.%d)" % [c.nickname, c.level])
+		print("[GameManager] Debug party: %s (Lv.%d)" % [c.nickname, c.level])
+	for c in barracks:
+		print("[GameManager] Debug barracks: %s (Lv.%d)" % [c.nickname, c.level])
 
 
 # ─── State Management ────────────────────────────────────────────
@@ -90,10 +100,50 @@ func get_battle_team(max_active: int = 3) -> Dictionary:
 
 
 func add_creature_to_party(creature: CreatureInstance) -> bool:
+	## Add a creature to the party if there's room, otherwise send to barracks.
 	if player_party.size() < 6:
 		player_party.append(creature)
 		return true
-	return false  # Company is full — would need a guild hall / barracks
+	# Party full — send to barracks automatically
+	barracks.append(creature)
+	return false
+
+
+func move_to_barracks(party_index: int) -> bool:
+	## Move a creature from the party to the barracks.
+	## Fails if it would leave the party empty.
+	if player_party.size() <= 1:
+		return false
+	if party_index < 0 or party_index >= player_party.size():
+		return false
+	var creature := player_party[party_index]
+	player_party.remove_at(party_index)
+	barracks.append(creature)
+	return true
+
+
+func move_to_party(barracks_index: int) -> bool:
+	## Move a creature from the barracks to the party.
+	## Fails if party is already full (6).
+	if player_party.size() >= 6:
+		return false
+	if barracks_index < 0 or barracks_index >= barracks.size():
+		return false
+	var creature := barracks[barracks_index]
+	barracks.remove_at(barracks_index)
+	player_party.append(creature)
+	return true
+
+
+func swap_party_positions(index_a: int, index_b: int) -> void:
+	## Swap two creatures' positions within the party (reorder active/reserve).
+	if index_a < 0 or index_a >= player_party.size():
+		return
+	if index_b < 0 or index_b >= player_party.size():
+		return
+	var temp := player_party[index_a]
+	player_party[index_a] = player_party[index_b]
+	player_party[index_b] = temp
 
 
 func heal_all_party() -> void:
@@ -138,7 +188,8 @@ func save_game(slot: int = 0) -> void:
 		"gold": gold,
 		"guild_ranks": guild_ranks,
 		"story_flags": story_flags,
-		"party": _serialize_party(),
+		"party": _serialize_creatures(player_party),
+		"barracks": _serialize_creatures(barracks),
 		"inventory": inventory,
 		"position": {"x": _saved_player_position.x, "y": _saved_player_position.y},
 		"map": _saved_map_path,
@@ -172,22 +223,20 @@ func load_game(slot: int = 0) -> bool:
 	# Restore party
 	player_party.clear()
 	for creature_data in data.get("party", []):
-		var creature := CreatureInstance.create(
-			creature_data["creature_id"],
-			int(creature_data["level"])
-		)
-		creature.nickname = creature_data.get("nickname", creature.nickname)
-		creature.current_hp = int(creature_data.get("current_hp", creature.max_hp))
-		creature.experience = int(creature_data.get("experience", 0))
-		player_party.append(creature)
+		player_party.append(_deserialize_creature(creature_data))
+
+	# Restore barracks
+	barracks.clear()
+	for creature_data in data.get("barracks", []):
+		barracks.append(_deserialize_creature(creature_data))
 
 	print("[GameManager] Game loaded from %s" % path)
 	return true
 
 
-func _serialize_party() -> Array:
+func _serialize_creatures(creatures: Array) -> Array:
 	var result := []
-	for creature in player_party:
+	for creature in creatures:
 		result.append({
 			"creature_id": creature.creature_id,
 			"nickname": creature.nickname,
@@ -196,3 +245,14 @@ func _serialize_party() -> Array:
 			"experience": creature.experience,
 		})
 	return result
+
+
+func _deserialize_creature(creature_data: Dictionary) -> CreatureInstance:
+	var creature := CreatureInstance.create(
+		creature_data["creature_id"],
+		int(creature_data["level"])
+	)
+	creature.nickname = creature_data.get("nickname", creature.nickname)
+	creature.current_hp = int(creature_data.get("current_hp", creature.max_hp))
+	creature.experience = int(creature_data.get("experience", 0))
+	return creature

@@ -53,6 +53,33 @@
       {"level": 25, "move_id": "tidal_wave"}
     ]
   },
+  "mischievous_fairy": {
+    "name": "Mischievous Fairy",
+    "description": "A tiny, giggling trickster from the Feywild. Impossibly fast and loves playing pranks on anyone foolish enough to wander into the woods.",
+    "types": ["flying"],
+    "base_hp": 38,
+    "base_attack": 35,
+    "base_defense": 30,
+    "base_sp_attack": 65,
+    "base_sp_defense": 55,
+    "base_speed": 75,
+    "base_exp": 60,
+    "class": "trickster",
+    "evolution": {
+      "creature_id": "archfey_sylph",
+      "level": 18,
+      "flavor": "Having caused enough chaos, the Mischievous Fairy ascends into an Archfey Sylph."
+    },
+    "learnset": [
+      {"level": 1, "move_id": "pixie_dust"},
+      {"level": 1, "move_id": "giggle_hex"},
+      {"level": 5, "move_id": "swift_strike"},
+      {"level": 9, "move_id": "gale_shot"},
+      {"level": 14, "move_id": "fae_wind"},
+      {"level": 20, "move_id": "smoke_bomb"},
+      {"level": 25, "move_id": "starfall"}
+    ]
+  },
   "grove_druid": {
     "name": "Grove Druid",
     "description": "An apprentice of the ancient forest order. Draws power from the earth and living things.",

@@ -91,8 +91,12 @@
             "id": "rest",
             "next": [
               {
-                "text": "Of course. Head upstairs, second room on the left. Your company will be fighting fit by morning.",
+                "text": "Of course. That'll be 25 gold. Head upstairs, second room on the left.",
                 "speaker": "Tavern Keeper"
+              },
+              {
+                "text": "Your party rests at the tavern... All HP and PP restored!",
+                "speaker": ""
               }
             ]
           },

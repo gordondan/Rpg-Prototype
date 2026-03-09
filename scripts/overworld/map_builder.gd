@@ -420,7 +420,7 @@ func _create_encounter_area(area_name: String, tile_x: int, tile_y: int, width: 
 func _place_npcs() -> void:
 	_create_npc("Village Guard", "village_guard", Vector2i(19, 5))
 	_create_npc("Old Scholar", "old_scholar", Vector2i(23, 10))
-	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 15))
+	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 18))
 	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(30, 22))
 
 

@@ -1,0 +1,87 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/party_editor.gd" id="1_editor"]
+
+[node name="PartyEditor" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_editor")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.15, 0.95)
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 476.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 10
+text = "PARTY MANAGEMENT"
+horizontal_alignment = 1
+
+[node name="PartyLabel" type="Label" parent="UI"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 18.0
+offset_right = 236.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 8
+text = "Active Party (first 3 fight)"
+
+[node name="PartyList" type="VBoxContainer" parent="UI"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 32.0
+offset_right = 236.0
+offset_bottom = 260.0
+
+[node name="BarracksLabel" type="Label" parent="UI"]
+layout_mode = 1
+offset_left = 244.0
+offset_top = 18.0
+offset_right = 476.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 8
+text = "Barracks"
+
+[node name="BarracksList" type="VBoxContainer" parent="UI"]
+layout_mode = 1
+offset_left = 244.0
+offset_top = 32.0
+offset_right = 476.0
+offset_bottom = 260.0
+
+[node name="InfoPanel" type="PanelContainer" parent="UI"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 262.0
+offset_right = 380.0
+offset_bottom = 316.0
+
+[node name="InfoLabel" type="Label" parent="UI/InfoPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Select a creature to manage."
+autowrap_mode = 2
+
+[node name="CloseButton" type="Button" parent="UI"]
+layout_mode = 1
+offset_left = 388.0
+offset_top = 262.0
+offset_right = 476.0
+offset_bottom = 282.0
+theme_override_font_sizes/font_size = 9
+text = "CLOSE (Esc)"

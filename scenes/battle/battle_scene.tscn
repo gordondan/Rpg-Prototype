@@ -31,87 +31,243 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -80.0
+offset_bottom = -56.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="EnemySprite" type="TextureRect" parent="UI/BattleField"]
+[node name="EnemyArea" type="HBoxContainer" parent="UI/BattleField"]
 layout_mode = 1
-offset_left = 270.0
-offset_top = 20.0
-offset_right = 400.0
-offset_bottom = 140.0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 472.0
+offset_bottom = 110.0
+
+[node name="EnemySlot1" type="VBoxContainer" parent="UI/BattleField/EnemyArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemySprite1" type="TextureRect" parent="UI/BattleField/EnemyArea/EnemySlot1"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EnemyPanel" type="PanelContainer" parent="UI/BattleField"]
-layout_mode = 1
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 220.0
-offset_bottom = 80.0
-
-[node name="VBox" type="VBoxContainer" parent="UI/BattleField/EnemyPanel"]
+[node name="EnemyPanel1" type="PanelContainer" parent="UI/BattleField/EnemyArea/EnemySlot1"]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="UI/BattleField/EnemyPanel/VBox"]
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1"]
 layout_mode = 2
-text = "Enemy"
 
-[node name="LevelLabel" type="Label" parent="UI/BattleField/EnemyPanel/VBox"]
+[node name="NameLabel" type="Label" parent="UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1/VBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Enemy 1"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
 text = "Lv.5"
 horizontal_alignment = 2
 
-[node name="HPBar" type="ProgressBar" parent="UI/BattleField/EnemyPanel/VBox"]
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1/VBox"]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
 max_value = 100.0
 value = 100.0
 show_percentage = false
 
-[node name="PlayerSprite" type="TextureRect" parent="UI/BattleField"]
-layout_mode = 1
-offset_left = 50.0
-offset_top = 100.0
-offset_right = 190.0
-offset_bottom = 220.0
+[node name="EnemySlot2" type="VBoxContainer" parent="UI/BattleField/EnemyArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemySprite2" type="TextureRect" parent="UI/BattleField/EnemyArea/EnemySlot2"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayerPanel" type="PanelContainer" parent="UI/BattleField"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -220.0
-offset_top = -110.0
-offset_right = -16.0
-offset_bottom = -8.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="VBox" type="VBoxContainer" parent="UI/BattleField/PlayerPanel"]
+[node name="EnemyPanel2" type="PanelContainer" parent="UI/BattleField/EnemyArea/EnemySlot2"]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="UI/BattleField/PlayerPanel/VBox"]
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2"]
 layout_mode = 2
-text = "Ally"
 
-[node name="LevelLabel" type="Label" parent="UI/BattleField/PlayerPanel/VBox"]
+[node name="NameLabel" type="Label" parent="UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2/VBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Enemy 2"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
 text = "Lv.5"
 horizontal_alignment = 2
 
-[node name="HPBar" type="ProgressBar" parent="UI/BattleField/PlayerPanel/VBox"]
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2/VBox"]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
 max_value = 100.0
 value = 100.0
 show_percentage = false
 
-[node name="HPLabel" type="Label" parent="UI/BattleField/PlayerPanel/VBox"]
+[node name="EnemySlot3" type="VBoxContainer" parent="UI/BattleField/EnemyArea"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemySprite3" type="TextureRect" parent="UI/BattleField/EnemyArea/EnemySlot3"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EnemyPanel3" type="PanelContainer" parent="UI/BattleField/EnemyArea/EnemySlot3"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Enemy 3"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Lv.5"
+horizontal_alignment = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="PlayerArea" type="HBoxContainer" parent="UI/BattleField"]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 120.0
+offset_right = 472.0
+offset_bottom = 232.0
+
+[node name="PlayerSlot1" type="VBoxContainer" parent="UI/BattleField/PlayerArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerSprite1" type="TextureRect" parent="UI/BattleField/PlayerArea/PlayerSlot1"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerPanel1" type="PanelContainer" parent="UI/BattleField/PlayerArea/PlayerSlot1"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Ally 1"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Lv.5"
+horizontal_alignment = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="PlayerSlot2" type="VBoxContainer" parent="UI/BattleField/PlayerArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerSprite2" type="TextureRect" parent="UI/BattleField/PlayerArea/PlayerSlot2"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerPanel2" type="PanelContainer" parent="UI/BattleField/PlayerArea/PlayerSlot2"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Ally 2"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Lv.5"
+horizontal_alignment = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="PlayerSlot3" type="VBoxContainer" parent="UI/BattleField/PlayerArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerSprite3" type="TextureRect" parent="UI/BattleField/PlayerArea/PlayerSlot3"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerPanel3" type="PanelContainer" parent="UI/BattleField/PlayerArea/PlayerSlot3"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Ally 3"
+
+[node name="LevelLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Lv.5"
+horizontal_alignment = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
 text = "100 / 100"
 horizontal_alignment = 2
 
@@ -121,12 +277,13 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -80.0
+offset_top = -56.0
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="MessageLabel" type="Label" parent="UI/BottomArea"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "What will you do?"
 autowrap_mode = 2
 
@@ -137,11 +294,19 @@ layout_mode = 2
 [node name="FightButton" type="Button" parent="UI/BottomArea/ActionPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 text = "FIGHT"
+
+[node name="SwapButton" type="Button" parent="UI/BottomArea/ActionPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "SWAP"
 
 [node name="RunButton" type="Button" parent="UI/BottomArea/ActionPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 text = "RETREAT"
 
 [node name="MovePanel" type="VBoxContainer" parent="UI/BottomArea"]
@@ -155,11 +320,13 @@ size_flags_vertical = 3
 [node name="MoveButton1" type="Button" parent="UI/BottomArea/MovePanel/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
 text = "Skill 1"
 
 [node name="MoveButton2" type="Button" parent="UI/BottomArea/MovePanel/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
 text = "Skill 2"
 
 [node name="BottomRow" type="HBoxContainer" parent="UI/BottomArea/MovePanel"]
@@ -169,13 +336,70 @@ size_flags_vertical = 3
 [node name="MoveButton3" type="Button" parent="UI/BottomArea/MovePanel/BottomRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
 text = "Skill 3"
 
 [node name="MoveButton4" type="Button" parent="UI/BottomArea/MovePanel/BottomRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
 text = "Skill 4"
 
 [node name="BackButton" type="Button" parent="UI/BottomArea/MovePanel"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "BACK"
+
+[node name="TargetPanel" type="VBoxContainer" parent="UI/BottomArea"]
+visible = false
+layout_mode = 2
+
+[node name="TargetButton1" type="Button" parent="UI/BottomArea/TargetPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
+text = "Target 1"
+
+[node name="TargetButton2" type="Button" parent="UI/BottomArea/TargetPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
+text = "Target 2"
+
+[node name="TargetButton3" type="Button" parent="UI/BottomArea/TargetPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
+text = "Target 3"
+
+[node name="TargetBackButton" type="Button" parent="UI/BottomArea/TargetPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "BACK"
+
+[node name="SwapPanel" type="VBoxContainer" parent="UI/BottomArea"]
+visible = false
+layout_mode = 2
+
+[node name="SwapButton1" type="Button" parent="UI/BottomArea/SwapPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
+text = "Reserve 1"
+
+[node name="SwapButton2" type="Button" parent="UI/BottomArea/SwapPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
+text = "Reserve 2"
+
+[node name="SwapButton3" type="Button" parent="UI/BottomArea/SwapPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 9
+text = "Reserve 3"
+
+[node name="SwapBackButton" type="Button" parent="UI/BottomArea/SwapPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
 text = "BACK"

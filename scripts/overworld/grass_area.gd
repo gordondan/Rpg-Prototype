@@ -38,27 +38,15 @@ func _on_player_stepped(_new_position: Vector2) -> void:
 
 
 func _trigger_encounter() -> void:
-	## Roll a random creature from this area's encounter table and start a battle.
-	var encounter_data = DataLoader.get_encounter_table(encounter_table_id)
-	if encounter_data.is_empty():
-		push_warning("No encounter table found for: %s" % encounter_table_id)
-		return
+	## Roll 1-3 random creatures from this area's encounter table and start a battle.
+	# Determine enemy count: 60% chance of 1, 30% chance of 2, 10% chance of 3
+	var count_roll := randf()
+	var enemy_count: int
+	if count_roll < 0.6:
+		enemy_count = 1
+	elif count_roll < 0.9:
+		enemy_count = 2
+	else:
+		enemy_count = 3
 
-	# Weighted random selection from encounter table
-	var total_weight := 0.0
-	for entry in encounter_data:
-		total_weight += entry.get("weight", 1.0)
-
-	var roll := randf() * total_weight
-	var cumulative := 0.0
-
-	for entry in encounter_data:
-		cumulative += entry.get("weight", 1.0)
-		if roll <= cumulative:
-			var creature_id: String = entry["creature_id"]
-			var level_min: int = entry.get("level_min", 2)
-			var level_max: int = entry.get("level_max", 5)
-			var level := randi_range(level_min, level_max)
-
-			BattleManager.start_wild_battle(creature_id, level)
-			return
+	BattleManager.start_wild_battle(encounter_table_id, enemy_count)

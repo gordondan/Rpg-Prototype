@@ -183,6 +183,13 @@ func _advance_dialogue() -> void:
 	_show_current_line()
 
 
+func replace_upcoming_lines(new_lines: Array) -> void:
+	## Replace all lines after the current one with new_lines.
+	## Called by DialogueManager to swap follow-up text (e.g. not enough gold).
+	_lines = _lines.slice(0, _current_line_index + 1)
+	_lines.append_array(new_lines)
+
+
 func _show_choices(choices: Array) -> void:
 	choice_container.visible = true
 

@@ -64,7 +64,8 @@ func _start_dialogue_then_battle() -> void:
 
 
 func _on_dialogue_ended_start_battle() -> void:
-	BattleManager.start_rival_battle(rival_creature_id, rival_creature_level)
+	var rival := CreatureInstance.create(rival_creature_id, rival_creature_level)
+	BattleManager.start_rival_battle([rival])
 	BattleManager.battle_finished.connect(_on_rival_defeated, CONNECT_ONE_SHOT)
 
 
