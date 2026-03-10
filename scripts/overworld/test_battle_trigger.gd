@@ -1,6 +1,6 @@
 extends Node
 ## Temporary test script for triggering battles and dialogue.
-## B = random battle | S = succubus test battle | L = level up party | 1-4 = test dialogues
+## B = random battle | K = succubus test battle | L = level up party | 1-4 = test dialogues
 ## Remove this once you have proper NPCs and encounter zones.
 
 var _test_dialogues := ["village_guard", "old_scholar", "tavern_keeper", "mysterious_stranger"]
@@ -14,7 +14,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		match event.keycode:
 			KEY_B:
 				_start_test_battle()
-			KEY_S:
+			KEY_K:
 				_start_succubus_battle()
 			KEY_L:
 				_level_up_party()
