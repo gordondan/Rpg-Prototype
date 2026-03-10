@@ -38,7 +38,7 @@ var moves: Array[Dictionary] = []  # [{id, current_pp, max_pp}]
 
 static func create(id: String, lvl: int) -> CreatureInstance:
 	## Factory method: create a creature instance from data definitions.
-	var instance := CreatureInstance.new()
+	var instance: CreatureInstance = load("res://scripts/battle/creature_instance.gd").new()
 	var data: Dictionary = DataLoader.get_creature_data(id)
 
 	if data.is_empty():

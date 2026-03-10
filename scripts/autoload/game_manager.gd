@@ -114,7 +114,7 @@ func move_to_barracks(party_index: int) -> bool:
 		return false
 	if party_index < 0 or party_index >= player_party.size():
 		return false
-	var creature := player_party[party_index]
+	var creature = player_party[party_index]
 	player_party.remove_at(party_index)
 	barracks.append(creature)
 	return true
@@ -127,7 +127,7 @@ func move_to_party(barracks_index: int) -> bool:
 		return false
 	if barracks_index < 0 or barracks_index >= barracks.size():
 		return false
-	var creature := barracks[barracks_index]
+	var creature = barracks[barracks_index]
 	barracks.remove_at(barracks_index)
 	player_party.append(creature)
 	return true
@@ -139,7 +139,7 @@ func swap_party_positions(index_a: int, index_b: int) -> void:
 		return
 	if index_b < 0 or index_b >= player_party.size():
 		return
-	var temp := player_party[index_a]
+	var temp = player_party[index_a]
 	player_party[index_a] = player_party[index_b]
 	player_party[index_b] = temp
 

@@ -89,11 +89,10 @@ func _ready() -> void:
 # --- Texture loading (bypasses Godot import system) ---
 func _load_texture(res_path: String) -> ImageTexture:
 	var global_path := ProjectSettings.globalize_path(res_path)
-	var image := Image.new()
-	var err := image.load(global_path)
-	if err != OK:
-		err = image.load(res_path)
-	if err != OK:
+	var image := Image.load_from_file(global_path)
+	if image == null:
+		image = Image.load_from_file(res_path)
+	if image == null:
 		push_warning("MapBuilder: Failed to load texture: %s" % res_path)
 		return null
 	return ImageTexture.create_from_image(image)

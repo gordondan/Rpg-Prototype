@@ -84,7 +84,6 @@ func _launch_battle(player_active: Array, enemy_team: Array,
 	var instance: Node = battle_scene.instantiate()
 	get_tree().current_scene.add_child(instance)
 
-	print("[BattleManager] instance class: %s, has setup_battle: %s" % [instance.get_class(), str(instance.has_method("setup_battle"))])
 	if instance.has_method("setup_battle"):
 		instance.call("setup_battle", player_active, enemy_team, is_wild, reserves)
 	else:

@@ -89,9 +89,6 @@ var _selected_move_index: int = 0
 
 
 func _ready() -> void:
-	print("[BattleScene] _ready() START — script is loading correctly")
-	print("[BattleScene] battle_sm node: %s" % str(battle_sm))
-	print("[BattleScene] battle_sm script: %s" % str(battle_sm.get_script() if battle_sm else "NULL"))
 	# Populate slot arrays directly from @onready vars (avoids string-path has_node() issues)
 	enemy_sprites   = [_es1, _es2, _es3]
 	enemy_panels    = [_ep1, _ep2, _ep3]
@@ -150,8 +147,6 @@ func _ready() -> void:
 	if swap_back_button:
 		swap_back_button.pressed.connect(_on_swap_back_pressed)
 
-	print("[BattleScene] Arrays populated — enemy_panels size: %d, player_panels size: %d" % [enemy_panels.size(), player_panels.size()])
-	print("[BattleScene] About to connect battle_sm signals...")
 	# Connect battle signals
 	battle_sm.battle_message.connect(_on_battle_message)
 	battle_sm.state_changed.connect(_on_state_changed)
@@ -164,15 +159,11 @@ func _ready() -> void:
 	if message_label:
 		message_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	print("[BattleScene] _ready() COMPLETE — signals connected")
 	# Show message only initially
 	_show_message_only()
 
 
 func setup_battle(p_team, e_team, is_wild, reserves = []) -> void:
-	print("[BattleScene] setup_battle() called — player:%d enemy:%d" % [p_team.size(), e_team.size()])
-	for i in range(e_team.size()):
-		print("[BattleScene] enemy[%d] = %s (id:%s)" % [i, e_team[i].nickname, e_team[i].creature_id])
 	player_team = p_team
 	enemy_team = e_team
 	var reserve_arr = reserves
@@ -247,20 +238,13 @@ func _load_creature_sprite(target: TextureRect, creature_id: String) -> void:
 	else:
 		path = SPRITE_PATH_TEMPLATE % creature_id
 
-	# Try Godot's resource loader first (works for editor-imported textures)
-	if ResourceLoader.exists(path):
-		var tex = ResourceLoader.load(path)
-		if tex and tex is Texture2D:
-			target.texture = tex
-			return
-
-	# Fall back to direct Image loading (works for raw PNG files not yet imported)
+	# Always load directly from the raw PNG — skips the import system entirely,
+	# which avoids crashes from stale .import files left over from older Godot versions.
 	var global_path := ProjectSettings.globalize_path(path)
-	var image := Image.new()
-	var err := image.load(global_path)
-	if err != OK:
-		err = image.load(path)
-	if err != OK:
+	var image := Image.load_from_file(global_path)
+	if image == null:
+		image = Image.load_from_file(path)
+	if image == null:
 		target.texture = null
 		return
 
@@ -289,7 +273,7 @@ func _on_move_selected(index: int) -> void:
 
 
 func _show_target_selection() -> void:
-	var living := battle_sm.get_living_enemy_indices()
+	var living: Array = battle_sm.get_living_enemy_indices()
 
 	# If only one target, auto-select it
 	if living.size() == 1:
