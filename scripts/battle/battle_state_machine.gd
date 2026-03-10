@@ -3,6 +3,11 @@ class_name BattleStateMachine
 ## Controls the flow of a 3v3 battle with speed-based turn order.
 ## Each round, all living combatants are sorted by speed and act one at a time.
 
+# Preload user-defined classes to avoid class_name resolution order issues
+# (Godot 4 parses scripts alphabetically; 'b' files are parsed before 'c' and 't')
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+const BattleCalculator = preload("res://scripts/battle/battle_calculator.gd")
+
 enum BattleState {
 	INTRO,
 	TURN_START,       # Beginning of a new round — build turn order
