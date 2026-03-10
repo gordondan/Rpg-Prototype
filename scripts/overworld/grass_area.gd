@@ -39,12 +39,12 @@ func _on_player_stepped(_new_position: Vector2) -> void:
 
 func _trigger_encounter() -> void:
 	## Roll 1-3 random creatures from this area's encounter table and start a battle.
-	# Determine enemy count: 60% chance of 1, 30% chance of 2, 10% chance of 3
+	# Determine enemy count: 50% chance of 1, 35% chance of 2, 15% chance of 3
 	var count_roll := randf()
 	var enemy_count: int
-	if count_roll < 0.6:
+	if count_roll < 0.5:
 		enemy_count = 1
-	elif count_roll < 0.9:
+	elif count_roll < 0.85:
 		enemy_count = 2
 	else:
 		enemy_count = 3

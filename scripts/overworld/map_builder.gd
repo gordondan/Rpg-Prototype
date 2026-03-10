@@ -428,8 +428,20 @@ func _place_npcs() -> void:
 	if not GameManager.get_flag("fairy_recruited"):
 		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14))
 
+	# Alexia — aggressive rival elf, can be battled then recruited
+	if not GameManager.get_flag("alexia_recruited"):
+		_create_npc("Alexia Ranger", "alexia_ranger", Vector2i(30, 8), {
+			"is_rival": true,
+			"rival_creature_id": "alexia",
+			"rival_creature_level": 8,
+			"defeated_flag": "alexia_defeated",
+			"post_defeat_dialogue_id": "alexia_ranger_defeated",
+			"recruited_flag": "alexia_recruited",
+			"line_of_sight_range": 5,
+		})
 
-func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i) -> void:
+
+func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extras: Dictionary = {}) -> void:
 	var npc := CharacterBody2D.new()
 	npc.name = npc_name.replace(" ", "")
 	npc.position = Vector2(tile_pos.x * TILE + TILE / 2.0, tile_pos.y * TILE + TILE / 2.0)
@@ -439,6 +451,9 @@ func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i) -> v
 		npc.set_script(script)
 		npc.set("npc_name", npc_name)
 		npc.set("dialogue_id", dialogue_id)
+		# Apply any extra properties (is_rival, rival_creature_id, etc.)
+		for key in extras:
+			npc.set(key, extras[key])
 
 	# Collision
 	var col := CollisionShape2D.new()
@@ -498,6 +513,8 @@ func _get_npc_color(npc_name: String) -> Color:
 			return Color(0.2, 0.2, 0.4)  # Dark blue
 		"Mischievous Fairy":
 			return Color(0.9, 0.5, 0.9)  # Pink/magenta
+		"Alexia Ranger":
+			return Color(0.2, 0.7, 0.3)  # Forest green
 		_:
 			return Color(0.5, 0.5, 0.5)  # Gray
 

@@ -1,0 +1,16 @@
+{
+  "name": "The Deepwood",
+  "description": "A dense and untamed wilderness beyond the King's Road. Orc warbands patrol the treeline and things with wings hunt from above.",
+  "encounters": [
+    {"creature_id": "ork_grunt", "level_min": 4, "level_max": 7, "weight": 30},
+    {"creature_id": "goblin", "level_min": 4, "level_max": 7, "weight": 22},
+    {"creature_id": "giant_bat", "level_min": 4, "level_max": 7, "weight": 20},
+    {"creature_id": "ork_warrior", "level_min": 5, "level_max": 7, "weight": 18},
+    {"creature_id": "goblin_firebomber", "level_min": 4, "level_max": 6, "weight": 14},
+    {"creature_id": "hex_weaver", "level_min": 4, "level_max": 6, "weight": 12},
+    {"creature_id": "wind_scout", "level_min": 4, "level_max": 7, "weight": 10},
+    {"creature_id": "spark_thief", "level_min": 4, "level_max": 6, "weight": 10},
+    {"creature_id": "stone_sentinel", "level_min": 5, "level_max": 7, "weight": 8},
+    {"creature_id": "orc_battleaxman", "level_min": 6, "level_max": 7, "weight": 6}
+  ]
+}

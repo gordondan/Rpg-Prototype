@@ -76,6 +76,7 @@ const SPRITE_PATH_TEMPLATE := "res://assets/sprites/creatures/%s_battle.png"
 const SPRITE_OVERRIDES := {
 	"emberclaw_seductress": "res://assets/sprites/creatures/emberclaw_seductress_battle.png",
 	"voidblade_succubus": "res://assets/sprites/creatures/voidblade_succubus_battle.png",
+	"alexia": "res://assets/sprites/creatures/wind_scout_battle.png",
 }
 
 var move_buttons: Array = []

@@ -11,6 +11,8 @@ const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 @export var rival_creature_id: String = ""
 @export var rival_creature_level: int = 5
 @export var defeated_flag: String = ""
+@export var post_defeat_dialogue_id: String = ""  # Dialogue shown after the player beats this rival
+@export var recruited_flag: String = ""           # Set by DialogueManager when player recruits them
 @export var line_of_sight_range: int = 4
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -26,7 +28,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if is_rival and sight_ray and not _is_defeated():
+	if is_rival and sight_ray and not _is_defeated() and not _is_recruited():
 		sight_ray.force_raycast_update()
 		if sight_ray.is_colliding():
 			var collider := sight_ray.get_collider()
@@ -39,7 +41,18 @@ func interact() -> void:
 	if DialogueManager.is_active():
 		return
 
-	if is_rival and not _is_defeated():
+	if _is_recruited():
+		# Already in the party — show the recruited variant if one exists
+		var recruited_id := recruited_flag + "_dialogue"
+		var d := DialogueManager.get_dialogue_data(recruited_id)
+		if not d.is_empty():
+			DialogueManager.start_dialogue(recruited_id)
+		else:
+			DialogueManager.show_line("I'm already with you.", npc_name)
+	elif is_rival and _is_defeated() and post_defeat_dialogue_id != "":
+		# Beaten but not yet recruited — show the post-defeat / recruit offer dialogue
+		DialogueManager.start_dialogue(post_defeat_dialogue_id)
+	elif is_rival and not _is_defeated():
 		_start_dialogue_then_battle()
 	else:
 		_start_dialogue()
@@ -79,10 +92,18 @@ func _initiate_rival_duel() -> void:
 func _on_rival_defeated(result: String) -> void:
 	if result == "win" and defeated_flag != "":
 		GameManager.set_flag(defeated_flag)
+		# Show the post-defeat dialogue (e.g. recruit offer) after a short delay
+		if post_defeat_dialogue_id != "":
+			await get_tree().create_timer(0.4).timeout
+			DialogueManager.start_dialogue(post_defeat_dialogue_id)
 
 
 func _is_defeated() -> bool:
 	return defeated_flag != "" and GameManager.get_flag(defeated_flag)
+
+
+func _is_recruited() -> bool:
+	return recruited_flag != "" and GameManager.get_flag(recruited_flag)
 
 
 func _update_sight_ray() -> void:
