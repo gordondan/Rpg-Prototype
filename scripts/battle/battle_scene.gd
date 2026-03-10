@@ -34,9 +34,11 @@ var target_buttons: Array[Button] = []
 
 # Battle sprite loading
 const SPRITE_PATH_TEMPLATE := "res://assets/sprites/creatures/%s_battle.png"
+# Overrides map creature_id -> sprite path for any creature whose sprite filename
+# doesn't exactly match the creature ID (or to force a specific sprite).
 const SPRITE_OVERRIDES := {
-	"flame_squire": "res://assets/sprites/creatures/flame_squire_battle.png",
-	"goblin": "res://assets/sprites/creatures/goblin_battle.png",
+	"emberclaw_seductress": "res://assets/sprites/creatures/emberclaw_seductress_battle.png",
+	"voidblade_succubus": "res://assets/sprites/creatures/voidblade_succubus_battle.png",
 }
 
 var move_buttons: Array[Button] = []
@@ -213,19 +215,19 @@ func _load_creature_sprite(target: TextureRect, creature_id: String) -> void:
 	else:
 		path = SPRITE_PATH_TEMPLATE % creature_id
 
+	# Try Godot's resource loader first (works for editor-imported textures)
+	if ResourceLoader.exists(path):
+		var tex = ResourceLoader.load(path)
+		if tex and tex is Texture2D:
+			target.texture = tex
+			return
+
+	# Fall back to direct Image loading (works for raw PNG files not yet imported)
 	var global_path := ProjectSettings.globalize_path(path)
-
-	if not FileAccess.file_exists(global_path) and not FileAccess.file_exists(path):
-		target.texture = null
-		return
-
 	var image := Image.new()
-	var err: int
-	if FileAccess.file_exists(global_path):
-		err = image.load(global_path)
-	else:
+	var err := image.load(global_path)
+	if err != OK:
 		err = image.load(path)
-
 	if err != OK:
 		target.texture = null
 		return

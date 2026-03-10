@@ -11,10 +11,11 @@ signal game_state_changed(new_state: GameState)
 var current_state: GameState = GameState.OVERWORLD
 
 # Player's active company (up to 6: first 3 active in battle, rest are reserves)
-var player_party: Array[CreatureInstance] = []
+# Note: untyped to avoid Godot 4 typed-array issues with script-defined classes
+var player_party: Array = []
 
 # Barracks — all recruited creatures not currently in the party
-var barracks: Array[CreatureInstance] = []
+var barracks: Array = []
 
 # Player inventory
 var inventory: Dictionary = {}  # {item_id: quantity}
