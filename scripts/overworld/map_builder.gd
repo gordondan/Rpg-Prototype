@@ -89,11 +89,10 @@ func _ready() -> void:
 # --- Texture loading (bypasses Godot import system) ---
 func _load_texture(res_path: String) -> ImageTexture:
 	var global_path := ProjectSettings.globalize_path(res_path)
-	var image := Image.new()
-	var err := image.load(global_path)
-	if err != OK:
-		err = image.load(res_path)
-	if err != OK:
+	var image := Image.load_from_file(global_path)
+	if image == null:
+		image = Image.load_from_file(res_path)
+	if image == null:
 		push_warning("MapBuilder: Failed to load texture: %s" % res_path)
 		return null
 	return ImageTexture.create_from_image(image)
@@ -324,8 +323,8 @@ func _place_trees() -> void:
 
 	# Scattered interior trees
 	var interior_trees := [
-		Vector2i(6, 10), Vector2i(14, 5), Vector2i(25, 5),
-		Vector2i(33, 10), Vector2i(6, 20), Vector2i(33, 20),
+		Vector2i(5, 12), Vector2i(14, 5), Vector2i(22, 3),
+		Vector2i(35, 11), Vector2i(15, 20), Vector2i(33, 20),
 		Vector2i(14, 18), Vector2i(25, 18),
 		Vector2i(10, 22), Vector2i(30, 22),
 	]
@@ -421,14 +420,34 @@ func _place_npcs() -> void:
 	_create_npc("Village Guard", "village_guard", Vector2i(19, 5))
 	_create_npc("Old Scholar", "old_scholar", Vector2i(23, 10))
 	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 18))
-	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(30, 22))
+	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(34, 18))
+	_create_npc("Elara", "elara", Vector2i(13, 9))
+	_create_npc("Sylwen", "sylwen", Vector2i(22, 17))
+
+	# Merchant — near the village plaza
+	_create_npc("Village Merchant", "village_merchant", Vector2i(25, 11), {
+		"is_merchant": true,
+		"shop_id": "village_merchant",
+	})
 
 	# Recruitable NPCs — only show if not yet recruited
 	if not GameManager.get_flag("fairy_recruited"):
 		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14))
 
+	# Alexia — aggressive rival elf, can be battled then recruited
+	if not GameManager.get_flag("alexia_recruited"):
+		_create_npc("Alexia Ranger", "alexia_ranger", Vector2i(30, 8), {
+			"is_rival": true,
+			"rival_creature_id": "alexia",
+			"rival_creature_level": 8,
+			"defeated_flag": "alexia_defeated",
+			"post_defeat_dialogue_id": "alexia_ranger_defeated",
+			"recruited_flag": "alexia_recruited",
+			"line_of_sight_range": 5,
+		})
 
-func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i) -> void:
+
+func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extras: Dictionary = {}) -> void:
 	var npc := CharacterBody2D.new()
 	npc.name = npc_name.replace(" ", "")
 	npc.position = Vector2(tile_pos.x * TILE + TILE / 2.0, tile_pos.y * TILE + TILE / 2.0)
@@ -438,6 +457,9 @@ func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i) -> v
 		npc.set_script(script)
 		npc.set("npc_name", npc_name)
 		npc.set("dialogue_id", dialogue_id)
+		# Apply any extra properties (is_rival, rival_creature_id, etc.)
+		for key in extras:
+			npc.set(key, extras[key])
 
 	# Collision
 	var col := CollisionShape2D.new()
@@ -457,23 +479,29 @@ func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i) -> v
 	sight_ray.target_position = Vector2(0, 64)
 	npc.add_child(sight_ray)
 
-	# Visual placeholder for NPC (colored circle)
-	var placeholder := ColorRect.new()
-	placeholder.name = "Placeholder"
-	placeholder.size = Vector2(12, 12)
-	placeholder.position = Vector2(-6, -6)
-	placeholder.color = _get_npc_color(npc_name)
-	npc.add_child(placeholder)
+	# Load sprite from dialogue data if available
+	var npc_data: Dictionary = DialogueManager.get_dialogue_data(dialogue_id)
+	var sprite_path: String = npc_data.get("sprite", "")
+	var sprite_loaded := false
+	if sprite_path != "":
+		var tex := _load_texture(sprite_path)
+		if tex:
+			var npc_sprite := Sprite2D.new()
+			npc_sprite.name = "NPCSprite"
+			npc_sprite.texture = tex
+			npc_sprite.offset = Vector2(0, -tex.get_height() / 2.0)
+			npc_sprite.z_index = 1
+			npc.add_child(npc_sprite)
+			sprite_loaded = true
 
-	# NPC name label
-	var label := Label.new()
-	label.name = "NameLabel"
-	label.text = npc_name
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.position = Vector2(-40, -20)
-	label.size = Vector2(80, 14)
-	label.add_theme_font_size_override("font_size", 8)
-	npc.add_child(label)
+	# Fallback: colored placeholder if no sprite loaded
+	if not sprite_loaded:
+		var placeholder := ColorRect.new()
+		placeholder.name = "Placeholder"
+		placeholder.size = Vector2(12, 12)
+		placeholder.position = Vector2(-6, -6)
+		placeholder.color = _get_npc_color(npc_name)
+		npc.add_child(placeholder)
 
 	add_child(npc)
 	npc.add_to_group("npc")
@@ -491,6 +519,10 @@ func _get_npc_color(npc_name: String) -> Color:
 			return Color(0.2, 0.2, 0.4)  # Dark blue
 		"Mischievous Fairy":
 			return Color(0.9, 0.5, 0.9)  # Pink/magenta
+		"Village Merchant":
+			return Color(0.9, 0.8, 0.2)  # Gold/yellow
+		"Alexia Ranger":
+			return Color(0.2, 0.7, 0.3)  # Forest green
 		_:
 			return Color(0.5, 0.5, 0.5)  # Gray
 

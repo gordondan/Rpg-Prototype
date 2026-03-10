@@ -2,6 +2,8 @@ extends Node
 ## Global game state manager — handles scene transitions, player party, and save/load.
 ## Autoloaded as "GameManager".
 
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+
 enum GameState { OVERWORLD, BATTLE, MENU, DIALOGUE, CUTSCENE }
 
 signal game_state_changed(new_state: GameState)
@@ -9,10 +11,11 @@ signal game_state_changed(new_state: GameState)
 var current_state: GameState = GameState.OVERWORLD
 
 # Player's active company (up to 6: first 3 active in battle, rest are reserves)
-var player_party: Array[CreatureInstance] = []
+# Note: untyped to avoid Godot 4 typed-array issues with script-defined classes
+var player_party: Array = []
 
 # Barracks — all recruited creatures not currently in the party
-var barracks: Array[CreatureInstance] = []
+var barracks: Array = []
 
 # Player inventory
 var inventory: Dictionary = {}  # {item_id: quantity}
@@ -111,7 +114,7 @@ func move_to_barracks(party_index: int) -> bool:
 		return false
 	if party_index < 0 or party_index >= player_party.size():
 		return false
-	var creature := player_party[party_index]
+	var creature = player_party[party_index]
 	player_party.remove_at(party_index)
 	barracks.append(creature)
 	return true
@@ -124,7 +127,7 @@ func move_to_party(barracks_index: int) -> bool:
 		return false
 	if barracks_index < 0 or barracks_index >= barracks.size():
 		return false
-	var creature := barracks[barracks_index]
+	var creature = barracks[barracks_index]
 	barracks.remove_at(barracks_index)
 	player_party.append(creature)
 	return true
@@ -136,7 +139,7 @@ func swap_party_positions(index_a: int, index_b: int) -> void:
 		return
 	if index_b < 0 or index_b >= player_party.size():
 		return
-	var temp := player_party[index_a]
+	var temp = player_party[index_a]
 	player_party[index_a] = player_party[index_b]
 	player_party[index_b] = temp
 
@@ -144,6 +147,58 @@ func swap_party_positions(index_a: int, index_b: int) -> void:
 func heal_all_party() -> void:
 	for creature in player_party:
 		creature.full_heal()
+
+
+# ─── Inventory ───────────────────────────────────────────────────
+
+func add_item(item_id: String, quantity: int = 1) -> void:
+	inventory[item_id] = inventory.get(item_id, 0) + quantity
+	print("[GameManager] Added %dx %s (total: %d)" % [quantity, item_id, inventory[item_id]])
+
+
+func remove_item(item_id: String, quantity: int = 1) -> bool:
+	if inventory.get(item_id, 0) < quantity:
+		return false
+	inventory[item_id] -= quantity
+	if inventory[item_id] <= 0:
+		inventory.erase(item_id)
+	return true
+
+
+func has_item(item_id: String, quantity: int = 1) -> bool:
+	return inventory.get(item_id, 0) >= quantity
+
+
+func use_item(item_id: String, creature) -> bool:
+	## Use an item on a creature. Returns true if the item was successfully used.
+	var item_data: Dictionary = DataLoader.get_item_data(item_id)
+	if item_data.is_empty():
+		push_warning("[GameManager] Unknown item: %s" % item_id)
+		return false
+
+	var effect: Dictionary = item_data.get("effect", {})
+	var used := false
+
+	match effect.get("type", ""):
+		"heal_hp":
+			if not creature.is_fainted():
+				var amount: int = effect.get("amount", 0)
+				creature.current_hp = min(creature.current_hp + amount, creature.max_hp)
+				used = true
+		"full_heal":
+			if not creature.is_fainted():
+				creature.current_hp = creature.max_hp
+				used = true
+		"revive":
+			if creature.is_fainted():
+				creature.current_hp = creature.max_hp / 2
+				used = true
+
+	if used:
+		remove_item(item_id)
+		print("[GameManager] Used %s on %s" % [item_id, creature.nickname])
+
+	return used
 
 
 func is_party_wiped() -> bool:

@@ -38,7 +38,7 @@ var moves: Array[Dictionary] = []  # [{id, current_pp, max_pp}]
 
 static func create(id: String, lvl: int) -> CreatureInstance:
 	## Factory method: create a creature instance from data definitions.
-	var instance := CreatureInstance.new()
+	var instance: CreatureInstance = load("res://scripts/battle/creature_instance.gd").new()
 	var data: Dictionary = DataLoader.get_creature_data(id)
 
 	if data.is_empty():
@@ -143,3 +143,30 @@ func gain_experience(amount: int) -> bool:
 func _exp_for_next_level() -> int:
 	## Medium-fast experience curve.
 	return int(pow(level + 1, 3))
+
+
+func level_up() -> void:
+	## Directly increment level, recalculate stats, learn any new moves, and restore HP.
+	level += 1
+	var old_max_hp := max_hp
+	_calculate_stats()
+	current_hp += max_hp - old_max_hp  # Heal by the HP increase
+	experience = 0  # Reset XP within the new level
+
+	# Learn any move unlocked at this exact level
+	var data: Dictionary = DataLoader.get_creature_data(creature_id)
+	for entry in data.get("learnset", []):
+		if entry.get("level", 0) == level and moves.size() < 4:
+			var move_data: Dictionary = DataLoader.get_move_data(entry["move_id"])
+			if not move_data.is_empty():
+				var already_known := false
+				for m in moves:
+					if m["id"] == entry["move_id"]:
+						already_known = true
+						break
+				if not already_known:
+					moves.append({
+						"id": entry["move_id"],
+						"current_pp": move_data.get("pp", 10),
+						"max_pp": move_data.get("pp", 10)
+					})

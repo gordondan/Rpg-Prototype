@@ -3,6 +3,11 @@ class_name BattleCalculator
 ## Handles all damage and accuracy calculations for the battle system.
 ## Uses a simplified version of the Gen III damage formula.
 
+# Preload user-defined classes to avoid class_name resolution order issues
+# (Godot 4 parses scripts alphabetically; 'b' files are parsed before 'c' and 't')
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+const TypeChart = preload("res://scripts/battle/type_chart.gd")
+
 
 static func calculate_damage(attacker: CreatureInstance, defender: CreatureInstance, move: Dictionary) -> Dictionary:
 	## Calculate damage for a move. Returns a dict with damage amount and metadata.

@@ -2,7 +2,7 @@ extends CanvasLayer
 ## Main battle scene controller for 3v3 combat.
 ## Wires the UI to the BattleStateMachine and handles target selection.
 
-@onready var battle_sm: BattleStateMachine = $BattleStateMachine
+@onready var battle_sm = $BattleStateMachine
 @onready var message_label: Label = $UI/BottomArea/MessageLabel
 @onready var action_panel: Control = $UI/BottomArea/ActionPanel
 @onready var fight_button: Button = $UI/BottomArea/ActionPanel/FightButton
@@ -15,32 +15,72 @@ extends CanvasLayer
 @onready var swap_panel: Control = $UI/BottomArea/SwapPanel
 @onready var swap_back_button: Button = $UI/BottomArea/SwapPanel/SwapBackButton
 
-# Sprite and stat panel arrays (indices 0-2 for each side)
-var enemy_sprites: Array[TextureRect] = []
-var enemy_panels: Array[Control] = []
-var enemy_name_labels: Array[Label] = []
-var enemy_hp_bars: Array[ProgressBar] = []
-var enemy_level_labels: Array[Label] = []
+# Direct @onready references to battle slot UI nodes (avoids has_node() loop failures)
+@onready var _es1: TextureRect = $UI/BattleField/EnemyArea/EnemySlot1/EnemySprite1
+@onready var _es2: TextureRect = $UI/BattleField/EnemyArea/EnemySlot2/EnemySprite2
+@onready var _es3: TextureRect = $UI/BattleField/EnemyArea/EnemySlot3/EnemySprite3
+@onready var _ep1: Control = $UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1
+@onready var _ep2: Control = $UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2
+@onready var _ep3: Control = $UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3
+@onready var _en1: Label = $UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1/VBox/NameLabel
+@onready var _en2: Label = $UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2/VBox/NameLabel
+@onready var _en3: Label = $UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3/VBox/NameLabel
+@onready var _el1: Label = $UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1/VBox/LevelLabel
+@onready var _el2: Label = $UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2/VBox/LevelLabel
+@onready var _el3: Label = $UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3/VBox/LevelLabel
+@onready var _eh1: ProgressBar = $UI/BattleField/EnemyArea/EnemySlot1/EnemyPanel1/VBox/HPBar
+@onready var _eh2: ProgressBar = $UI/BattleField/EnemyArea/EnemySlot2/EnemyPanel2/VBox/HPBar
+@onready var _eh3: ProgressBar = $UI/BattleField/EnemyArea/EnemySlot3/EnemyPanel3/VBox/HPBar
 
-var player_sprites: Array[TextureRect] = []
-var player_panels: Array[Control] = []
-var player_name_labels: Array[Label] = []
-var player_hp_bars: Array[ProgressBar] = []
-var player_hp_labels: Array[Label] = []
-var player_level_labels: Array[Label] = []
+@onready var _ps1: TextureRect = $UI/BattleField/PlayerArea/PlayerSlot1/PlayerSprite1
+@onready var _ps2: TextureRect = $UI/BattleField/PlayerArea/PlayerSlot2/PlayerSprite2
+@onready var _ps3: TextureRect = $UI/BattleField/PlayerArea/PlayerSlot3/PlayerSprite3
+@onready var _pp1: Control = $UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1
+@onready var _pp2: Control = $UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2
+@onready var _pp3: Control = $UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3
+@onready var _pn1: Label = $UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox/NameLabel
+@onready var _pn2: Label = $UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox/NameLabel
+@onready var _pn3: Label = $UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox/NameLabel
+@onready var _pl1: Label = $UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox/LevelLabel
+@onready var _pl2: Label = $UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox/LevelLabel
+@onready var _pl3: Label = $UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox/LevelLabel
+@onready var _ph1: ProgressBar = $UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox/HPBar
+@onready var _ph2: ProgressBar = $UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox/HPBar
+@onready var _ph3: ProgressBar = $UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox/HPBar
+@onready var _php1: Label = $UI/BattleField/PlayerArea/PlayerSlot1/PlayerPanel1/VBox/HPLabel
+@onready var _php2: Label = $UI/BattleField/PlayerArea/PlayerSlot2/PlayerPanel2/VBox/HPLabel
+@onready var _php3: Label = $UI/BattleField/PlayerArea/PlayerSlot3/PlayerPanel3/VBox/HPLabel
+
+# Sprite and stat panel arrays (indices 0-2 for each side)
+# Note: untyped to avoid Godot 4 typed-array issues
+var enemy_sprites: Array = []
+var enemy_panels: Array = []
+var enemy_name_labels: Array = []
+var enemy_hp_bars: Array = []
+var enemy_level_labels: Array = []
+
+var player_sprites: Array = []
+var player_panels: Array = []
+var player_name_labels: Array = []
+var player_hp_bars: Array = []
+var player_hp_labels: Array = []
+var player_level_labels: Array = []
 
 # Target selection buttons
-var target_buttons: Array[Button] = []
+var target_buttons: Array = []
 
 # Battle sprite loading
 const SPRITE_PATH_TEMPLATE := "res://assets/sprites/creatures/%s_battle.png"
+# Overrides map creature_id -> sprite path for any creature whose sprite filename
+# doesn't exactly match the creature ID (or to force a specific sprite).
 const SPRITE_OVERRIDES := {
-	"flame_squire": "res://assets/sprites/creatures/flame_squire_battle.png",
-	"goblin": "res://assets/sprites/creatures/goblin_battle.png",
+	"emberclaw_seductress": "res://assets/sprites/creatures/emberclaw_seductress_battle.png",
+	"voidblade_succubus": "res://assets/sprites/creatures/voidblade_succubus_battle.png",
+	"alexia": "res://assets/sprites/creatures/wind_scout_battle.png",
 }
 
-var move_buttons: Array[Button] = []
-var swap_buttons: Array[Button] = []
+var move_buttons: Array = []
+var swap_buttons: Array = []
 var player_team: Array = []
 var enemy_team: Array = []
 
@@ -50,63 +90,49 @@ var _selected_move_index: int = 0
 
 
 func _ready() -> void:
-	# Collect enemy UI elements (3 slots)
-	for i in range(3):
-		var idx := i + 1
-		var sprite_path := "UI/BattleField/EnemyArea/EnemySlot%d/EnemySprite%d" % [idx, idx]
-		var panel_path := "UI/BattleField/EnemyArea/EnemySlot%d/EnemyPanel%d" % [idx, idx]
+	# Populate slot arrays directly from @onready vars (avoids string-path has_node() issues)
+	enemy_sprites   = [_es1, _es2, _es3]
+	enemy_panels    = [_ep1, _ep2, _ep3]
+	enemy_name_labels  = [_en1, _en2, _en3]
+	enemy_level_labels = [_el1, _el2, _el3]
+	enemy_hp_bars   = [_eh1, _eh2, _eh3]
 
-		if has_node(sprite_path):
-			enemy_sprites.append(get_node(sprite_path))
-		if has_node(panel_path):
-			enemy_panels.append(get_node(panel_path))
-			enemy_name_labels.append(get_node(panel_path + "/VBox/NameLabel"))
-			enemy_level_labels.append(get_node(panel_path + "/VBox/LevelLabel"))
-			enemy_hp_bars.append(get_node(panel_path + "/VBox/HPBar"))
-
-	# Collect player UI elements (3 slots)
-	for i in range(3):
-		var idx := i + 1
-		var sprite_path := "UI/BattleField/PlayerArea/PlayerSlot%d/PlayerSprite%d" % [idx, idx]
-		var panel_path := "UI/BattleField/PlayerArea/PlayerSlot%d/PlayerPanel%d" % [idx, idx]
-
-		if has_node(sprite_path):
-			player_sprites.append(get_node(sprite_path))
-		if has_node(panel_path):
-			player_panels.append(get_node(panel_path))
-			player_name_labels.append(get_node(panel_path + "/VBox/NameLabel"))
-			player_level_labels.append(get_node(panel_path + "/VBox/LevelLabel"))
-			player_hp_bars.append(get_node(panel_path + "/VBox/HPBar"))
-			player_hp_labels.append(get_node(panel_path + "/VBox/HPLabel"))
+	player_sprites   = [_ps1, _ps2, _ps3]
+	player_panels    = [_pp1, _pp2, _pp3]
+	player_name_labels  = [_pn1, _pn2, _pn3]
+	player_level_labels = [_pl1, _pl2, _pl3]
+	player_hp_bars   = [_ph1, _ph2, _ph3]
+	player_hp_labels = [_php1, _php2, _php3]
 
 	# Collect move buttons
-	var button_paths := [
-		"UI/BottomArea/MovePanel/TopRow/MoveButton1",
-		"UI/BottomArea/MovePanel/TopRow/MoveButton2",
-		"UI/BottomArea/MovePanel/BottomRow/MoveButton3",
-		"UI/BottomArea/MovePanel/BottomRow/MoveButton4",
+	var move_btn_nodes := [
+		$UI/BottomArea/MovePanel/TopRow/MoveButton1,
+		$UI/BottomArea/MovePanel/TopRow/MoveButton2,
+		$UI/BottomArea/MovePanel/BottomRow/MoveButton3,
+		$UI/BottomArea/MovePanel/BottomRow/MoveButton4,
 	]
-	for i in range(button_paths.size()):
-		if has_node(button_paths[i]):
-			var btn: Button = get_node(button_paths[i])
-			move_buttons.append(btn)
-			btn.pressed.connect(_on_move_selected.bind(i))
+	for i in range(move_btn_nodes.size()):
+		var btn: Button = move_btn_nodes[i]
+		move_buttons.append(btn)
+		btn.pressed.connect(_on_move_selected.bind(i))
 
 	# Collect target buttons
-	for i in range(3):
-		var path := "UI/BottomArea/TargetPanel/TargetButton%d" % (i + 1)
-		if has_node(path):
-			var btn: Button = get_node(path)
-			target_buttons.append(btn)
-			btn.pressed.connect(_on_target_selected.bind(i))
+	target_buttons = [
+		$UI/BottomArea/TargetPanel/TargetButton1,
+		$UI/BottomArea/TargetPanel/TargetButton2,
+		$UI/BottomArea/TargetPanel/TargetButton3,
+	]
+	for i in range(target_buttons.size()):
+		target_buttons[i].pressed.connect(_on_target_selected.bind(i))
 
 	# Collect swap buttons
-	for i in range(3):
-		var path := "UI/BottomArea/SwapPanel/SwapButton%d" % (i + 1)
-		if has_node(path):
-			var btn: Button = get_node(path)
-			swap_buttons.append(btn)
-			btn.pressed.connect(_on_swap_selected.bind(i))
+	swap_buttons = [
+		$UI/BottomArea/SwapPanel/SwapButton1,
+		$UI/BottomArea/SwapPanel/SwapButton2,
+		$UI/BottomArea/SwapPanel/SwapButton3,
+	]
+	for i in range(swap_buttons.size()):
+		swap_buttons[i].pressed.connect(_on_swap_selected.bind(i))
 
 	# Connect action buttons
 	if fight_button:
@@ -213,20 +239,13 @@ func _load_creature_sprite(target: TextureRect, creature_id: String) -> void:
 	else:
 		path = SPRITE_PATH_TEMPLATE % creature_id
 
+	# Always load directly from the raw PNG — skips the import system entirely,
+	# which avoids crashes from stale .import files left over from older Godot versions.
 	var global_path := ProjectSettings.globalize_path(path)
-
-	if not FileAccess.file_exists(global_path) and not FileAccess.file_exists(path):
-		target.texture = null
-		return
-
-	var image := Image.new()
-	var err: int
-	if FileAccess.file_exists(global_path):
-		err = image.load(global_path)
-	else:
-		err = image.load(path)
-
-	if err != OK:
+	var image := Image.load_from_file(global_path)
+	if image == null:
+		image = Image.load_from_file(path)
+	if image == null:
 		target.texture = null
 		return
 
@@ -255,7 +274,7 @@ func _on_move_selected(index: int) -> void:
 
 
 func _show_target_selection() -> void:
-	var living := battle_sm.get_living_enemy_indices()
+	var living: Array = battle_sm.get_living_enemy_indices()
 
 	# If only one target, auto-select it
 	if living.size() == 1:

@@ -37,7 +37,7 @@ func _refresh() -> void:
 
 	# Build party entries
 	for i in range(GameManager.player_party.size()):
-		var creature: CreatureInstance = GameManager.player_party[i]
+		var creature = GameManager.player_party[i]
 		var row := _create_creature_row(creature, i, "party")
 
 		# Label first 3 as "Active", rest as "Reserve"
@@ -48,7 +48,7 @@ func _refresh() -> void:
 
 	# Build barracks entries
 	for i in range(GameManager.barracks.size()):
-		var creature: CreatureInstance = GameManager.barracks[i]
+		var creature = GameManager.barracks[i]
 		var row := _create_creature_row(creature, i, "barracks")
 		barracks_list.add_child(row)
 
@@ -60,7 +60,7 @@ func _clear_list(container: VBoxContainer) -> void:
 		child.queue_free()
 
 
-func _create_creature_row(creature: CreatureInstance, index: int, source: String) -> HBoxContainer:
+func _create_creature_row(creature, index: int, source: String) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
@@ -80,7 +80,7 @@ func _create_creature_row(creature: CreatureInstance, index: int, source: String
 
 	var hp_text := "%d/%d" % [creature.current_hp, creature.max_hp]
 	var type_text := "/".join(creature.types)
-	var exp_needed := creature._exp_for_next_level()
+	var exp_needed: int = creature._exp_for_next_level()
 	btn.text = "%s  Lv.%d  %s  HP:%s  XP:%d/%d" % [creature.nickname, creature.level, type_text, hp_text, creature.experience, exp_needed]
 
 	btn.pressed.connect(_on_creature_selected.bind(source, index))
@@ -93,7 +93,7 @@ func _on_creature_selected(source: String, index: int) -> void:
 	_selected_source = source
 	_selected_index = index
 
-	var creature: CreatureInstance
+	var creature
 	if source == "party":
 		creature = GameManager.player_party[index]
 	else:
@@ -108,7 +108,7 @@ func _on_creature_selected(source: String, index: int) -> void:
 		if not move_data.is_empty():
 			moves_text += move_data.get("name", m["id"]) + "  "
 
-	var exp_needed := creature._exp_for_next_level()
+	var exp_needed: int = creature._exp_for_next_level()
 	var exp_text := "EXP: %d / %d  (need %d more)" % [creature.experience, exp_needed, exp_needed - creature.experience]
 
 	info_label.text = "%s (Lv.%d) — %s — %s\n%s\nMoves: %s" % [
@@ -136,6 +136,14 @@ func _build_action_buttons(source: String, index: int) -> void:
 	btn_container.offset_top = 286.0
 	btn_container.offset_right = 476.0
 	btn_container.offset_bottom = 316.0
+
+	# Level up button — always available for both party and barracks (testing)
+	var lvup_btn := Button.new()
+	lvup_btn.text = "+Lv"
+	lvup_btn.add_theme_font_size_override("font_size", 8)
+	lvup_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lvup_btn.pressed.connect(_level_up_creature.bind(source, index))
+	btn_container.add_child(lvup_btn)
 
 	if source == "party":
 		# Move up (higher priority / more active)
@@ -200,3 +208,14 @@ func _add_to_party(index: int) -> void:
 		_refresh()
 	else:
 		info_label.text = "Party is full (max 6)! Remove someone first."
+
+
+func _level_up_creature(source: String, index: int) -> void:
+	var creature
+	if source == "party":
+		creature = GameManager.player_party[index]
+	else:
+		creature = GameManager.barracks[index]
+	creature.level_up()
+	info_label.text = "%s is now Lv.%d!" % [creature.nickname, creature.level]
+	_refresh()

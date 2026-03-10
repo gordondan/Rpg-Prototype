@@ -1,0 +1,7 @@
+{
+  "village_merchant": {
+    "name": "Village Merchant",
+    "greeting": "Welcome, traveler! Browse my wares.",
+    "items": ["minor_healing_potion", "healing_potion", "mega_potion", "revive"]
+  }
+}

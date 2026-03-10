@@ -2,6 +2,7 @@ extends Node
 ## Manages transitioning in and out of battles.
 ## Autoloaded as "BattleManager".
 
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle_scene.tscn"
 
 signal battle_started()
@@ -55,6 +56,31 @@ func start_wild_battle_single(creature_id: String, level: int) -> void:
 	GameManager.set_state(GameManager.GameState.BATTLE)
 	battle_started.emit()
 
+	_launch_battle(player_active, enemy_team, true, reserves)
+
+
+func start_wild_battle_with_ids(enemy_defs: Array) -> void:
+	## Start a wild battle with a specific list of creatures by ID and level.
+	## enemy_defs: Array of {creature_id, level} dicts.
+	var team_data := GameManager.get_battle_team(3)
+	var player_active: Array = team_data["active"]
+	var reserves: Array = team_data["reserves"]
+
+	if player_active.is_empty():
+		push_error("No alive allies in company!")
+		return
+
+	var enemy_team: Array = []
+	for def in enemy_defs:
+		var creature := CreatureInstance.create(def["creature_id"], int(def["level"]))
+		if creature:
+			enemy_team.append(creature)
+
+	if enemy_team.is_empty():
+		return
+
+	GameManager.set_state(GameManager.GameState.BATTLE)
+	battle_started.emit()
 	_launch_battle(player_active, enemy_team, true, reserves)
 
 

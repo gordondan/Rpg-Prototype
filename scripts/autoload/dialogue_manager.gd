@@ -2,6 +2,8 @@ extends Node
 ## Global dialogue manager — loads dialogue data and controls the dialogue UI.
 ## Autoloaded as "DialogueManager".
 
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+
 signal dialogue_started()
 signal dialogue_ended()
 signal choice_selected(choice_id: String)
@@ -148,6 +150,8 @@ func _on_choice_made(choice_index: int, choice_id: String) -> void:
 					])
 		"recruit_fairy":
 			_recruit_creature("mischievous_fairy", 5, "fairy_recruited", "MischievousFairy")
+		"recruit_alexia":
+			_recruit_creature("alexia", 8, "alexia_recruited", "AlexiaRanger")
 
 
 func _recruit_creature(creature_id: String, level: int, flag_name: String, npc_node_name: String = "") -> void:

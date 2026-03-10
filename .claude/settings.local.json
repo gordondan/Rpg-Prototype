@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/tyrel/AppData/Local/Programs//**)",
+      "Read(//c/Users/tyrel/**)"
+    ]
+  }
+}

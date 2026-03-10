@@ -1,6 +1,7 @@
 {
   "village_guard": {
     "name": "Village Guard",
+    "sprite": "res://assets/sprites/npcs/town_guard.png",
     "lines": [
       {
         "text": "Halt! The road ahead is crawling with goblins and bandits.",
@@ -59,6 +60,7 @@
 
   "old_scholar": {
     "name": "Old Scholar",
+    "sprite": "res://assets/sprites/npcs/old_scholar.png",
     "lines": [
       {
         "text": "Ah, a young adventurer! Tell me, do you know about elemental affinities?",
@@ -77,6 +79,7 @@
 
   "tavern_keeper": {
     "name": "Tavern Keeper",
+    "sprite": "res://assets/sprites/npcs/tavernkeeper.png",
     "lines": [
       {
         "text": "Welcome to The Rusty Flagon! You look like you've been through a scrap or two.",
@@ -131,6 +134,7 @@
 
   "mischievous_fairy": {
     "name": "Mischievous Fairy",
+    "sprite": "res://assets/sprites/npcs/mischievous_fairy_overworld.png",
     "lines": [
       {
         "text": "Hee hee hee! You can see me? Most humans walk right past!",
@@ -175,6 +179,7 @@
 
   "mischievous_fairy_recruited": {
     "name": "Mischievous Fairy",
+    "sprite": "res://assets/sprites/npcs/mischievous_fairy_overworld.png",
     "lines": [
       {
         "text": "Hee hee! I'm already in your party, silly! Let's go cause some trouble!",
@@ -183,8 +188,118 @@
     ]
   },
 
+  "elara": {
+    "name": "Elara",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld.png",
+    "lines": [
+      {
+        "text": "Oh! You startled me. I don't get many visitors out here.",
+        "speaker": "Elara"
+      },
+      {
+        "text": "I've been gathering herbs along the forest edge. The ones near the ruins are potent, but... I don't dare go in alone.",
+        "speaker": "Elara"
+      },
+      {
+        "text": "If you're heading that way, be careful. Strange creatures have been stirring lately.",
+        "speaker": "Elara"
+      }
+    ]
+  },
+
+  "sylwen": {
+    "name": "Sylwen",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_rear.png",
+    "lines": [
+      {
+        "text": "...",
+        "speaker": "Sylwen"
+      },
+      {
+        "text": "Ah. You caught me staring at the road. I've been watching for my sister — she left for the ruins three days ago and hasn't returned.",
+        "speaker": "Sylwen"
+      },
+      {
+        "text": "If you happen to pass through... keep an eye out for her, would you? Her name is Elara.",
+        "speaker": "Sylwen"
+      }
+    ]
+  },
+
+  "alexia_ranger": {
+    "name": "Alexia",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_aggressive.png",
+    "lines": [
+      {
+        "text": "Hold it right there. These roads are under my watch.",
+        "speaker": "Alexia"
+      },
+      {
+        "text": "I've been patrolling alone out here for months. Anyone who wants to pass has to prove they're worth the trouble.",
+        "speaker": "Alexia"
+      },
+      {
+        "text": "Show me what you've got!",
+        "speaker": "Alexia"
+      }
+    ]
+  },
+
+  "alexia_ranger_defeated": {
+    "name": "Alexia",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_aggressive.png",
+    "lines": [
+      {
+        "text": "...You're good. Better than I expected.",
+        "speaker": "Alexia"
+      },
+      {
+        "text": "I've been out here alone too long. Maybe it's time I had someone worth fighting alongside.",
+        "speaker": "Alexia",
+        "choices": [
+          {
+            "text": "Come with me.",
+            "id": "recruit_alexia",
+            "next": [
+              {
+                "text": "Don't make me regret this. I travel light and I don't take orders easily.",
+                "speaker": "Alexia"
+              },
+              {
+                "text": "Alexia joined your party!",
+                "speaker": ""
+              }
+            ]
+          },
+          {
+            "text": "Maybe another time.",
+            "id": "decline_alexia",
+            "next": [
+              {
+                "text": "Your loss. I'll be here if you change your mind.",
+                "speaker": "Alexia"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "alexia_ranger_recruited": {
+    "name": "Alexia",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_aggressive.png",
+    "lines": [
+      {
+        "text": "I'm already with you. Stop dawdling.",
+        "speaker": "Alexia"
+      }
+    ]
+  },
+
   "mysterious_stranger": {
     "name": "???",
+    "sprite": "res://assets/sprites/npcs/mysterious_stranger.png",
     "requires_flag": "",
     "lines": [
       {
@@ -200,5 +315,11 @@
         "speaker": "???"
       }
     ]
+  },
+
+  "village_merchant": {
+    "name": "Village Merchant",
+    "sprite": "res://assets/sprites/npcs/merchant_npc.png",
+    "lines": []
   }
 }
