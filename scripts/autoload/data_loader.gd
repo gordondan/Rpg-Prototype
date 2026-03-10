@@ -5,6 +5,8 @@ extends Node
 var _creatures: Dictionary = {}
 var _moves: Dictionary = {}
 var _encounter_tables: Dictionary = {}
+var _items: Dictionary = {}
+var _shops: Dictionary = {}
 
 
 func _ready() -> void:
@@ -16,9 +18,11 @@ func _load_all_data() -> void:
 	_load_creatures("res://data/creatures/wild.json")
 	_load_moves("res://data/moves/moves.json")
 	_load_encounter_tables("res://data/maps/")
+	_load_json_into("res://data/items/items.json", _items)
+	_load_json_into("res://data/shops/shops.json", _shops)
 
-	print("[DataLoader] Loaded %d creatures, %d moves, %d encounter tables" % [
-		_creatures.size(), _moves.size(), _encounter_tables.size()
+	print("[DataLoader] Loaded %d creatures, %d moves, %d encounter tables, %d items, %d shops" % [
+		_creatures.size(), _moves.size(), _encounter_tables.size(), _items.size(), _shops.size()
 	])
 
 
@@ -49,6 +53,12 @@ func _load_encounter_tables(dir_path: String) -> void:
 				var table_id := file_name.get_basename()
 				_encounter_tables[table_id] = map_data.get("encounters", [])
 		file_name = dir.get_next()
+
+
+func _load_json_into(path: String, target: Dictionary) -> void:
+	var data = _load_json(path)
+	if data is Dictionary:
+		target.merge(data)
 
 
 func _load_json(path: String) -> Variant:
@@ -87,3 +97,11 @@ func get_all_creature_ids() -> Array:
 
 func get_all_move_ids() -> Array:
 	return _moves.keys()
+
+
+func get_item_data(item_id: String) -> Dictionary:
+	return _items.get(item_id, {})
+
+
+func get_shop_data(shop_id: String) -> Dictionary:
+	return _shops.get(shop_id, {})

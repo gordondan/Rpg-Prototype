@@ -1,6 +1,6 @@
 extends Node
 ## Temporary test script for triggering battles and dialogue.
-## B = random battle | K = succubus test battle | L = level up party | 1-4 = test dialogues
+## B = route 1 battle | N = route 2 battle | K = succubus test battle | L = level up party | 1-4 = test dialogues
 ## Remove this once you have proper NPCs and encounter zones.
 
 var _test_dialogues := ["village_guard", "old_scholar", "tavern_keeper", "mysterious_stranger"]
@@ -13,7 +13,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_B:
-				_start_test_battle()
+				_start_test_battle("route_1")
+			KEY_N:
+				_start_test_battle("route_2")
 			KEY_K:
 				_start_succubus_battle()
 			KEY_L:
@@ -55,15 +57,14 @@ func _level_up_party() -> void:
 		print("[TEST] %s levelled up to Lv.%d!" % [creature.nickname, creature.level])
 
 
-func _start_test_battle() -> void:
+func _start_test_battle(table_id: String) -> void:
 	if DialogueManager.is_active():
 		return
 
-	# Random 1-3 enemies (60% chance of 1, 30% chance of 2, 10% chance of 3)
 	var roll := randf()
 	var enemy_count := 1
-	if roll < 0.1:
+	if roll < 0.15:
 		enemy_count = 3
-	elif roll < 0.4:
+	elif roll < 0.5:
 		enemy_count = 2
-	BattleManager.start_wild_battle("route_1", enemy_count)
+	BattleManager.start_wild_battle(table_id, enemy_count)

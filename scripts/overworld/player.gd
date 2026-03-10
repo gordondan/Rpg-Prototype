@@ -82,7 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("inventory"):
-		_open_party_editor()
+		_open_hub_menu()
 		get_viewport().set_input_as_handled()
 		return
 
@@ -195,12 +195,12 @@ func _direction_to_row(dir: Vector2) -> int:
 	return 3  # Default to down
 
 
-func _open_party_editor() -> void:
-	var editor_scene := load("res://scenes/ui/party_editor.tscn")
-	if editor_scene:
-		GameManager.set_state(GameManager.GameState.MENU)
-		var instance: Node = editor_scene.instantiate()
-		get_tree().current_scene.add_child(instance)
+func _open_hub_menu() -> void:
+	var hub_script := load("res://scripts/ui/hub_menu.gd")
+	if hub_script:
+		var hub_node := CanvasLayer.new()
+		hub_node.set_script(hub_script)
+		get_tree().current_scene.add_child(hub_node)
 
 
 func _update_raycast() -> void:

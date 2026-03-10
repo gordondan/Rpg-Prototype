@@ -149,6 +149,58 @@ func heal_all_party() -> void:
 		creature.full_heal()
 
 
+# ─── Inventory ───────────────────────────────────────────────────
+
+func add_item(item_id: String, quantity: int = 1) -> void:
+	inventory[item_id] = inventory.get(item_id, 0) + quantity
+	print("[GameManager] Added %dx %s (total: %d)" % [quantity, item_id, inventory[item_id]])
+
+
+func remove_item(item_id: String, quantity: int = 1) -> bool:
+	if inventory.get(item_id, 0) < quantity:
+		return false
+	inventory[item_id] -= quantity
+	if inventory[item_id] <= 0:
+		inventory.erase(item_id)
+	return true
+
+
+func has_item(item_id: String, quantity: int = 1) -> bool:
+	return inventory.get(item_id, 0) >= quantity
+
+
+func use_item(item_id: String, creature) -> bool:
+	## Use an item on a creature. Returns true if the item was successfully used.
+	var item_data: Dictionary = DataLoader.get_item_data(item_id)
+	if item_data.is_empty():
+		push_warning("[GameManager] Unknown item: %s" % item_id)
+		return false
+
+	var effect: Dictionary = item_data.get("effect", {})
+	var used := false
+
+	match effect.get("type", ""):
+		"heal_hp":
+			if not creature.is_fainted():
+				var amount: int = effect.get("amount", 0)
+				creature.current_hp = min(creature.current_hp + amount, creature.max_hp)
+				used = true
+		"full_heal":
+			if not creature.is_fainted():
+				creature.current_hp = creature.max_hp
+				used = true
+		"revive":
+			if creature.is_fainted():
+				creature.current_hp = creature.max_hp / 2
+				used = true
+
+	if used:
+		remove_item(item_id)
+		print("[GameManager] Used %s on %s" % [item_id, creature.nickname])
+
+	return used
+
+
 func is_party_wiped() -> bool:
 	for creature in player_party:
 		if not creature.is_fainted():

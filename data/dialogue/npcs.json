@@ -315,5 +315,11 @@
         "speaker": "???"
       }
     ]
+  },
+
+  "village_merchant": {
+    "name": "Village Merchant",
+    "sprite": "res://assets/sprites/npcs/merchant_npc.png",
+    "lines": []
   }
 }

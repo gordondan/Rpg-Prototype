@@ -424,6 +424,12 @@ func _place_npcs() -> void:
 	_create_npc("Elara", "elara", Vector2i(13, 9))
 	_create_npc("Sylwen", "sylwen", Vector2i(22, 17))
 
+	# Merchant — near the village plaza
+	_create_npc("Village Merchant", "village_merchant", Vector2i(25, 11), {
+		"is_merchant": true,
+		"shop_id": "village_merchant",
+	})
+
 	# Recruitable NPCs — only show if not yet recruited
 	if not GameManager.get_flag("fairy_recruited"):
 		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14))
@@ -513,6 +519,8 @@ func _get_npc_color(npc_name: String) -> Color:
 			return Color(0.2, 0.2, 0.4)  # Dark blue
 		"Mischievous Fairy":
 			return Color(0.9, 0.5, 0.9)  # Pink/magenta
+		"Village Merchant":
+			return Color(0.9, 0.8, 0.2)  # Gold/yellow
 		"Alexia Ranger":
 			return Color(0.2, 0.7, 0.3)  # Forest green
 		_:

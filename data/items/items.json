@@ -1,0 +1,32 @@
+{
+  "minor_healing_potion": {
+    "name": "Minor Potion",
+    "description": "Restores 25 HP to one creature.",
+    "price": 15,
+    "effect": {"type": "heal_hp", "amount": 25}
+  },
+  "healing_potion": {
+    "name": "Healing Potion",
+    "description": "Restores 50 HP to one creature.",
+    "price": 30,
+    "effect": {"type": "heal_hp", "amount": 50}
+  },
+  "mega_potion": {
+    "name": "Mega Potion",
+    "description": "Restores 150 HP to one creature.",
+    "price": 75,
+    "effect": {"type": "heal_hp", "amount": 150}
+  },
+  "elixir": {
+    "name": "Elixir",
+    "description": "Fully restores one creature's HP.",
+    "price": 200,
+    "effect": {"type": "full_heal"}
+  },
+  "revive": {
+    "name": "Revive Scroll",
+    "description": "Revives a fainted creature with half its HP restored.",
+    "price": 150,
+    "effect": {"type": "revive"}
+  }
+}

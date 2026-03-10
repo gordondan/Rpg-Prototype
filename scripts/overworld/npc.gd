@@ -7,6 +7,9 @@ const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 @export var dialogue_id: String = ""  # References data/dialogue/*.json
 @export var simple_lines: Array[String] = []  # Fallback if no dialogue_id
 
+@export var is_merchant: bool = false
+@export var shop_id: String = ""
+
 @export var is_rival: bool = false
 @export var rival_creature_id: String = ""
 @export var rival_creature_level: int = 5
@@ -39,6 +42,13 @@ func _physics_process(_delta: float) -> void:
 func interact() -> void:
 	## Called when the player presses interact facing this NPC.
 	if DialogueManager.is_active():
+		return
+	if GameManager.current_state == GameManager.GameState.MENU:
+		return
+
+	# Merchant: open the shop UI directly
+	if is_merchant and shop_id != "":
+		_open_shop()
 		return
 
 	if _is_recruited():
@@ -104,6 +114,17 @@ func _is_defeated() -> bool:
 
 func _is_recruited() -> bool:
 	return recruited_flag != "" and GameManager.get_flag(recruited_flag)
+
+
+func _open_shop() -> void:
+	var shop_script := load("res://scripts/ui/shop.gd")
+	if not shop_script:
+		push_error("[NPC] Could not load shop.gd")
+		return
+	var shop_node := CanvasLayer.new()
+	shop_node.set_script(shop_script)
+	shop_node.set("shop_id", shop_id)
+	get_tree().current_scene.add_child(shop_node)
 
 
 func _update_sight_ray() -> void:
