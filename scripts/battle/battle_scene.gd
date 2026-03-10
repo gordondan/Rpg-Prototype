@@ -2,7 +2,7 @@ extends CanvasLayer
 ## Main battle scene controller for 3v3 combat.
 ## Wires the UI to the BattleStateMachine and handles target selection.
 
-@onready var battle_sm: BattleStateMachine = $BattleStateMachine
+@onready var battle_sm = $BattleStateMachine
 @onready var message_label: Label = $UI/BottomArea/MessageLabel
 @onready var action_panel: Control = $UI/BottomArea/ActionPanel
 @onready var fight_button: Button = $UI/BottomArea/ActionPanel/FightButton

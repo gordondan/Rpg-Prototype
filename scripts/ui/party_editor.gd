@@ -37,7 +37,7 @@ func _refresh() -> void:
 
 	# Build party entries
 	for i in range(GameManager.player_party.size()):
-		var creature: CreatureInstance = GameManager.player_party[i]
+		var creature = GameManager.player_party[i]
 		var row := _create_creature_row(creature, i, "party")
 
 		# Label first 3 as "Active", rest as "Reserve"
@@ -48,7 +48,7 @@ func _refresh() -> void:
 
 	# Build barracks entries
 	for i in range(GameManager.barracks.size()):
-		var creature: CreatureInstance = GameManager.barracks[i]
+		var creature = GameManager.barracks[i]
 		var row := _create_creature_row(creature, i, "barracks")
 		barracks_list.add_child(row)
 
@@ -60,7 +60,7 @@ func _clear_list(container: VBoxContainer) -> void:
 		child.queue_free()
 
 
-func _create_creature_row(creature: CreatureInstance, index: int, source: String) -> HBoxContainer:
+func _create_creature_row(creature, index: int, source: String) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
@@ -93,7 +93,7 @@ func _on_creature_selected(source: String, index: int) -> void:
 	_selected_source = source
 	_selected_index = index
 
-	var creature: CreatureInstance
+	var creature
 	if source == "party":
 		creature = GameManager.player_party[index]
 	else:
