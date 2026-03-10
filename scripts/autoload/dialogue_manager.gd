@@ -2,6 +2,8 @@ extends Node
 ## Global dialogue manager — loads dialogue data and controls the dialogue UI.
 ## Autoloaded as "DialogueManager".
 
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+
 signal dialogue_started()
 signal dialogue_ended()
 signal choice_selected(choice_id: String)

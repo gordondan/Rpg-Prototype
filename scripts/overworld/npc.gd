@@ -1,6 +1,8 @@
 extends CharacterBody2D
 ## NPC with dialogue (simple or branching) and optional rival battle.
 
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+
 @export var npc_name: String = "Villager"
 @export var dialogue_id: String = ""  # References data/dialogue/*.json
 @export var simple_lines: Array[String] = []  # Fallback if no dialogue_id

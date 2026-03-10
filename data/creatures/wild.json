@@ -107,6 +107,55 @@
       {"level": 7, "move_id": "venom_fang"}
     ]
   },
+  "emberclaw_seductress": {
+    "name": "Emberclaw Seductress",
+    "description": "A dangerous demon from the shadow realm who lures wanderers with enchanted flames. Masters of dark fire magic and impossible to resist.",
+    "types": ["dark", "fire"],
+    "base_hp": 42,
+    "base_attack": 45,
+    "base_defense": 38,
+    "base_sp_attack": 68,
+    "base_sp_defense": 45,
+    "base_speed": 58,
+    "base_exp": 72,
+    "class": "demon",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.15,
+    "recruit_dialogue": "Hmph... I didn't expect to lose. Very well — I'll grant you my power. Don't waste it.",
+    "learnset": [
+      {"level": 1, "move_id": "dagger_jab"},
+      {"level": 4, "move_id": "shadow_bite"},
+      {"level": 8, "move_id": "fire_bolt"},
+      {"level": 12, "move_id": "smoke_bomb"},
+      {"level": 17, "move_id": "inferno"},
+      {"level": 22, "move_id": "blazing_blade"}
+    ]
+  },
+  "voidblade_succubus": {
+    "name": "Voidblade Succubus",
+    "description": "A fearsome demon warrior who cleaves through enemies with a blade forged from shadow and hellfire. Encountered only deep in cursed ruins.",
+    "types": ["dark", "fire"],
+    "base_hp": 58,
+    "base_attack": 80,
+    "base_defense": 52,
+    "base_sp_attack": 55,
+    "base_sp_defense": 52,
+    "base_speed": 68,
+    "base_exp": 95,
+    "class": "demon",
+    "recruit_method": "defeat",
+    "recruit_chance": 0.08,
+    "recruit_dialogue": "You dare face me and live? ...I respect that. I'll fight alongside you. Once.",
+    "learnset": [
+      {"level": 1, "move_id": "sword_strike"},
+      {"level": 1, "move_id": "shadow_bite"},
+      {"level": 5, "move_id": "blazing_blade"},
+      {"level": 10, "move_id": "cross_slash"},
+      {"level": 16, "move_id": "smoke_bomb"},
+      {"level": 22, "move_id": "inferno"},
+      {"level": 28, "move_id": "inferno"}
+    ]
+  },
   "wind_scout": {
     "name": "Wind Scout",
     "description": "A swift ranger who rides the gales. Scouts ahead of caravans and strikes from above.",

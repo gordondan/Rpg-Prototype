@@ -80,6 +80,28 @@
       {"level": 25, "move_id": "starfall"}
     ]
   },
+  "alexia": {
+    "name": "Alexia the Ranger",
+    "description": "A seasoned elven ranger who patrols the roads alone. Deadly accurate with a bow and quicker than anyone expects.",
+    "types": ["normal", "flying"],
+    "base_hp": 52,
+    "base_attack": 62,
+    "base_defense": 45,
+    "base_sp_attack": 38,
+    "base_sp_defense": 48,
+    "base_speed": 72,
+    "base_exp": 70,
+    "class": "ranger",
+    "learnset": [
+      {"level": 1, "move_id": "swift_strike"},
+      {"level": 1, "move_id": "war_cry"},
+      {"level": 5, "move_id": "gale_shot"},
+      {"level": 10, "move_id": "cross_slash"},
+      {"level": 15, "move_id": "smoke_bomb"},
+      {"level": 20, "move_id": "starfall"},
+      {"level": 28, "move_id": "fae_wind"}
+    ]
+  },
   "grove_druid": {
     "name": "Grove Druid",
     "description": "An apprentice of the ancient forest order. Draws power from the earth and living things.",

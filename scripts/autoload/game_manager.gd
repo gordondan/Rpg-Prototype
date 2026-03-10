@@ -2,6 +2,8 @@ extends Node
 ## Global game state manager — handles scene transitions, player party, and save/load.
 ## Autoloaded as "GameManager".
 
+const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
+
 enum GameState { OVERWORLD, BATTLE, MENU, DIALOGUE, CUTSCENE }
 
 signal game_state_changed(new_state: GameState)
