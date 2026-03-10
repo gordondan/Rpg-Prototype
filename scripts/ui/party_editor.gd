@@ -137,6 +137,14 @@ func _build_action_buttons(source: String, index: int) -> void:
 	btn_container.offset_right = 476.0
 	btn_container.offset_bottom = 316.0
 
+	# Level up button — always available for both party and barracks (testing)
+	var lvup_btn := Button.new()
+	lvup_btn.text = "+Lv"
+	lvup_btn.add_theme_font_size_override("font_size", 8)
+	lvup_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lvup_btn.pressed.connect(_level_up_creature.bind(source, index))
+	btn_container.add_child(lvup_btn)
+
 	if source == "party":
 		# Move up (higher priority / more active)
 		if index > 0:
@@ -200,3 +208,14 @@ func _add_to_party(index: int) -> void:
 		_refresh()
 	else:
 		info_label.text = "Party is full (max 6)! Remove someone first."
+
+
+func _level_up_creature(source: String, index: int) -> void:
+	var creature
+	if source == "party":
+		creature = GameManager.player_party[index]
+	else:
+		creature = GameManager.barracks[index]
+	creature.level_up()
+	info_label.text = "%s is now Lv.%d!" % [creature.nickname, creature.level]
+	_refresh()

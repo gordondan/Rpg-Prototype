@@ -1,6 +1,6 @@
 extends Node
 ## Temporary test script for triggering battles and dialogue.
-## B = random battle | S = succubus test battle | 1-4 = test different NPC dialogues
+## B = random battle | S = succubus test battle | L = level up party | 1-4 = test dialogues
 ## Remove this once you have proper NPCs and encounter zones.
 
 var _test_dialogues := ["village_guard", "old_scholar", "tavern_keeper", "mysterious_stranger"]
@@ -16,6 +16,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				_start_test_battle()
 			KEY_S:
 				_start_succubus_battle()
+			KEY_L:
+				_level_up_party()
 			KEY_1:
 				_start_test_dialogue(0)
 			KEY_2:
@@ -45,6 +47,12 @@ func _start_succubus_battle() -> void:
 		{"creature_id": "emberclaw_seductress", "level": 8},
 		{"creature_id": "voidblade_succubus", "level": 10},
 	])
+
+
+func _level_up_party() -> void:
+	for creature in GameManager.player_party:
+		creature.level_up()
+		print("[TEST] %s levelled up to Lv.%d!" % [creature.nickname, creature.level])
 
 
 func _start_test_battle() -> void:
