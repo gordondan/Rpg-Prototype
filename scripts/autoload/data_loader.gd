@@ -64,7 +64,23 @@ func _load_json(path: String) -> Variant:
 		push_error("JSON parse error in %s: %s" % [path, json.get_error_message()])
 		return {}
 
-	return json.data
+	return _convert_floats_to_ints(json.data)
+
+
+func _convert_floats_to_ints(data: Variant) -> Variant:
+	if data is Dictionary:
+		var result := {}
+		for key in data:
+			result[key] = _convert_floats_to_ints(data[key])
+		return result
+	elif data is Array:
+		var result := []
+		for item in data:
+			result.append(_convert_floats_to_ints(item))
+		return result
+	elif data is float and is_equal_approx(data, roundf(data)):
+		return int(data)
+	return data
 
 
 # ─── Public API ──────────────────────────────────────────────────
