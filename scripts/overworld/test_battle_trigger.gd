@@ -1,6 +1,6 @@
 extends Node
 ## Temporary test script for triggering battles and dialogue.
-## B = random battle | 1-4 = test different NPC dialogues | Space = talk to NPCs
+## B = random battle | S = succubus test battle | 1-4 = test different NPC dialogues
 ## Remove this once you have proper NPCs and encounter zones.
 
 var _test_dialogues := ["village_guard", "old_scholar", "tavern_keeper", "mysterious_stranger"]
@@ -14,6 +14,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		match event.keycode:
 			KEY_B:
 				_start_test_battle()
+			KEY_S:
+				_start_succubus_battle()
 			KEY_1:
 				_start_test_dialogue(0)
 			KEY_2:
@@ -33,6 +35,16 @@ func _start_test_dialogue(index: int) -> void:
 	var id: String = _test_dialogues[index]
 	print("[TEST] Starting dialogue: %s" % id)
 	DialogueManager.start_dialogue(id)
+
+
+func _start_succubus_battle() -> void:
+	if DialogueManager.is_active():
+		return
+	# Spawn one of each succubus type for a 2-enemy test battle
+	BattleManager.start_wild_battle_with_ids([
+		{"creature_id": "emberclaw_seductress", "level": 8},
+		{"creature_id": "voidblade_succubus", "level": 10},
+	])
 
 
 func _start_test_battle() -> void:
