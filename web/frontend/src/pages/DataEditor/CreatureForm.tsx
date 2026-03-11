@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -8,11 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Slider } from '@/components/ui/slider'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, Upload, Download } from 'lucide-react'
 import StatRadarChart from '@/components/RadarChart'
 import { TYPE_COLORS, STAT_LABELS } from '@/theme/colors'
 import { type Creature, spritePath } from '@/api/creatures'
 import { useChanges } from '@/context/ChangeContext'
+import { toast } from 'sonner'
 
 interface Props {
   id: string
@@ -21,10 +22,14 @@ interface Props {
 
 export default function CreatureForm({ id, creature: initial }: Props) {
   const [form, setForm] = useState<Creature>(initial)
+  const [spriteRev, setSpriteRev] = useState(0)
   const { markChanged } = useChanges()
+  const owUploadRef = useRef<HTMLInputElement>(null)
+  const btUploadRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setForm(initial)
+    setSpriteRev((r) => r + 1)
   }, [initial])
 
   const update = (patch: Partial<Creature>) => {
@@ -35,6 +40,28 @@ export default function CreatureForm({ id, creature: initial }: Props) {
 
   const updateStat = (key: string, value: number) => {
     update({ [key]: value } as unknown as Partial<Creature>)
+  }
+
+  const uploadSprite = async (file: File, variant: 'overworld' | 'battle') => {
+    const path = spritePath(id, variant)
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      const res = await fetch(`/api/assets/upload/${path}`, { method: 'POST', body: formData })
+      if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
+      setSpriteRev((r) => r + 1)
+      toast.success(`${variant} sprite uploaded`)
+    } catch (err) {
+      toast.error(`Upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    }
+  }
+
+  const downloadSprite = (variant: 'overworld' | 'battle') => {
+    const path = spritePath(id, variant)
+    const a = document.createElement('a')
+    a.href = `/api/assets/file/${path}`
+    a.download = path.split('/').pop() ?? `${id}.png`
+    a.click()
   }
 
   const statKeys = Object.keys(STAT_LABELS) as (keyof Creature)[]
@@ -52,7 +79,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
           <div className="flex flex-col items-center gap-1">
             <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
               <img
-                src={`/api/assets/thumbnail/${spritePath(id)}?size=128`}
+                src={`/api/assets/thumbnail/${spritePath(id)}?size=128&v=${spriteRev}`}
                 alt={`${form.name} overworld`}
                 className="size-20 object-contain"
                 onError={(e) => {
@@ -61,13 +88,18 @@ export default function CreatureForm({ id, creature: initial }: Props) {
               />
             </div>
             <span className="text-[10px] text-parchment/40">Overworld</span>
+            <div className="flex gap-1">
+              <input ref={owUploadRef} type="file" accept="image/png" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'overworld'); e.target.value = '' }} />
+              <Button variant="ghost" size="icon-xs" title="Upload" onClick={() => owUploadRef.current?.click()} className="text-parchment/40 hover:text-gold"><Upload className="size-3" /></Button>
+              <Button variant="ghost" size="icon-xs" title="Download" onClick={() => downloadSprite('overworld')} className="text-parchment/40 hover:text-gold"><Download className="size-3" /></Button>
+            </div>
           </div>
 
           {/* Battle sprite */}
           <div className="flex flex-col items-center gap-1">
             <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
               <img
-                src={`/api/assets/thumbnail/${spritePath(id, 'battle')}?size=128`}
+                src={`/api/assets/thumbnail/${spritePath(id, 'battle')}?size=128&v=${spriteRev}`}
                 alt={`${form.name} battle`}
                 className="size-20 object-contain"
                 onError={(e) => {
@@ -76,6 +108,11 @@ export default function CreatureForm({ id, creature: initial }: Props) {
               />
             </div>
             <span className="text-[10px] text-parchment/40">Battle</span>
+            <div className="flex gap-1">
+              <input ref={btUploadRef} type="file" accept="image/png" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'battle'); e.target.value = '' }} />
+              <Button variant="ghost" size="icon-xs" title="Upload" onClick={() => btUploadRef.current?.click()} className="text-parchment/40 hover:text-gold"><Upload className="size-3" /></Button>
+              <Button variant="ghost" size="icon-xs" title="Download" onClick={() => downloadSprite('battle')} className="text-parchment/40 hover:text-gold"><Download className="size-3" /></Button>
+            </div>
           </div>
 
           <span className="text-xs text-parchment/40 font-mono mt-auto">{id}</span>
