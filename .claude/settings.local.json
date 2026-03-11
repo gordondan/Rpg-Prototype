@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/tyrel/AppData/Local/Programs//**)",
-      "Read(//c/Users/tyrel/**)"
+      "Read(//c/Users/tyrel/**)",
+      "Bash(/Applications/Godot.app/Contents/MacOS/Godot --headless -s addons/gut/gut_cmdln.gd 2>&1)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr:*)"
     ]
   }
 }
