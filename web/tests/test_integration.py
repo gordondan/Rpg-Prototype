@@ -52,12 +52,13 @@ def client(test_repo, monkeypatch):
     monkeypatch.setattr(config, "settings", test_settings)
 
     # Recreate services with the test repo path
-    from backend.routers import creatures, moves, items, maps, shops, assets, git_ops
+    from backend.routers import creatures, moves, items, maps, shops, assets, git_ops, quests
     creatures.data_svc = data_service.DataService(repo_path=test_repo)
     moves.data_svc = data_service.DataService(repo_path=test_repo)
     items.data_svc = data_service.DataService(repo_path=test_repo)
     maps.data_svc = data_service.DataService(repo_path=test_repo)
     shops.data_svc = data_service.DataService(repo_path=test_repo)
+    quests.data_svc = data_service.DataService(repo_path=test_repo)
     assets.asset_svc = asset_service.AssetService(repo_path=test_repo)
     assets.git_svc = git_service.GitService(repo_path=test_repo)
     git_ops.git_svc = git_service.GitService(repo_path=test_repo)
@@ -192,3 +193,66 @@ def test_full_edit_and_commit_flow(client):
     r = client.get("/api/git/history")
     history = r.json()
     assert history[0]["message"] == "Update Flame Squire HP"
+
+
+def test_create_map(client):
+    r = client.post("/api/maps/", json={"id": "test_map", "name": "Test Map", "description": "A test", "encounters": []})
+    assert r.status_code == 200
+    r = client.get("/api/maps/")
+    assert "test_map" in r.json()
+
+
+def test_delete_map(client):
+    client.post("/api/maps/", json={"id": "to_delete", "name": "Del", "description": "", "encounters": []})
+    r = client.delete("/api/maps/to_delete")
+    assert r.status_code == 200
+    assert "to_delete" not in client.get("/api/maps/").json()
+
+
+def test_quest_crud(client):
+    quest_data = {
+        "id": "test_quest",
+        "name": "Test Quest",
+        "description": "A test quest",
+        "map_id": "route_1",
+        "prerequisite_quest_id": None,
+        "reward": {"gold": 100, "items": [], "exp": 50},
+        "stages": [
+            {"id": "s1", "type": "reach_location", "description": "Go to route 1", "map_id": "route_1"}
+        ],
+    }
+    # Create
+    r = client.post("/api/quests/", json=quest_data)
+    assert r.status_code == 200
+
+    # Read
+    r = client.get("/api/quests/test_quest")
+    assert r.status_code == 200
+    assert r.json()["name"] == "Test Quest"
+
+    # Update
+    updated = r.json()
+    updated["name"] = "Updated Quest"
+    r = client.put("/api/quests/test_quest", json=updated)
+    assert r.status_code == 200
+
+    # Verify update
+    r = client.get("/api/quests/test_quest")
+    assert r.json()["name"] == "Updated Quest"
+
+    # List
+    r = client.get("/api/quests/")
+    assert "test_quest" in r.json()
+
+    # Delete
+    r = client.delete("/api/quests/test_quest")
+    assert r.status_code == 200
+    r = client.get("/api/quests/test_quest")
+    assert r.status_code == 404
+
+
+def test_sprite_auto_match(client):
+    r = client.get("/api/creatures/auto-match-sprites")
+    assert r.status_code == 200
+    matches = r.json()
+    assert "flame_squire" in matches
