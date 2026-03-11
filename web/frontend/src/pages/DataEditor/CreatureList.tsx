@@ -59,14 +59,18 @@ export default function CreatureList({ creatures, selectedId, onSelect }: Props)
               )}
             >
               <div className="flex size-10 items-center justify-center rounded-lg bg-stone-light/30 overflow-hidden shrink-0">
-                <img
-                  src={`/api/assets/thumbnail/creatures/${id}/front.png?size=64`}
-                  alt={creature.name}
-                  className="size-8 object-contain"
-                  onError={(e) => {
-                    ;(e.target as HTMLImageElement).style.display = 'none'
-                  }}
-                />
+                {creature.sprite_battle ? (
+                  <img
+                    src={`/api/assets/thumbnail/${creature.sprite_battle}?size=64`}
+                    alt={creature.name}
+                    className="size-8 object-contain"
+                    onError={(e) => {
+                      ;(e.target as HTMLImageElement).style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <span className="text-parchment/30 text-[10px]">?</span>
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{creature.name}</p>

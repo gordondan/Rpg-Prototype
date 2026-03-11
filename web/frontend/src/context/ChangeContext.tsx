@@ -4,11 +4,12 @@ import { movesApi } from '@/api/moves'
 import { itemsApi } from '@/api/items'
 import { mapsApi } from '@/api/maps'
 import { shopsApi } from '@/api/shops'
+import { questsApi } from '@/api/quests'
 import { gitApi } from '@/api/git'
 import { toast } from 'sonner'
 
 export interface Change {
-  type: 'creatures' | 'moves' | 'items' | 'maps' | 'shops'
+  type: 'creatures' | 'moves' | 'items' | 'maps' | 'shops' | 'quests'
   id: string
   data: unknown
   label: string
@@ -61,6 +62,9 @@ export function ChangeProvider({ children }: { children: ReactNode }) {
             break
           case 'shops':
             await shopsApi.update(change.id, change.data as Parameters<typeof shopsApi.update>[1])
+            break
+          case 'quests':
+            await questsApi.update(change.id, change.data as Parameters<typeof questsApi.update>[1])
             break
         }
       }

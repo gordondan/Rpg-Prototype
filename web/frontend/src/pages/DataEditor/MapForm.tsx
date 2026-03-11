@@ -4,28 +4,53 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Plus, Trash2 } from 'lucide-react'
-import type { GameMap } from '@/api/maps'
+import { mapsApi, type GameMap } from '@/api/maps'
+import { questsApi, type Quest } from '@/api/quests'
 import { useChanges } from '@/context/ChangeContext'
+import { toast } from 'sonner'
 
 interface Props {
   id: string
   map: GameMap
+  onDelete?: () => void
 }
 
-export default function MapForm({ id, map: initial }: Props) {
+export default function MapForm({ id, map: initial, onDelete }: Props) {
   const [form, setForm] = useState<GameMap>(initial)
+  const [associatedQuests, setAssociatedQuests] = useState<[string, Quest][]>([])
   const { markChanged } = useChanges()
 
   useEffect(() => {
     setForm(initial)
   }, [initial])
 
+  useEffect(() => {
+    questsApi.list().then((quests) => {
+      const matched = Object.entries(quests).filter(([, q]) => q.map_id === id)
+      setAssociatedQuests(matched)
+    }).catch(() => {
+      setAssociatedQuests([])
+    })
+  }, [id])
+
   const update = (patch: Partial<GameMap>) => {
     const next = { ...form, ...patch }
     setForm(next)
     markChanged('maps', id, next, `${next.name}`)
+  }
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Delete map "${form.name}" (${id})? This cannot be undone.`)) return
+    try {
+      await mapsApi.delete(id)
+      toast.success(`Map "${form.name}" deleted`)
+      onDelete?.()
+    } catch (err) {
+      toast.error(`Failed to delete map: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    }
   }
 
   return (
@@ -141,6 +166,41 @@ export default function MapForm({ id, map: initial }: Props) {
             </div>
           </CardContent>
         </Card>
+
+        {/* Associated Quests */}
+        <Card className="bg-stone/30 border-stone-light/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-gold font-heading text-base">Associated Quests</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {associatedQuests.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5">
+                {associatedQuests.map(([qId, quest]) => (
+                  <Badge
+                    key={qId}
+                    variant="outline"
+                    className="text-parchment/70 border-stone-light/40"
+                  >
+                    {quest.name || qId}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-parchment/40">No quests for this map.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Delete */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+        >
+          <Trash2 className="size-3.5" />
+          Delete Map
+        </Button>
       </div>
     </ScrollArea>
   )
