@@ -9,7 +9,17 @@
       "Bash(git branch:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(ls \"/Users/gordon/Documents/Tyrell/monster-game/assets/sprites/tilesets/The Fan-tasy Tileset \\(Free\\)/Art/Ground Tileset/\")",
+      "Bash(ls \"/Users/gordon/Documents/Tyrell/monster-game/assets/sprites/tilesets/The Fan-tasy Tileset \\(Free\\)/Art/Characters/Main Character/\")",
+      "Bash(wc -l /Users/gordon/Documents/Tyrell/monster-game/assets/sprites/creatures/*.png | tail -1)",
+      "Bash(grep -r \"dagordons\" ~/ --include=\"*.yml\" --include=\"*.yaml\" --include=\"*.conf\" 2>/dev/null | head -20)",
+      "Bash(ls /Users/gordon/Documents/Tyrell/monster-game/assets/sprites/creatures/*.png | grep -v \".import\" | wc -l)",
+      "Bash(ls /Users/gordon/Documents/Tyrell/monster-game/assets/sprites/creatures/*.png | grep -v \".import\" | sort)",
+      "Bash(find ~/source/repos -name \".env*\" -o -name \"docker-compose*.yml\" 2>/dev/null | sort)",
+      "Bash(docker inspect:*)",
+      "Bash(find /Users/gordon/source/repos/todo-lists/src -type f -name \"*.py\" 2>/dev/null | head -10)",
+      "Bash(git add:*)"
     ]
   }
 }

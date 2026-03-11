@@ -22,6 +22,8 @@ class AssetInfo:
 
 
 class AssetService:
+    GAME_SPRITE_SIZE = 128
+
     def __init__(self, repo_path: Path | None = None):
         self.repo_path = repo_path or settings.repo_path
         self.assets_path = self.repo_path / settings.assets_dir
@@ -109,6 +111,27 @@ class AssetService:
         full_path = self.repo_path / rel_path
         full_path.parent.mkdir(parents=True, exist_ok=True)
         full_path.write_bytes(content)
+
+    def process_sprite(self, rel_path: str, content: bytes) -> None:
+        """Save original to original/ subdir, write resized game-ready PNG to rel_path."""
+        from io import BytesIO
+
+        full_path = self.repo_path / rel_path
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Save original
+        original_dir = full_path.parent / "original"
+        original_dir.mkdir(parents=True, exist_ok=True)
+        original_path = original_dir / full_path.name
+        original_path.write_bytes(content)
+
+        # Open, convert to RGBA PNG, resize if needed
+        with Image.open(BytesIO(content)) as img:
+            img = img.convert("RGBA")
+            img.thumbnail((self.GAME_SPRITE_SIZE, self.GAME_SPRITE_SIZE), Image.Resampling.LANCZOS)
+            buf = BytesIO()
+            img.save(buf, format="PNG")
+            full_path.write_bytes(buf.getvalue())
 
     def delete_asset(self, rel_path: str) -> bool:
         full_path = self.repo_path / rel_path

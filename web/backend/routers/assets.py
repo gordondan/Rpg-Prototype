@@ -47,8 +47,17 @@ def get_file(path: str):
 @router.post("/upload/{path:path}")
 async def upload_asset(path: str, file: UploadFile = File(...)):
     content = await file.read()
-    asset_svc.save_uploaded_file(path, content)
+    if path.startswith("assets/sprites/creatures/") and not path.startswith("assets/sprites/creatures/original/"):
+        asset_svc.process_sprite(path, content)
+    else:
+        asset_svc.save_uploaded_file(path, content)
     return {"status": "uploaded", "path": path}
+
+
+@router.post("/reprocess-sprites")
+def reprocess_sprites():
+    count = asset_svc.reprocess_all_sprites()
+    return {"status": "reprocessed", "count": count}
 
 
 @router.put("/status/{path:path}")

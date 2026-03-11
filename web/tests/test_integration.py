@@ -3,11 +3,13 @@
 import json
 import os
 import shutil
+from io import BytesIO
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 from git import Repo
+from PIL import Image as PILImage
 
 # Set REPO_PATH before importing app
 REPO = Path(__file__).parent.parent.parent  # monster-game root
@@ -270,3 +272,27 @@ def test_delete_creature(client):
     assert r.status_code == 200
     r = client.get(f"/api/creatures/{creature_id}")
     assert r.status_code == 404
+
+
+def test_upload_creature_sprite_is_processed(client, test_repo):
+    img = PILImage.new("RGBA", (512, 512), (255, 0, 0, 255))
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    buf.seek(0)
+
+    r = client.post(
+        "/api/assets/upload/assets/sprites/creatures/test_upload.png",
+        files={"file": ("test_upload.png", buf, "image/png")},
+    )
+    assert r.status_code == 200
+
+    game_path = test_repo / "assets/sprites/creatures/test_upload.png"
+    assert game_path.exists()
+    with PILImage.open(game_path) as result_img:
+        assert result_img.width <= 128
+        assert result_img.height <= 128
+
+    original_path = test_repo / "assets/sprites/creatures/original/test_upload.png"
+    assert original_path.exists()
+    with PILImage.open(original_path) as orig_img:
+        assert orig_img.width == 512
