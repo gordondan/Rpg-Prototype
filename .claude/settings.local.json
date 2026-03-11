@@ -33,7 +33,10 @@
       "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && bash start-web.sh 2>&1)",
       "Bash(sleep 5 && curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/editor/creatures 2>&1)",
       "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/web\" && export PYTHONPATH=\"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/web\" && .venv/Scripts/python backend/app.py --host 127.0.0.1 --port 8000 2>&1)",
-      "Bash(sleep 20 && curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/editor/creatures 2>&1)"
+      "Bash(sleep 20 && curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/editor/creatures 2>&1)",
+      "Bash(ls -la \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/assets/sprites/creatures/aqua_monk\"* 2>&1)",
+      "Bash(powershell.exe -NoProfile -Command \"Get-Process python* 2>/dev/null | Select-Object Id,CPU,WorkingSet\" 2>&1)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/editor/creatures 2>&1)"
     ]
   }
 }
