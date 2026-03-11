@@ -177,3 +177,58 @@ class DataService:
             for f in (self.data_path).glob(pattern):
                 changed.append(str(f.relative_to(self.repo_path)))
         return changed
+
+    # --- Map Create & Delete ---
+
+    def create_map(self, map_id: str, map_data: dict) -> bool:
+        path = self.data_path / "maps" / f"{map_id}.json"
+        if path.exists():
+            return False
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._write_json(path, map_data)
+        return True
+
+    def delete_map(self, map_id: str) -> bool:
+        path = self.data_path / "maps" / f"{map_id}.json"
+        if not path.exists():
+            return False
+        path.unlink()
+        return True
+
+    # --- Quests ---
+
+    def get_all_quests(self) -> dict[str, dict]:
+        quests = {}
+        quests_dir = self.data_path / "quests"
+        if quests_dir.exists():
+            for f in quests_dir.glob("*.json"):
+                quests[f.stem] = self._read_json(f)
+        return quests
+
+    def get_quest(self, quest_id: str) -> dict | None:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if path.exists():
+            return self._read_json(path)
+        return None
+
+    def create_quest(self, quest_id: str, quest_data: dict) -> bool:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if path.exists():
+            return False
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._write_json(path, quest_data)
+        return True
+
+    def update_quest(self, quest_id: str, quest_data: dict) -> bool:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if not path.exists():
+            return False
+        self._write_json(path, quest_data)
+        return True
+
+    def delete_quest(self, quest_id: str) -> bool:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if not path.exists():
+            return False
+        path.unlink()
+        return True

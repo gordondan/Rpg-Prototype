@@ -57,3 +57,24 @@ def test_get_all_maps(data_service):
 def test_get_all_shops(data_service):
     shops = data_service.get_all_shops()
     assert "village_merchant" in shops
+
+
+def test_create_map(data_service):
+    result = data_service.create_map("test_map", {"name": "Test", "description": "A test map", "encounters": []})
+    assert result is True
+    maps = data_service.get_all_maps()
+    assert "test_map" in maps
+
+
+def test_create_map_duplicate(data_service):
+    assert data_service.create_map("route_1", {"name": "Dup"}) is False
+
+
+def test_delete_map(data_service):
+    data_service.create_map("to_delete", {"name": "Del", "description": "", "encounters": []})
+    assert data_service.delete_map("to_delete") is True
+    assert "to_delete" not in data_service.get_all_maps()
+
+
+def test_delete_map_not_found(data_service):
+    assert data_service.delete_map("nonexistent") is False
