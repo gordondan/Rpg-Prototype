@@ -133,6 +133,31 @@ class AssetService:
             img.save(buf, format="PNG")
             full_path.write_bytes(buf.getvalue())
 
+    def reprocess_all_sprites(self) -> int:
+        """Reprocess all creature sprites: save originals, generate game-ready versions."""
+        creatures_dir = self.repo_path / "assets" / "sprites" / "creatures"
+        if not creatures_dir.exists():
+            return 0
+        count = 0
+        for f in sorted(creatures_dir.glob("*.png")):
+            if f.is_dir():
+                continue
+            content = f.read_bytes()
+            rel_path = str(f.relative_to(self.repo_path))
+            self.process_sprite(rel_path, content)
+            count += 1
+        for ext in ("*.jpg", "*.jpeg", "*.gif"):
+            for f in sorted(creatures_dir.glob(ext)):
+                if f.is_dir():
+                    continue
+                content = f.read_bytes()
+                png_name = f.stem + ".png"
+                rel_path = str((f.parent / png_name).relative_to(self.repo_path))
+                self.process_sprite(rel_path, content)
+                f.unlink()
+                count += 1
+        return count
+
     def delete_asset(self, rel_path: str) -> bool:
         full_path = self.repo_path / rel_path
         if full_path.exists():

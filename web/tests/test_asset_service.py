@@ -92,3 +92,17 @@ def test_process_sprite_small_image_unchanged(asset_service):
 
     original_path = asset_service.repo_path / "assets/sprites/creatures/original/tiny.png"
     assert original_path.exists()
+
+
+def test_reprocess_all_sprites(asset_service):
+    creatures_dir = asset_service.repo_path / "assets" / "sprites" / "creatures"
+    large_img = Image.new("RGBA", (1024, 1024), (255, 0, 0, 255))
+    large_img.save(creatures_dir / "big_creature.png")
+
+    count = asset_service.reprocess_all_sprites()
+    assert count >= 1
+
+    with Image.open(creatures_dir / "big_creature.png") as img:
+        assert img.width <= 128
+
+    assert (creatures_dir / "original" / "big_creature.png").exists()
