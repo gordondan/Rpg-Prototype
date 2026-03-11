@@ -249,10 +249,3 @@ def test_quest_crud(client):
     assert r.status_code == 200
     r = client.get("/api/quests/test_quest")
     assert r.status_code == 404
-
-
-def test_sprite_auto_match(client):
-    r = client.get("/api/creatures/auto-match-sprites")
-    assert r.status_code == 200
-    matches = r.json()
-    assert "flame_squire" in matches

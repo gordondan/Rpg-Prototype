@@ -33,9 +33,7 @@
         "level": 12,
         "move_id": "lightning_stab"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Spark Thief Female.png",
-    "sprite_battle": "assets/sprites/creatures/spark_thief_battle.png"
+    ]
   },
   "goblin_firebomber": {
     "name": "Goblin Firebomber",
@@ -71,9 +69,7 @@
         "level": 11,
         "move_id": "swift_strike"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Goblin Firebomber.png",
-    "sprite_battle": "assets/sprites/creatures/goblin_firebomber_battle.png"
+    ]
   },
   "stone_sentinel": {
     "name": "Stone Sentinel",
@@ -109,9 +105,7 @@
         "level": 12,
         "move_id": "headbutt"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/stone sentinel.png",
-    "sprite_battle": "assets/sprites/creatures/stone_sentinel_battle.png"
+    ]
   },
   "goblin": {
     "name": "Goblin",
@@ -149,9 +143,7 @@
         "level": 13,
         "move_id": "venom_fang"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Goblin_Basic.png",
-    "sprite_battle": "assets/sprites/creatures/goblin_battle.png"
+    ]
   },
   "hex_weaver": {
     "name": "Hex Weaver",
@@ -183,9 +175,7 @@
         "level": 7,
         "move_id": "venom_fang"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Hex Weaver.png",
-    "sprite_battle": "assets/sprites/creatures/hex_weaver_battle.png"
+    ]
   },
   "emberclaw_seductress": {
     "name": "Emberclaw Seductress",
@@ -230,8 +220,7 @@
         "level": 22,
         "move_id": "blazing_blade"
       }
-    ],
-    "sprite_battle": "assets/sprites/creatures/emberclaw_seductress_battle.png"
+    ]
   },
   "voidblade_succubus": {
     "name": "Voidblade Succubus",
@@ -280,8 +269,7 @@
         "level": 28,
         "move_id": "inferno"
       }
-    ],
-    "sprite_battle": "assets/sprites/creatures/voidblade_succubus_battle.png"
+    ]
   },
   "flame_squire": {
     "name": "Flame Squire",
@@ -321,9 +309,7 @@
         "level": 20,
         "move_id": "cross_slash"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Flame_Squire.png",
-    "sprite_battle": "assets/sprites/creatures/flame_squire_battle.png"
+    ]
   },
   "grove_druid": {
     "name": "Grove Druid",
@@ -367,9 +353,7 @@
         "level": 22,
         "move_id": "solar_wrath"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/grove druid.png",
-    "sprite_battle": "assets/sprites/creatures/grove_druid_battle.png"
+    ]
   },
   "succubus_mage": {
     "name": "Succubus Mage",
@@ -410,9 +394,7 @@
         "level": 20,
         "move_id": "solar_wrath"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/succubus mage.png",
-    "sprite_battle": "assets/sprites/creatures/succubus_mage_battle.png"
+    ]
   },
   "succubus_sword": {
     "name": "Succubus Sword",
@@ -457,9 +439,7 @@
         "level": 22,
         "move_id": "inferno"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/succubus Sword.png",
-    "sprite_battle": "assets/sprites/creatures/succubus_sword_battle.png"
+    ]
   },
   "tide_cleric": {
     "name": "Tide Cleric",
@@ -499,9 +479,7 @@
         "level": 18,
         "move_id": "tidal_wave"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Tide Cleric.png",
-    "sprite_battle": "assets/sprites/creatures/tide_cleric_battle.png"
+    ]
   },
   "giant_bat": {
     "name": "Giant Bat",
@@ -538,9 +516,7 @@
         "level": 14,
         "move_id": "fae_wind"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Giant Bat.png",
-    "sprite_battle": "assets/sprites/creatures/giant_bat_battle.png"
+    ]
   },
   "orc_battleaxman": {
     "name": "Orc Battleaxman",
@@ -580,9 +556,7 @@
         "level": 18,
         "move_id": "cross_slash"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Orc Battleaxman.png",
-    "sprite_battle": "assets/sprites/creatures/orc_battleaxman_battle.png"
+    ]
   },
   "ork_grunt": {
     "name": "Ork Grunt",
@@ -618,9 +592,7 @@
         "level": 13,
         "move_id": "weaken_armor"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Ork Grunt.png",
-    "sprite_battle": "assets/sprites/creatures/ork_grunt_battle.png"
+    ]
   },
   "ork_warrior": {
     "name": "Ork Warrior",
@@ -660,9 +632,7 @@
         "level": 18,
         "move_id": "headbutt"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Ork Warrior.png",
-    "sprite_battle": "assets/sprites/creatures/ork_warrior_battle.png"
+    ]
   },
   "wind_scout": {
     "name": "Elven Bandit",
@@ -698,8 +668,6 @@
         "level": 10,
         "move_id": "cross_slash"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/wind scout.png",
-    "sprite_battle": "assets/sprites/creatures/wind_scout_battle.png"
+    ]
   }
 }

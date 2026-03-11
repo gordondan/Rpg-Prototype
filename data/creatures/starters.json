@@ -147,8 +147,7 @@
         "level": 25,
         "move_id": "starfall"
       }
-    ],
-    "sprite_battle": "assets/sprites/creatures/mischievous_fairy_battle.png"
+    ]
   },
   "alexia": {
     "name": "Alexia the Ranger",
@@ -271,9 +270,7 @@
         "level": 28,
         "move_id": "war_cry"
       }
-    ],
-    "sprite_overworld": "assets/sprites/creatures/Aqua Monk Female.png",
-    "sprite_battle": "assets/sprites/creatures/aqua_monk_battle.png"
+    ]
   },
   "grove_druid": {
     "name": "Grove Druid",

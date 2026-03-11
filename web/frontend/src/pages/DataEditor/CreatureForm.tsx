@@ -8,12 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Slider } from '@/components/ui/slider'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash2, Wand2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import StatRadarChart from '@/components/RadarChart'
 import { TYPE_COLORS, STAT_LABELS } from '@/theme/colors'
-import { creaturesApi, type Creature } from '@/api/creatures'
+import { type Creature, spritePath } from '@/api/creatures'
 import { useChanges } from '@/context/ChangeContext'
-import { toast } from 'sonner'
 
 interface Props {
   id: string
@@ -52,15 +51,14 @@ export default function CreatureForm({ id, creature: initial }: Props) {
           {/* Overworld sprite */}
           <div className="flex flex-col items-center gap-1">
             <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
-              {form.sprite_overworld ? (
-                <img
-                  src={`/api/assets/thumbnail/${form.sprite_overworld}?size=128`}
-                  alt={`${form.name} overworld`}
-                  className="size-20 object-contain"
-                />
-              ) : (
-                <span className="text-xs text-parchment/30">No sprite</span>
-              )}
+              <img
+                src={`/api/assets/thumbnail/${spritePath(id)}?size=128`}
+                alt={`${form.name} overworld`}
+                className="size-20 object-contain"
+                onError={(e) => {
+                  ;(e.target as HTMLImageElement).style.display = 'none'
+                }}
+              />
             </div>
             <span className="text-[10px] text-parchment/40">Overworld</span>
           </div>
@@ -68,15 +66,14 @@ export default function CreatureForm({ id, creature: initial }: Props) {
           {/* Battle sprite */}
           <div className="flex flex-col items-center gap-1">
             <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
-              {form.sprite_battle ? (
-                <img
-                  src={`/api/assets/thumbnail/${form.sprite_battle}?size=128`}
-                  alt={`${form.name} battle`}
-                  className="size-20 object-contain"
-                />
-              ) : (
-                <span className="text-xs text-parchment/30">No sprite</span>
-              )}
+              <img
+                src={`/api/assets/thumbnail/${spritePath(id, 'battle')}?size=128`}
+                alt={`${form.name} battle`}
+                className="size-20 object-contain"
+                onError={(e) => {
+                  ;(e.target as HTMLImageElement).style.display = 'none'
+                }}
+              />
             </div>
             <span className="text-[10px] text-parchment/40">Battle</span>
           </div>
@@ -326,53 +323,6 @@ export default function CreatureForm({ id, creature: initial }: Props) {
                   className="bg-stone/50 border-stone-light/30 text-parchment text-sm resize-none"
                 />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Sprites */}
-        <Card className="bg-stone/30 border-stone-light/30">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-gold font-heading text-base">Sprites</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div>
-                <Label className="text-parchment/60 text-xs">Overworld Sprite Path</Label>
-                <Input
-                  value={form.sprite_overworld ?? ''}
-                  onChange={(e) => update({ sprite_overworld: e.target.value || undefined })}
-                  className="bg-stone/50 border-stone-light/30 text-parchment text-sm h-7"
-                  placeholder="e.g. creatures/goblin/overworld.png"
-                />
-              </div>
-              <div>
-                <Label className="text-parchment/60 text-xs">Battle Sprite Path</Label>
-                <Input
-                  value={form.sprite_battle ?? ''}
-                  onChange={(e) => update({ sprite_battle: e.target.value || undefined })}
-                  className="bg-stone/50 border-stone-light/30 text-parchment text-sm h-7"
-                  placeholder="e.g. creatures/goblin/front.png"
-                />
-              </div>
-              <Separator className="bg-stone-light/30" />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={async () => {
-                  try {
-                    const matches = await creaturesApi.autoMatchSprites()
-                    await creaturesApi.applySprites(matches)
-                    toast.success('Sprites auto-matched and applied. Reload the page to see updates.')
-                  } catch (err) {
-                    toast.error(`Auto-match failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
-                  }
-                }}
-                className="text-gold/70 hover:text-gold"
-              >
-                <Wand2 className="size-3.5" />
-                Auto-Match All Sprites
-              </Button>
             </div>
           </CardContent>
         </Card>

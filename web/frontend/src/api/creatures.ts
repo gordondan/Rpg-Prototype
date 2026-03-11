@@ -1,4 +1,4 @@
-import { get, put, post } from './client'
+import { get, put } from './client'
 
 export interface Creature {
   name: string
@@ -17,15 +17,16 @@ export interface Creature {
   recruit_chance?: number
   recruit_dialogue?: string
   learnset: { level: number; move_id: string }[]
-  sprite_overworld?: string
-  sprite_battle?: string
+}
+
+/** Convention-based sprite paths derived from creature ID */
+export function spritePath(creatureId: string, variant: 'overworld' | 'battle' = 'overworld'): string {
+  const file = variant === 'battle' ? `${creatureId}_battle.png` : `${creatureId}.png`
+  return `assets/sprites/creatures/${file}`
 }
 
 export const creaturesApi = {
   list: () => get<Record<string, Creature>>('/creatures/'),
   getOne: (id: string) => get<Creature>(`/creatures/${id}`),
   update: (id: string, data: Creature) => put<Creature>(`/creatures/${id}`, data),
-  autoMatchSprites: () => get<Record<string, { overworld: string | null; battle: string | null }>>('/creatures/auto-match-sprites'),
-  applySprites: (matches: Record<string, { overworld: string | null; battle: string | null }>) =>
-    post('/creatures/apply-sprite-matches', { matches }),
 }

@@ -33,8 +33,6 @@ class Creature(BaseModel):
     recruit_chance: float | None = None
     recruit_dialogue: str | None = None
     recruitable: bool | None = None
-    sprite_overworld: str | None = None
-    sprite_battle: str | None = None
     learnset: list[LearnsetEntry] = []
 
     model_config = {"populate_by_name": True}
