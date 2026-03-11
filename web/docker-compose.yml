@@ -1,0 +1,25 @@
+services:
+  api:
+    build: .
+    volumes:
+      - ${REPO_PATH:-/Users/gordon/Documents/Tyrell/monster-game}:/repo
+    environment:
+      - REPO_PATH=/repo
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - default
+      - cloudflare-tunnel
+
+networks:
+  cloudflare-tunnel:
+    external: true
