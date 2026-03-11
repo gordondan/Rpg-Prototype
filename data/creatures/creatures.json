@@ -1069,22 +1069,20 @@
     "category": "wild"
   },
   "new_creature_1": {
-    "name": "The LOKI",
-    "description": "",
+    "name": "Dancing Villager",
+    "description": "Dance dance dance",
     "types": [
       "normal"
     ],
-    "base_hp": 50,
-    "base_attack": 50,
-    "base_defense": 50,
-    "base_sp_attack": 50,
-    "base_sp_defense": 50,
-    "base_speed": 50,
+    "base_hp": 200,
+    "base_attack": 200,
+    "base_defense": 200,
+    "base_sp_attack": 200,
+    "base_sp_defense": 200,
+    "base_speed": 200,
     "base_exp": 50,
     "class": "monster",
     "category": "wild",
-    "learnset": [],
-    "has_overworld_sprite": false,
-    "has_battle_sprite": false
+    "learnset": []
   }
 }
