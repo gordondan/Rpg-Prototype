@@ -91,7 +91,7 @@ export default function DataEditor() {
       {/* List panel */}
       <div className="w-[280px] shrink-0">
         {category === 'creatures' && (
-          <CreatureList creatures={creatures} selectedId={selectedId} onSelect={setSelectedId} />
+          <CreatureList creatures={creatures} selectedId={selectedId} onSelect={setSelectedId} onRefresh={loadData} />
         )}
         {category === 'moves' && (
           <MovesList moves={moves} selectedId={selectedId} onSelect={setSelectedId} />

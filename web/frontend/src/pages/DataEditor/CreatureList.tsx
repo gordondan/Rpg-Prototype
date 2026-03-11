@@ -1,36 +1,166 @@
 import { useState, useMemo } from 'react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Search } from 'lucide-react'
+import { Search, Plus, ChevronDown, ChevronRight, X } from 'lucide-react'
 import { TYPE_COLORS } from '@/theme/colors'
-import { type Creature, spritePath } from '@/api/creatures'
+import { type Creature, spritePath, creaturesApi } from '@/api/creatures'
 import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
+
+interface Filters {
+  types: string[]
+  classes: string[]
+  category: 'all' | 'starter' | 'wild'
+  missingOverworld: boolean
+  missingBattle: boolean
+  hasEvolution: 'all' | 'yes' | 'no'
+  recruitable: 'all' | 'yes' | 'no'
+}
+
+const DEFAULT_FILTERS: Filters = {
+  types: [],
+  classes: [],
+  category: 'all',
+  missingOverworld: false,
+  missingBattle: false,
+  hasEvolution: 'all',
+  recruitable: 'all',
+}
+
+function isFiltersActive(filters: Filters): boolean {
+  return (
+    filters.types.length > 0 ||
+    filters.classes.length > 0 ||
+    filters.category !== 'all' ||
+    filters.missingOverworld ||
+    filters.missingBattle ||
+    filters.hasEvolution !== 'all' ||
+    filters.recruitable !== 'all'
+  )
+}
 
 interface Props {
   creatures: Record<string, Creature>
   selectedId: string | null
   onSelect: (id: string) => void
+  onRefresh?: () => void
 }
 
-export default function CreatureList({ creatures, selectedId, onSelect }: Props) {
+export default function CreatureList({ creatures, selectedId, onSelect, onRefresh }: Props) {
   const [search, setSearch] = useState('')
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
+
+  const active = isFiltersActive(filters)
+
+  const { allTypes, allClasses } = useMemo(() => {
+    const types = new Set<string>()
+    const classes = new Set<string>()
+    for (const c of Object.values(creatures)) {
+      c.types.forEach((t) => types.add(t))
+      if (c.class) classes.add(c.class)
+    }
+    return {
+      allTypes: [...types].sort(),
+      allClasses: [...classes].sort(),
+    }
+  }, [creatures])
 
   const filtered = useMemo(() => {
-    const entries = Object.entries(creatures)
-    if (!search) return entries
-    const q = search.toLowerCase()
-    return entries.filter(
-      ([id, c]) =>
-        c.name.toLowerCase().includes(q) ||
-        id.toLowerCase().includes(q) ||
-        c.types.some((t) => t.toLowerCase().includes(q))
-    )
-  }, [creatures, search])
+    let entries = Object.entries(creatures)
+
+    // Text search
+    if (search) {
+      const q = search.toLowerCase()
+      entries = entries.filter(
+        ([id, c]) =>
+          c.name.toLowerCase().includes(q) ||
+          id.toLowerCase().includes(q) ||
+          c.types.some((t) => t.toLowerCase().includes(q))
+      )
+    }
+
+    // Type filter
+    if (filters.types.length > 0) {
+      entries = entries.filter(([, c]) =>
+        filters.types.some((t) => c.types.includes(t))
+      )
+    }
+
+    // Class filter
+    if (filters.classes.length > 0) {
+      entries = entries.filter(([, c]) => filters.classes.includes(c.class))
+    }
+
+    // Category filter
+    if (filters.category !== 'all') {
+      entries = entries.filter(([, c]) => c.category === filters.category)
+    }
+
+    // Missing sprites
+    if (filters.missingOverworld) {
+      entries = entries.filter(([, c]) => c.has_overworld_sprite === false)
+    }
+    if (filters.missingBattle) {
+      entries = entries.filter(([, c]) => c.has_battle_sprite === false)
+    }
+
+    // Has evolution
+    if (filters.hasEvolution === 'yes') {
+      entries = entries.filter(([, c]) => c.evolution != null)
+    } else if (filters.hasEvolution === 'no') {
+      entries = entries.filter(([, c]) => c.evolution == null)
+    }
+
+    // Recruitable
+    if (filters.recruitable === 'yes') {
+      entries = entries.filter(([, c]) => c.recruit_method != null)
+    } else if (filters.recruitable === 'no') {
+      entries = entries.filter(([, c]) => c.recruit_method == null)
+    }
+
+    return entries
+  }, [creatures, search, filters])
+
+  const toggleType = (t: string) => {
+    setFilters((f) => ({
+      ...f,
+      types: f.types.includes(t) ? f.types.filter((x) => x !== t) : [...f.types, t],
+    }))
+  }
+
+  const toggleClass = (c: string) => {
+    setFilters((f) => ({
+      ...f,
+      classes: f.classes.includes(c) ? f.classes.filter((x) => x !== c) : [...f.classes, c],
+    }))
+  }
+
+  const handleCreate = async () => {
+    try {
+      const result = await creaturesApi.create()
+      toast.success('Creature created')
+      await onRefresh?.()
+      onSelect(result.creature_id)
+    } catch (err) {
+      toast.error(`Failed to create creature: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    }
+  }
 
   return (
     <div className="flex flex-col h-full border-r border-stone-light/30">
       <div className="p-3 border-b border-stone-light/30">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleCreate}
+          className="w-full text-gold/70 hover:text-gold justify-start"
+        >
+          <Plus className="size-3.5" />
+          New Creature
+        </Button>
         <div className="relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-parchment/40" />
           <Input
@@ -40,6 +170,169 @@ export default function CreatureList({ creatures, selectedId, onSelect }: Props)
             className="pl-8 bg-stone/50 border-stone-light/30 text-parchment placeholder:text-parchment/30"
           />
         </div>
+
+        {/* Collapsible filters */}
+        <div>
+          <button
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className="flex items-center gap-1 text-xs text-parchment/50 hover:text-parchment/70 transition-colors"
+          >
+            {filtersOpen ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
+            Filters
+            {active && <span className="text-gold ml-1">(active)</span>}
+          </button>
+
+          {filtersOpen && (
+            <div className="mt-2 space-y-3 p-2 rounded-md bg-stone/50 border border-stone-light/30">
+              {/* Type chips */}
+              <div>
+                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Type</p>
+                <div className="flex flex-wrap gap-1">
+                  {allTypes.map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => toggleType(t)}
+                      className={cn(
+                        'text-[10px] px-1.5 py-0.5 rounded-full border transition-colors',
+                        filters.types.includes(t)
+                          ? 'border-transparent'
+                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                      )}
+                      style={
+                        filters.types.includes(t)
+                          ? { backgroundColor: `${TYPE_COLORS[t] ?? '#666'}33`, color: TYPE_COLORS[t] ?? '#999' }
+                          : undefined
+                      }
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Class chips */}
+              <div>
+                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Class</p>
+                <div className="flex flex-wrap gap-1">
+                  {allClasses.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => toggleClass(c)}
+                      className={cn(
+                        'text-[10px] px-1.5 py-0.5 rounded-full border transition-colors',
+                        filters.classes.includes(c)
+                          ? 'bg-gold/20 text-gold border-transparent'
+                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                      )}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Category toggle */}
+              <div>
+                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Category</p>
+                <div className="flex gap-1">
+                  {(['all', 'starter', 'wild'] as const).map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setFilters((f) => ({ ...f, category: opt }))}
+                      className={cn(
+                        'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
+                        filters.category === opt
+                          ? 'bg-gold/20 text-gold border-transparent'
+                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Missing sprites checkboxes */}
+              <div>
+                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Missing Sprites</p>
+                <div className="space-y-1">
+                  <label className="flex items-center gap-1.5 text-[11px] text-parchment/60 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.missingOverworld}
+                      onChange={(e) => setFilters((f) => ({ ...f, missingOverworld: e.target.checked }))}
+                      className="rounded border-stone-light/30"
+                    />
+                    Missing overworld
+                  </label>
+                  <label className="flex items-center gap-1.5 text-[11px] text-parchment/60 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.missingBattle}
+                      onChange={(e) => setFilters((f) => ({ ...f, missingBattle: e.target.checked }))}
+                      className="rounded border-stone-light/30"
+                    />
+                    Missing battle
+                  </label>
+                </div>
+              </div>
+
+              {/* Has Evolution toggle */}
+              <div>
+                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Has Evolution</p>
+                <div className="flex gap-1">
+                  {(['all', 'yes', 'no'] as const).map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setFilters((f) => ({ ...f, hasEvolution: opt }))}
+                      className={cn(
+                        'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
+                        filters.hasEvolution === opt
+                          ? 'bg-gold/20 text-gold border-transparent'
+                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recruitable toggle */}
+              <div>
+                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Recruitable</p>
+                <div className="flex gap-1">
+                  {(['all', 'yes', 'no'] as const).map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setFilters((f) => ({ ...f, recruitable: opt }))}
+                      className={cn(
+                        'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
+                        filters.recruitable === opt
+                          ? 'bg-gold/20 text-gold border-transparent'
+                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clear filters */}
+              {active && (
+                <button
+                  onClick={() => setFilters(DEFAULT_FILTERS)}
+                  className="flex items-center gap-1 text-[11px] text-gold/70 hover:text-gold transition-colors"
+                >
+                  <X className="size-3" />
+                  Clear filters
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
         <p className="mt-1.5 text-xs text-parchment/40">
           {filtered.length} of {Object.keys(creatures).length} creatures
         </p>
