@@ -421,8 +421,8 @@ func _place_npcs() -> void:
 	_create_npc("Old Scholar", "old_scholar", Vector2i(23, 10))
 	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 18))
 	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(34, 18))
-	_create_npc("Elara", "elara", Vector2i(13, 9))
-	_create_npc("Sylwen", "sylwen", Vector2i(22, 17))
+	_create_npc("Elara", "elara", Vector2i(13, 9), {"quest_id": "meet_elara", "quest_role": "step", "quest_step_index": 0})
+	_create_npc("Sylwen", "sylwen", Vector2i(22, 17), {"quest_id": "meet_elara", "quest_role": "giver"})
 
 	# Merchant — near the village plaza
 	_create_npc("Village Merchant", "village_merchant", Vector2i(25, 11), {
@@ -433,6 +433,27 @@ func _place_npcs() -> void:
 	# Recruitable NPCs — only show if not yet recruited
 	if not GameManager.get_flag("fairy_recruited"):
 		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14))
+
+	# Aqua Monk — peaceful recruitable, meditating near the spring
+	if not GameManager.get_flag("aqua_monk_recruited"):
+		_create_npc("Aqua Monk", "aqua_monk", Vector2i(8, 12), {
+			"recruited_flag": "aqua_monk_recruited",
+		})
+
+	# Zacharias — aggressive gang leader with two Spark Thief wingmen
+	if not GameManager.get_flag("zacharias_recruited"):
+		_create_npc("Zacharias", "zacharias", Vector2i(20, 25), {
+			"is_rival": true,
+			"rival_party": [
+				{"creature_id": "zacharias", "level": 5},
+				{"creature_id": "spark_thief", "level": 3},
+				{"creature_id": "spark_thief", "level": 3},
+			],
+			"defeated_flag": "zacharias_defeated",
+			"post_defeat_dialogue_id": "zacharias_defeated",
+			"recruited_flag": "zacharias_recruited",
+			"line_of_sight_range": 5,
+		})
 
 	# Alexia — aggressive rival elf, can be battled then recruited
 	if not GameManager.get_flag("alexia_recruited"):

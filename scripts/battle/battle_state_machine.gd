@@ -246,27 +246,6 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 	if attacker.is_fainted():
 		return
 
-	# Resolve defender
-	var defender
-	var defending_team: Array = enemy_team if is_player_attacking else player_team
-
-	if target_index >= 0 and target_index < defending_team.size():
-		defender = defending_team[target_index]
-	else:
-		return
-
-	# If target already fainted, retarget to first living member of that team
-	if defender.is_fainted():
-		var found := false
-		for i in range(defending_team.size()):
-			if not defending_team[i].is_fainted():
-				defender = defending_team[i]
-				target_index = i
-				found = true
-				break
-		if not found:
-			return
-
 	var move_data := _get_move_data(attacker, move_index)
 	if move_data.is_empty():
 		return
@@ -278,83 +257,120 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 	if not is_player_attacking:
 		attacker_label = "Enemy " + attacker.nickname
 
-	var move_category: String = move_data.get("category", "physical")
 	var move_name: String = move_data.get("name", "???")
+	var move_category: String = move_data.get("category", "physical")
+	var move_target: String = move_data.get("target", "single")
 
-	# Status moves target differently — some target self
-	var effect: Dictionary = move_data.get("effect", {})
-	var targets_self: bool = effect.get("target", "enemy") == "self"
+	var defending_team: Array = enemy_team if is_player_attacking else player_team
+	var allied_team: Array = player_team if is_player_attacking else enemy_team
 
-	if targets_self:
+	# Build target list: each entry is {creature, is_player, index}
+	var targets: Array = []
+
+	if move_target == "all_enemies":
 		battle_message.emit("%s uses %s!" % [attacker_label, move_name])
+		for i in range(defending_team.size()):
+			if not defending_team[i].is_fainted():
+				targets.append({"creature": defending_team[i], "is_player": not is_player_attacking, "index": i})
+	elif move_target == "all_allies":
+		battle_message.emit("%s uses %s!" % [attacker_label, move_name])
+		for i in range(allied_team.size()):
+			if not allied_team[i].is_fainted():
+				targets.append({"creature": allied_team[i], "is_player": is_player_attacking, "index": i})
 	else:
-		battle_message.emit("%s casts %s on %s!" % [attacker_label, move_name, defender.nickname])
+		# Single target — original behaviour
+		var defender
+		if target_index >= 0 and target_index < defending_team.size():
+			defender = defending_team[target_index]
+		else:
+			return
+
+		if defender.is_fainted():
+			var found := false
+			for i in range(defending_team.size()):
+				if not defending_team[i].is_fainted():
+					defender = defending_team[i]
+					target_index = i
+					found = true
+					break
+			if not found:
+				return
+
+		var effect: Dictionary = move_data.get("effect", {})
+		var targets_self: bool = effect.get("target", "enemy") == "self"
+		if targets_self:
+			battle_message.emit("%s uses %s!" % [attacker_label, move_name])
+		else:
+			battle_message.emit("%s casts %s on %s!" % [attacker_label, move_name, defender.nickname])
+
+		targets.append({"creature": defender, "is_player": not is_player_attacking, "index": target_index})
+
 	await get_tree().create_timer(1.2).timeout
 
-	# Handle status moves separately from damaging moves
+	# Handle status moves
 	if move_category == "status":
-		# Accuracy check for status moves
 		var accuracy: int = move_data.get("accuracy", 100)
 		if accuracy < 100 and randi() % 100 >= accuracy:
 			battle_message.emit("But it missed!")
 			await get_tree().create_timer(1.0).timeout
 			return
-
-		await _apply_status_effect(attacker, defender, move_data, is_player_attacking, target_index)
+		for tgt in targets:
+			if not tgt["creature"].is_fainted():
+				await _apply_status_effect(attacker, tgt["creature"], move_data, is_player_attacking, tgt["index"])
 		return
 
-	var result := BattleCalculator.calculate_damage(attacker, defender, move_data)
+	# Damaging move — apply to each target
+	for tgt in targets:
+		if tgt["creature"].is_fainted():
+			continue
 
-	if result["missed"]:
-		battle_message.emit("The attack missed!")
-	else:
-		defender.take_damage(result["damage"])
-		var defender_is_player := not is_player_attacking
-		creature_hp_changed.emit(defender_is_player, target_index,
-			defender.current_hp, defender.max_hp)
+		var result := BattleCalculator.calculate_damage(attacker, tgt["creature"], move_data)
 
-		if result["critical"]:
-			battle_message.emit("A critical hit!")
-			await get_tree().create_timer(0.8).timeout
+		if result["missed"]:
+			battle_message.emit("The attack missed!")
+		else:
+			tgt["creature"].take_damage(result["damage"])
+			creature_hp_changed.emit(tgt["is_player"], tgt["index"],
+				tgt["creature"].current_hp, tgt["creature"].max_hp)
 
-		if result["effectiveness_text"] != "":
-			battle_message.emit(result["effectiveness_text"])
-			await get_tree().create_timer(0.8).timeout
+			if result["critical"]:
+				battle_message.emit("A critical hit!")
+				await get_tree().create_timer(0.8).timeout
 
-		# Check for damaging moves that also have status side-effects (e.g. fire_bolt burn chance)
-		var dmg_effect: Dictionary = move_data.get("effect", {})
-		var effect_chance: int = move_data.get("effect_chance", 0)
-		if not dmg_effect.is_empty() and effect_chance > 0:
-			if randi() % 100 < effect_chance:
-				await _apply_status_effect(attacker, defender, move_data, is_player_attacking, target_index)
+			if result["effectiveness_text"] != "":
+				battle_message.emit(result["effectiveness_text"])
+				await get_tree().create_timer(0.8).timeout
 
-	await get_tree().create_timer(0.6).timeout
+			var dmg_effect: Dictionary = move_data.get("effect", {})
+			var effect_chance: int = move_data.get("effect_chance", 0)
+			if not dmg_effect.is_empty() and effect_chance > 0:
+				if randi() % 100 < effect_chance:
+					await _apply_status_effect(attacker, tgt["creature"], move_data, is_player_attacking, tgt["index"])
 
-	# Check if defender fainted
-	if defender.is_fainted():
-		battle_message.emit("%s has been defeated!" % defender.nickname)
-		creature_fainted.emit(not is_player_attacking, target_index)
-		await get_tree().create_timer(1.2).timeout
+		await get_tree().create_timer(0.6).timeout
 
-		# If a player creature defeated an enemy, gain EXP
-		if is_player_attacking and not attacker.is_fainted():
-			var exp_amount := BattleCalculator.calculate_exp_yield(defender, is_wild_battle)
-			var leveled_up: bool = attacker.gain_experience(exp_amount)
-			battle_message.emit("%s gained %d EXP!" % [attacker.nickname, exp_amount])
-			exp_gained.emit(attacker, exp_amount, leveled_up)
-			await get_tree().create_timer(1.0).timeout
+		if tgt["creature"].is_fainted():
+			battle_message.emit("%s has been defeated!" % tgt["creature"].nickname)
+			creature_fainted.emit(tgt["is_player"], tgt["index"])
+			await get_tree().create_timer(1.2).timeout
 
-			if leveled_up:
-				battle_message.emit("%s reached level %d!" % [attacker.nickname, attacker.level])
-				await get_tree().create_timer(1.2).timeout
-			else:
-				var remaining: int = attacker._exp_for_next_level() - attacker.experience
-				battle_message.emit("%d more EXP to level %d" % [remaining, attacker.level + 1])
+			if is_player_attacking and not attacker.is_fainted():
+				var exp_amount := BattleCalculator.calculate_exp_yield(tgt["creature"], is_wild_battle)
+				var leveled_up: bool = attacker.gain_experience(exp_amount)
+				battle_message.emit("%s gained %d EXP!" % [attacker.nickname, exp_amount])
+				exp_gained.emit(attacker, exp_amount, leveled_up)
 				await get_tree().create_timer(1.0).timeout
 
-		# If player ally fainted, try to swap in a reserve
-		if not is_player_attacking:
-			await _try_swap_reserve(target_index)
+				if leveled_up:
+					battle_message.emit("%s reached level %d!" % [attacker.nickname, attacker.level])
+					await get_tree().create_timer(1.2).timeout
+				else:
+					var remaining: int = attacker._exp_for_next_level() - attacker.experience
+					battle_message.emit("%d more EXP to level %d" % [remaining, attacker.level + 1])
+					await get_tree().create_timer(1.0).timeout
+
+			if not is_player_attacking:
+				await _try_swap_reserve(tgt["index"])
 
 
 func _attempt_escape() -> void:

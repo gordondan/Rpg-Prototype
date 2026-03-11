@@ -28,6 +28,9 @@ var guild_ranks: Array[String] = []  # Replaces "badges" — earned from guild h
 # Story flags — tracks events, defeated trainers, etc.
 var story_flags: Dictionary = {}
 
+# Quest tracking
+var quests: Dictionary = {}  # {quest_id: {"status": "active"/"completed", "step": int}}
+
 # Saved player position for returning from battles
 var _saved_player_position: Vector2 = Vector2.ZERO
 var _saved_map_path: String = ""
@@ -216,6 +219,61 @@ func set_flag(flag_name: String, value: bool = true) -> void:
 
 func get_flag(flag_name: String) -> bool:
 	return story_flags.get(flag_name, false)
+
+
+# ─── Quest Tracking ──────────────────────────────────────────────
+
+func start_quest(quest_id: String) -> void:
+	if quest_id in quests:
+		return
+	quests[quest_id] = {"status": "active", "step": 0}
+	print("[GameManager] Quest started: %s" % quest_id)
+
+
+func advance_quest_step(quest_id: String) -> void:
+	if quests.get(quest_id, {}).get("status") != "active":
+		return
+	quests[quest_id]["step"] = quests[quest_id]["step"] + 1
+	print("[GameManager] Quest %s advanced to step %d" % [quest_id, quests[quest_id]["step"]])
+
+
+func complete_quest(quest_id: String) -> void:
+	if not quest_id in quests:
+		return
+	quests[quest_id]["status"] = "completed"
+	var quest_data: Dictionary = DataLoader.get_quest_data(quest_id)
+	var reward: Dictionary = quest_data.get("reward", {})
+	var reward_gold: int = int(reward.get("gold", 0))
+	if reward_gold > 0:
+		gold += reward_gold
+		print("[GameManager] Quest reward: +%d gold" % reward_gold)
+	for item_reward in reward.get("items", []):
+		add_item(item_reward["item_id"], int(item_reward.get("quantity", 1)))
+	print("[GameManager] Quest completed: %s" % quest_id)
+
+
+func get_quest_status(quest_id: String) -> String:
+	return quests.get(quest_id, {}).get("status", "")
+
+
+func get_quest_step(quest_id: String) -> int:
+	return int(quests.get(quest_id, {}).get("step", 0))
+
+
+func is_quest_active(quest_id: String) -> bool:
+	return get_quest_status(quest_id) == "active"
+
+
+func is_quest_completed(quest_id: String) -> bool:
+	return get_quest_status(quest_id) == "completed"
+
+
+func is_quest_ready_to_complete(quest_id: String) -> bool:
+	if not is_quest_active(quest_id):
+		return false
+	var quest_data: Dictionary = DataLoader.get_quest_data(quest_id)
+	var step_count: int = quest_data.get("steps", []).size()
+	return get_quest_step(quest_id) >= step_count
 
 
 # ─── Scene Transitions ───────────────────────────────────────────

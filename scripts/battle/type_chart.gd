@@ -1,7 +1,6 @@
 extends RefCounted
 class_name TypeChart
 ## Type effectiveness chart — handles all type matchup calculations.
-## Mirrors the classic 18-type system.
 
 # Effectiveness multipliers
 const SUPER_EFFECTIVE := 2.0
@@ -13,87 +12,87 @@ const NORMAL := 1.0
 # Only non-1.0 matchups are listed to save space.
 static var _chart: Dictionary = {
 	"fire": {
-		"grass": SUPER_EFFECTIVE, "ice": SUPER_EFFECTIVE, "bug": SUPER_EFFECTIVE,
-		"steel": SUPER_EFFECTIVE, "fire": NOT_EFFECTIVE, "water": NOT_EFFECTIVE,
-		"rock": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE
+		"nature": SUPER_EFFECTIVE, "frost": SUPER_EFFECTIVE, "witch": SUPER_EFFECTIVE,
+		"machine": SUPER_EFFECTIVE, "fire": NOT_EFFECTIVE, "aqua": NOT_EFFECTIVE,
+		"construct": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE
 	},
-	"water": {
-		"fire": SUPER_EFFECTIVE, "ground": SUPER_EFFECTIVE, "rock": SUPER_EFFECTIVE,
-		"water": NOT_EFFECTIVE, "grass": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE
+	"aqua": {
+		"fire": SUPER_EFFECTIVE, "earth": SUPER_EFFECTIVE, "construct": SUPER_EFFECTIVE,
+		"aqua": NOT_EFFECTIVE, "nature": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE
 	},
-	"grass": {
-		"water": SUPER_EFFECTIVE, "ground": SUPER_EFFECTIVE, "rock": SUPER_EFFECTIVE,
-		"fire": NOT_EFFECTIVE, "grass": NOT_EFFECTIVE, "poison": NOT_EFFECTIVE,
-		"flying": NOT_EFFECTIVE, "bug": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE,
-		"steel": NOT_EFFECTIVE
+	"nature": {
+		"aqua": SUPER_EFFECTIVE, "earth": SUPER_EFFECTIVE, "construct": SUPER_EFFECTIVE,
+		"fire": NOT_EFFECTIVE, "nature": NOT_EFFECTIVE, "poison": NOT_EFFECTIVE,
+		"wind": NOT_EFFECTIVE, "witch": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE,
+		"machine": NOT_EFFECTIVE
 	},
-	"electric": {
-		"water": SUPER_EFFECTIVE, "flying": SUPER_EFFECTIVE,
-		"electric": NOT_EFFECTIVE, "grass": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE,
-		"ground": NO_EFFECT
+	"storm": {
+		"aqua": SUPER_EFFECTIVE, "wind": SUPER_EFFECTIVE,
+		"storm": NOT_EFFECTIVE, "nature": NOT_EFFECTIVE, "dragon": NOT_EFFECTIVE,
+		"earth": NO_EFFECT
 	},
-	"normal": {
-		"rock": NOT_EFFECTIVE, "steel": NOT_EFFECTIVE, "ghost": NO_EFFECT
+	"no_affinity": {
+		"construct": NOT_EFFECTIVE, "machine": NOT_EFFECTIVE, "specter": NO_EFFECT
 	},
-	"fighting": {
-		"normal": SUPER_EFFECTIVE, "ice": SUPER_EFFECTIVE, "rock": SUPER_EFFECTIVE,
-		"dark": SUPER_EFFECTIVE, "steel": SUPER_EFFECTIVE,
-		"poison": NOT_EFFECTIVE, "flying": NOT_EFFECTIVE, "psychic": NOT_EFFECTIVE,
-		"bug": NOT_EFFECTIVE, "fairy": NOT_EFFECTIVE, "ghost": NO_EFFECT
+	"warrior": {
+		"no_affinity": SUPER_EFFECTIVE, "frost": SUPER_EFFECTIVE, "construct": SUPER_EFFECTIVE,
+		"shadow": SUPER_EFFECTIVE, "machine": SUPER_EFFECTIVE,
+		"poison": NOT_EFFECTIVE, "wind": NOT_EFFECTIVE, "arcane": NOT_EFFECTIVE,
+		"witch": NOT_EFFECTIVE, "fey": NOT_EFFECTIVE, "specter": NO_EFFECT
 	},
-	"flying": {
-		"grass": SUPER_EFFECTIVE, "fighting": SUPER_EFFECTIVE, "bug": SUPER_EFFECTIVE,
-		"electric": NOT_EFFECTIVE, "rock": NOT_EFFECTIVE, "steel": NOT_EFFECTIVE
+	"wind": {
+		"nature": SUPER_EFFECTIVE, "warrior": SUPER_EFFECTIVE, "witch": SUPER_EFFECTIVE,
+		"storm": NOT_EFFECTIVE, "construct": NOT_EFFECTIVE, "machine": NOT_EFFECTIVE
 	},
 	"poison": {
-		"grass": SUPER_EFFECTIVE, "fairy": SUPER_EFFECTIVE,
-		"poison": NOT_EFFECTIVE, "ground": NOT_EFFECTIVE, "rock": NOT_EFFECTIVE,
-		"ghost": NOT_EFFECTIVE, "steel": NO_EFFECT
+		"nature": SUPER_EFFECTIVE, "fey": SUPER_EFFECTIVE,
+		"poison": NOT_EFFECTIVE, "earth": NOT_EFFECTIVE, "construct": NOT_EFFECTIVE,
+		"specter": NOT_EFFECTIVE, "machine": NO_EFFECT
 	},
-	"ground": {
-		"fire": SUPER_EFFECTIVE, "electric": SUPER_EFFECTIVE, "poison": SUPER_EFFECTIVE,
-		"rock": SUPER_EFFECTIVE, "steel": SUPER_EFFECTIVE,
-		"grass": NOT_EFFECTIVE, "bug": NOT_EFFECTIVE, "flying": NO_EFFECT
+	"earth": {
+		"fire": SUPER_EFFECTIVE, "storm": SUPER_EFFECTIVE, "poison": SUPER_EFFECTIVE,
+		"construct": SUPER_EFFECTIVE, "machine": SUPER_EFFECTIVE,
+		"nature": NOT_EFFECTIVE, "witch": NOT_EFFECTIVE, "wind": NO_EFFECT
 	},
-	"rock": {
-		"fire": SUPER_EFFECTIVE, "ice": SUPER_EFFECTIVE, "flying": SUPER_EFFECTIVE,
-		"bug": SUPER_EFFECTIVE, "fighting": NOT_EFFECTIVE, "ground": NOT_EFFECTIVE,
-		"steel": NOT_EFFECTIVE
+	"construct": {
+		"fire": SUPER_EFFECTIVE, "frost": SUPER_EFFECTIVE, "wind": SUPER_EFFECTIVE,
+		"witch": SUPER_EFFECTIVE, "warrior": NOT_EFFECTIVE, "earth": NOT_EFFECTIVE,
+		"machine": NOT_EFFECTIVE
 	},
-	"bug": {
-		"grass": SUPER_EFFECTIVE, "psychic": SUPER_EFFECTIVE, "dark": SUPER_EFFECTIVE,
-		"fire": NOT_EFFECTIVE, "fighting": NOT_EFFECTIVE, "poison": NOT_EFFECTIVE,
-		"flying": NOT_EFFECTIVE, "ghost": NOT_EFFECTIVE, "steel": NOT_EFFECTIVE,
-		"fairy": NOT_EFFECTIVE
+	"witch": {
+		"nature": SUPER_EFFECTIVE, "arcane": SUPER_EFFECTIVE, "shadow": SUPER_EFFECTIVE,
+		"fire": NOT_EFFECTIVE, "warrior": NOT_EFFECTIVE, "poison": NOT_EFFECTIVE,
+		"wind": NOT_EFFECTIVE, "specter": NOT_EFFECTIVE, "machine": NOT_EFFECTIVE,
+		"fey": NOT_EFFECTIVE
 	},
-	"ghost": {
-		"psychic": SUPER_EFFECTIVE, "ghost": SUPER_EFFECTIVE,
-		"dark": NOT_EFFECTIVE, "normal": NO_EFFECT
+	"specter": {
+		"arcane": SUPER_EFFECTIVE, "specter": SUPER_EFFECTIVE,
+		"shadow": NOT_EFFECTIVE, "no_affinity": NO_EFFECT
 	},
-	"psychic": {
-		"fighting": SUPER_EFFECTIVE, "poison": SUPER_EFFECTIVE,
-		"psychic": NOT_EFFECTIVE, "steel": NOT_EFFECTIVE, "dark": NO_EFFECT
+	"arcane": {
+		"warrior": SUPER_EFFECTIVE, "poison": SUPER_EFFECTIVE,
+		"arcane": NOT_EFFECTIVE, "machine": NOT_EFFECTIVE, "shadow": NO_EFFECT
 	},
-	"ice": {
-		"grass": SUPER_EFFECTIVE, "ground": SUPER_EFFECTIVE, "flying": SUPER_EFFECTIVE,
-		"dragon": SUPER_EFFECTIVE, "fire": NOT_EFFECTIVE, "water": NOT_EFFECTIVE,
-		"ice": NOT_EFFECTIVE, "steel": NOT_EFFECTIVE
+	"frost": {
+		"nature": SUPER_EFFECTIVE, "earth": SUPER_EFFECTIVE, "wind": SUPER_EFFECTIVE,
+		"dragon": SUPER_EFFECTIVE, "fire": NOT_EFFECTIVE, "aqua": NOT_EFFECTIVE,
+		"frost": NOT_EFFECTIVE, "machine": NOT_EFFECTIVE
 	},
 	"dragon": {
-		"dragon": SUPER_EFFECTIVE, "steel": NOT_EFFECTIVE, "fairy": NO_EFFECT
+		"dragon": SUPER_EFFECTIVE, "machine": NOT_EFFECTIVE, "fey": NO_EFFECT
 	},
-	"dark": {
-		"psychic": SUPER_EFFECTIVE, "ghost": SUPER_EFFECTIVE,
-		"fighting": NOT_EFFECTIVE, "dark": NOT_EFFECTIVE, "fairy": NOT_EFFECTIVE
+	"shadow": {
+		"arcane": SUPER_EFFECTIVE, "specter": SUPER_EFFECTIVE,
+		"warrior": NOT_EFFECTIVE, "shadow": NOT_EFFECTIVE, "fey": NOT_EFFECTIVE
 	},
-	"steel": {
-		"ice": SUPER_EFFECTIVE, "rock": SUPER_EFFECTIVE, "fairy": SUPER_EFFECTIVE,
-		"fire": NOT_EFFECTIVE, "water": NOT_EFFECTIVE, "electric": NOT_EFFECTIVE,
-		"steel": NOT_EFFECTIVE
+	"machine": {
+		"frost": SUPER_EFFECTIVE, "construct": SUPER_EFFECTIVE, "fey": SUPER_EFFECTIVE,
+		"fire": NOT_EFFECTIVE, "aqua": NOT_EFFECTIVE, "storm": NOT_EFFECTIVE,
+		"machine": NOT_EFFECTIVE
 	},
-	"fairy": {
-		"fighting": SUPER_EFFECTIVE, "dragon": SUPER_EFFECTIVE, "dark": SUPER_EFFECTIVE,
-		"fire": NOT_EFFECTIVE, "poison": NOT_EFFECTIVE, "steel": NOT_EFFECTIVE
+	"fey": {
+		"warrior": SUPER_EFFECTIVE, "dragon": SUPER_EFFECTIVE, "shadow": SUPER_EFFECTIVE,
+		"fire": NOT_EFFECTIVE, "poison": NOT_EFFECTIVE, "machine": NOT_EFFECTIVE
 	}
 }
 

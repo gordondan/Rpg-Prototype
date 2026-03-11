@@ -10,9 +10,16 @@ const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 @export var is_merchant: bool = false
 @export var shop_id: String = ""
 
+@export var quest_id: String = ""
+@export var quest_role: String = ""   # "giver" or "step"
+@export var quest_step_index: int = 0 # which step index this NPC fulfils (for "step" NPCs)
+
 @export var is_rival: bool = false
 @export var rival_creature_id: String = ""
 @export var rival_creature_level: int = 5
+## Optional multi-creature party. Each entry: {"creature_id": String, "level": int}
+## If set, overrides rival_creature_id/rival_creature_level for the battle.
+@export var rival_party: Array = []
 @export var defeated_flag: String = ""
 @export var post_defeat_dialogue_id: String = ""  # Dialogue shown after the player beats this rival
 @export var recruited_flag: String = ""           # Set by DialogueManager when player recruits them
@@ -49,6 +56,10 @@ func interact() -> void:
 	# Merchant: open the shop UI directly
 	if is_merchant and shop_id != "":
 		_open_shop()
+		return
+
+	# Quest-aware interaction — takes priority over standard dialogue
+	if _handle_quest_interact():
 		return
 
 	if _is_recruited():
@@ -89,8 +100,17 @@ func _start_dialogue_then_battle() -> void:
 
 
 func _on_dialogue_ended_start_battle() -> void:
-	var rival := CreatureInstance.create(rival_creature_id, rival_creature_level)
-	BattleManager.start_rival_battle([rival])
+	var enemies: Array = []
+	if rival_party.size() > 0:
+		# Multi-creature party defined — build each creature from the array
+		for entry in rival_party:
+			var cid: String = entry.get("creature_id", rival_creature_id)
+			var clv: int    = entry.get("level", rival_creature_level)
+			enemies.append(CreatureInstance.create(cid, clv))
+	else:
+		# Single-creature fallback (existing behaviour)
+		enemies.append(CreatureInstance.create(rival_creature_id, rival_creature_level))
+	BattleManager.start_rival_battle(enemies)
 	BattleManager.battle_finished.connect(_on_rival_defeated, CONNECT_ONE_SHOT)
 
 
@@ -114,6 +134,61 @@ func _is_defeated() -> bool:
 
 func _is_recruited() -> bool:
 	return recruited_flag != "" and GameManager.get_flag(recruited_flag)
+
+
+func _handle_quest_interact() -> bool:
+	## Handle quest-aware interaction. Returns true if this NPC handled the interaction.
+	if quest_id == "" or quest_role == "":
+		return false
+
+	var status: String = GameManager.get_quest_status(quest_id)
+
+	if quest_role == "giver":
+		if status == "":
+			# First time — start the quest and show the start dialogue
+			GameManager.start_quest(quest_id)
+			_show_quest_dialogue(dialogue_id)
+			# Show a notification toast once the dialogue closes
+			DialogueManager.dialogue_ended.connect(_show_quest_notification, CONNECT_ONE_SHOT)
+		elif status == "active":
+			if GameManager.is_quest_ready_to_complete(quest_id):
+				# All steps done — complete quest and give reward
+				GameManager.complete_quest(quest_id)
+				_show_quest_dialogue(dialogue_id + "_complete")
+			else:
+				_show_quest_dialogue(dialogue_id + "_active")
+		elif status == "completed":
+			_show_quest_dialogue(dialogue_id + "_done")
+		return true
+
+	elif quest_role == "step":
+		if status == "active" and GameManager.get_quest_step(quest_id) == quest_step_index:
+			# Player has reached this step — advance and show step dialogue
+			GameManager.advance_quest_step(quest_id)
+			_show_quest_dialogue(dialogue_id + "_quest")
+			return true
+		# Not at this step yet, or already past it — fall through to normal dialogue
+		return false
+
+	return false
+
+
+func _show_quest_dialogue(dlg_id: String) -> void:
+	## Show dialogue by ID, falling back to a generic line if the ID doesn't exist.
+	var d: Dictionary = DialogueManager.get_dialogue_data(dlg_id)
+	if not d.is_empty():
+		DialogueManager.start_dialogue(dlg_id)
+	else:
+		DialogueManager.show_line("...", npc_name)
+
+
+func _show_quest_notification() -> void:
+	## Spawn the "New Quest" toast notification.
+	var notif_script := load("res://scripts/ui/quest_notification.gd")
+	if notif_script:
+		var notif_node := CanvasLayer.new()
+		notif_node.set_script(notif_script)
+		get_tree().current_scene.add_child(notif_node)
 
 
 func _open_shop() -> void:

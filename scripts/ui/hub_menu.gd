@@ -58,6 +58,11 @@ func _build_ui() -> void:
 	inv_btn.pressed.connect(_open_inventory)
 	vbox.add_child(inv_btn)
 
+	var quest_btn := Button.new()
+	quest_btn.text = "Quests"
+	quest_btn.pressed.connect(_open_quest_log)
+	vbox.add_child(quest_btn)
+
 	vbox.add_child(HSeparator.new())
 
 	var close_btn := Button.new()
@@ -81,6 +86,15 @@ func _open_inventory() -> void:
 		var inv_node := CanvasLayer.new()
 		inv_node.set_script(inv_script)
 		get_tree().current_scene.add_child(inv_node)
+
+
+func _open_quest_log() -> void:
+	queue_free()
+	var ql_script := load("res://scripts/ui/quest_log.gd")
+	if ql_script:
+		var ql_node := CanvasLayer.new()
+		ql_node.set_script(ql_script)
+		get_tree().current_scene.add_child(ql_node)
 
 
 func _close() -> void:

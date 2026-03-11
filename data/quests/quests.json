@@ -1,0 +1,18 @@
+{
+  "meet_elara": {
+    "name": "A Message for Sylwen",
+    "description": "Sylwen is worried about her sister Elara, who ventured toward the ruins days ago and hasn't returned. Find Elara and hear what she has to say.",
+    "steps": [
+      {
+        "id": "talk_to_elara",
+        "description": "Find and speak with Elara"
+      }
+    ],
+    "reward": {
+      "gold": 75,
+      "items": [
+        {"item_id": "healing_potion", "quantity": 2}
+      ]
+    }
+  }
+}

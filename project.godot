@@ -8,12 +8,16 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="MonsterQuest"
 config/description="A Pokémon-inspired monster catching RPG"
 run/main_scene="res://scenes/overworld/overworld.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [autoload]
 
@@ -30,6 +34,10 @@ window/size/viewport_height=320
 window/size/window_width_override=960
 window/size/window_height_override=640
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [input]
 
@@ -78,7 +86,3 @@ inventory={
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/gut/plugin.cfg")
