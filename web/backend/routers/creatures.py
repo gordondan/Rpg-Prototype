@@ -13,6 +13,17 @@ def list_creatures():
     return data_svc.get_all_creatures()
 
 
+@router.get("/auto-match-sprites")
+def auto_match_sprites():
+    return data_svc.auto_match_sprites()
+
+
+@router.post("/apply-sprite-matches")
+def apply_sprite_matches(body: dict):
+    count = data_svc.apply_sprite_matches(body.get("matches", {}))
+    return {"status": "applied", "updated_count": count}
+
+
 @router.get("/{creature_id}")
 def get_creature(creature_id: str):
     creature = data_svc.get_creature(creature_id)
