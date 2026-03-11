@@ -50,6 +50,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
       const res = await fetch(`/api/assets/upload/${path}`, { method: 'POST', body: formData })
       if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
       setSpriteRev((r) => r + 1)
+      markChanged('creatures', id, form, `${form.name}`)
       toast.success(`${variant} sprite uploaded`)
     } catch (err) {
       toast.error(`Upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
