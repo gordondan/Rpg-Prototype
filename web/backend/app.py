@@ -42,4 +42,4 @@ if __name__ == "__main__":
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
-    uvicorn.run("app:app", host=args.host, port=args.port, reload=True)
+    uvicorn.run("backend.app:app", host=args.host, port=args.port, reload=True)
