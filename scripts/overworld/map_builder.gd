@@ -417,7 +417,10 @@ func _create_encounter_area(area_name: String, tile_x: int, tile_y: int, width: 
 
 # --- NPC placement ---
 func _place_npcs() -> void:
-	_create_npc("Village Guard", "village_guard", Vector2i(19, 5))
+	_create_npc("Village Guard", "village_guard", Vector2i(19, 5), {
+		"quest_id": "defeat_zacharias",
+		"quest_role": "giver",
+	})
 	_create_npc("Old Scholar", "old_scholar", Vector2i(23, 10))
 	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 18))
 	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(34, 18))
@@ -452,7 +455,26 @@ func _place_npcs() -> void:
 			"defeated_flag": "zacharias_defeated",
 			"post_defeat_dialogue_id": "zacharias_defeated",
 			"recruited_flag": "zacharias_recruited",
+			"defeat_quest_id": "defeat_zacharias",
 			"line_of_sight_range": 5,
+		})
+
+	# Mog — goblin firebomber boss with a pack of goblins, disappears on defeat
+	if not GameManager.get_flag("mog_defeated"):
+		_create_npc("Mog", "mog", Vector2i(20, 20), {
+			"is_rival": true,
+			"rival_party": [
+				{"creature_id": "goblin_firebomber", "level": 5},
+				{"creature_id": "goblin", "level": 3},
+				{"creature_id": "goblin", "level": 3},
+			],
+			"rival_reserves": [
+				{"creature_id": "goblin", "level": 3},
+			],
+			"defeated_flag": "mog_defeated",
+			"post_defeat_dialogue_id": "mog_defeated",
+			"disappear_on_defeat": true,
+			"line_of_sight_range": 4,
 		})
 
 	# Alexia — aggressive rival elf, can be battled then recruited
@@ -466,6 +488,90 @@ func _place_npcs() -> void:
 			"recruited_flag": "alexia_recruited",
 			"line_of_sight_range": 5,
 		})
+
+	# -------------------------------------------------------------------------
+	# FUTURE ROUTE BOSSES — uncomment and set tile_pos when building each route
+	# -------------------------------------------------------------------------
+
+	# Grix — bat tamer, early route boss (bats + goblin fodder)
+	# if not GameManager.get_flag("grix_defeated"):
+	# 	_create_npc("Grix", "grix", Vector2i(0, 0), {
+	# 		"is_rival": true,
+	# 		"rival_party": [
+	# 			{"creature_id": "goblin", "level": 5},
+	# 			{"creature_id": "giant_bat", "level": 4},
+	# 			{"creature_id": "giant_bat", "level": 4},
+	# 		],
+	# 		"rival_reserves": [
+	# 			{"creature_id": "giant_bat", "level": 3},
+	# 			{"creature_id": "goblin", "level": 2},
+	# 			{"creature_id": "goblin", "level": 2},
+	# 		],
+	# 		"defeated_flag": "grix_defeated",
+	# 		"post_defeat_dialogue_id": "grix_defeated",
+	# 		"disappear_on_defeat": true,
+	# 		"line_of_sight_range": 4,
+	# 	})
+
+	# Skrag — mixed raider, uses ork_grunt + ork_warrior alongside firebomber
+	# if not GameManager.get_flag("skrag_defeated"):
+	# 	_create_npc("Skrag", "skrag", Vector2i(0, 0), {
+	# 		"is_rival": true,
+	# 		"rival_party": [
+	# 			{"creature_id": "goblin_firebomber", "level": 6},
+	# 			{"creature_id": "ork_warrior", "level": 5},
+	# 			{"creature_id": "ork_grunt", "level": 4},
+	# 		],
+	# 		"rival_reserves": [
+	# 			{"creature_id": "ork_grunt", "level": 4},
+	# 			{"creature_id": "goblin", "level": 3},
+	# 			{"creature_id": "goblin", "level": 3},
+	# 		],
+	# 		"defeated_flag": "skrag_defeated",
+	# 		"post_defeat_dialogue_id": "skrag_defeated",
+	# 		"disappear_on_defeat": true,
+	# 		"line_of_sight_range": 4,
+	# 	})
+
+	# Urk — all three orc tiers in one fight, goblin rabble in reserve
+	# if not GameManager.get_flag("urk_defeated"):
+	# 	_create_npc("Urk", "urk", Vector2i(0, 0), {
+	# 		"is_rival": true,
+	# 		"rival_party": [
+	# 			{"creature_id": "orc_battleaxman", "level": 7},
+	# 			{"creature_id": "ork_warrior", "level": 6},
+	# 			{"creature_id": "ork_grunt", "level": 5},
+	# 		],
+	# 		"rival_reserves": [
+	# 			{"creature_id": "ork_grunt", "level": 4},
+	# 			{"creature_id": "goblin", "level": 4},
+	# 			{"creature_id": "goblin", "level": 4},
+	# 		],
+	# 		"defeated_flag": "urk_defeated",
+	# 		"post_defeat_dialogue_id": "urk_defeated",
+	# 		"disappear_on_defeat": true,
+	# 		"line_of_sight_range": 5,
+	# 	})
+
+	# Zog — warchief, hardest goblin boss (all three orc tiers + firebomber)
+	# if not GameManager.get_flag("zog_defeated"):
+	# 	_create_npc("Zog", "zog", Vector2i(0, 0), {
+	# 		"is_rival": true,
+	# 		"rival_party": [
+	# 			{"creature_id": "goblin_firebomber", "level": 8},
+	# 			{"creature_id": "orc_battleaxman", "level": 7},
+	# 			{"creature_id": "ork_warrior", "level": 7},
+	# 		],
+	# 		"rival_reserves": [
+	# 			{"creature_id": "ork_grunt", "level": 6},
+	# 			{"creature_id": "goblin", "level": 5},
+	# 			{"creature_id": "goblin", "level": 5},
+	# 		],
+	# 		"defeated_flag": "zog_defeated",
+	# 		"post_defeat_dialogue_id": "zog_defeated",
+	# 		"disappear_on_defeat": true,
+	# 		"line_of_sight_range": 5,
+	# 	})
 
 
 func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extras: Dictionary = {}) -> void:

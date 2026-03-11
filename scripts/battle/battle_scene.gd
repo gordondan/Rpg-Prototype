@@ -77,7 +77,18 @@ const SPRITE_OVERRIDES := {
 	"emberclaw_seductress": "res://assets/sprites/creatures/emberclaw_seductress_battle.png",
 	"voidblade_succubus": "res://assets/sprites/creatures/voidblade_succubus_battle.png",
 	"alexia": "res://assets/sprites/creatures/wind_scout_battle.png",
-	"zacharias": "res://assets/sprites/creatures/spark_thief_battle.png",
+	"zacharias": "res://assets/sprites/creatures/spark_thief_male_battle.png",
+}
+# Creature IDs that pick randomly from a list of gendered sprites each battle.
+const SPRITE_RANDOM_POOLS := {
+	"spark_thief": [
+		"res://assets/sprites/creatures/spark_thief_male_battle.png",
+		"res://assets/sprites/creatures/spark_thief_female_battle.png",
+	],
+	"wind_scout": [
+		"res://assets/sprites/creatures/wind_scout_battle.png",
+		"res://assets/sprites/creatures/wind_scout_male_battle.png",
+	],
 }
 
 var move_buttons: Array = []
@@ -165,10 +176,11 @@ func _ready() -> void:
 	_show_message_only()
 
 
-func setup_battle(p_team, e_team, is_wild, reserves = []) -> void:
+func setup_battle(p_team, e_team, is_wild, reserves = [], enemy_reserves = []) -> void:
 	player_team = p_team
 	enemy_team = e_team
 	var reserve_arr = reserves
+	var enemy_reserve_arr = enemy_reserves
 
 	# Set up UI for each team member
 	for i in range(3):
@@ -182,7 +194,7 @@ func setup_battle(p_team, e_team, is_wild, reserves = []) -> void:
 		else:
 			_hide_player_slot(i)
 
-	battle_sm.start_battle(player_team, enemy_team, bool(is_wild), reserve_arr)
+	battle_sm.start_battle(player_team, enemy_team, bool(is_wild), reserve_arr, enemy_reserve_arr)
 
 
 # --- Slot setup ---
@@ -235,7 +247,10 @@ func _load_creature_sprite(target: TextureRect, creature_id: String) -> void:
 		return
 
 	var path: String
-	if creature_id in SPRITE_OVERRIDES:
+	if creature_id in SPRITE_RANDOM_POOLS:
+		var pool: Array = SPRITE_RANDOM_POOLS[creature_id]
+		path = pool[randi() % pool.size()]
+	elif creature_id in SPRITE_OVERRIDES:
 		path = SPRITE_OVERRIDES[creature_id]
 	else:
 		path = SPRITE_PATH_TEMPLATE % creature_id
@@ -426,6 +441,17 @@ func _on_hp_changed(is_player, index, current_hp, max_hp) -> void:
 		if idx < enemy_hp_bars.size():
 			var tween := create_tween()
 			tween.tween_property(enemy_hp_bars[idx], "value", hp, 0.4)
+		# Update display in case of enemy reserve swap
+		if idx < enemy_team.size() and idx < enemy_name_labels.size():
+			enemy_name_labels[idx].text = enemy_team[idx].nickname
+			enemy_level_labels[idx].text = "Lv.%d" % enemy_team[idx].level
+			enemy_hp_bars[idx].max_value = enemy_team[idx].max_hp
+			if idx < enemy_sprites.size():
+				_load_creature_sprite(enemy_sprites[idx], enemy_team[idx].creature_id)
+				enemy_sprites[idx].visible = true
+				enemy_sprites[idx].modulate = Color.WHITE
+			if idx < enemy_panels.size():
+				enemy_panels[idx].visible = true
 
 
 func _on_creature_fainted(is_player, index) -> void:

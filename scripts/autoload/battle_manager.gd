@@ -84,7 +84,7 @@ func start_wild_battle_with_ids(enemy_defs: Array) -> void:
 	_launch_battle(player_active, enemy_team, true, reserves)
 
 
-func start_rival_battle(enemy_creatures: Array) -> void:
+func start_rival_battle(enemy_creatures: Array, enemy_reserves: Array = []) -> void:
 	## Duel with an NPC rival or boss — can't retreat.
 	var team_data := GameManager.get_battle_team(3)
 	var player_active: Array = team_data["active"]
@@ -96,11 +96,11 @@ func start_rival_battle(enemy_creatures: Array) -> void:
 	GameManager.set_state(GameManager.GameState.BATTLE)
 	battle_started.emit()
 
-	_launch_battle(player_active, enemy_creatures, false, reserves)
+	_launch_battle(player_active, enemy_creatures, false, reserves, enemy_reserves)
 
 
 func _launch_battle(player_active: Array, enemy_team: Array,
-		is_wild: bool, reserves: Array) -> void:
+		is_wild: bool, reserves: Array, enemy_reserves: Array = []) -> void:
 	var battle_scene = load(BATTLE_SCENE_PATH)
 	if not battle_scene:
 		push_error("[BattleManager] Could not load battle scene: %s" % BATTLE_SCENE_PATH)
@@ -110,7 +110,7 @@ func _launch_battle(player_active: Array, enemy_team: Array,
 	get_tree().current_scene.add_child(instance)
 
 	if instance.has_method("setup_battle"):
-		instance.call("setup_battle", player_active, enemy_team, is_wild, reserves)
+		instance.call("setup_battle", player_active, enemy_team, is_wild, reserves, enemy_reserves)
 	else:
 		push_error("[BattleManager] setup_battle method NOT FOUND — script likely failed to load!")
 

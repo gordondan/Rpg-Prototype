@@ -1,4 +1,20 @@
 {
+  "defeat_zacharias": {
+    "name": "The Lightningsworn Gang",
+    "description": "Zacharias Lightningsworn and his gang of Spark Thieves have been terrorizing the King's Road. The village guard has asked you to deal with them.",
+    "steps": [
+      {
+        "id": "defeat_gang",
+        "description": "Defeat Zacharias Lightningsworn and his gang on the King's Road"
+      }
+    ],
+    "reward": {
+      "gold": 120,
+      "items": [
+        {"item_id": "healing_potion", "quantity": 1}
+      ]
+    }
+  },
   "meet_elara": {
     "name": "A Message for Sylwen",
     "description": "Sylwen is worried about her sister Elara, who ventured toward the ruins days ago and hasn't returned. Find Elara and hear what she has to say.",

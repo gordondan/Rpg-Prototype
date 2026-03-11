@@ -4,56 +4,57 @@
     "sprite": "res://assets/sprites/npcs/town_guard.png",
     "lines": [
       {
-        "text": "Halt! The road ahead is crawling with goblins and bandits.",
+        "text": "Glad you stopped by, traveller. I've got a problem that needs someone capable.",
         "speaker": "Village Guard"
       },
       {
-        "text": "Are you sure you want to head out there?",
-        "speaker": "Village Guard",
-        "choices": [
-          {
-            "text": "I can handle myself.",
-            "id": "brave",
-            "next": [
-              {
-                "text": "Ha! I like your spirit. Just keep your wits about you, and don't let the goblins surround you.",
-                "speaker": "Village Guard"
-              },
-              {
-                "text": "Here, take this. A little something to keep you on your feet.",
-                "speaker": "Village Guard"
-              }
-            ]
-          },
-          {
-            "text": "What can you tell me about the dangers?",
-            "id": "info",
-            "next": [
-              {
-                "text": "Goblins are the most common threat. Nasty little things — they'll try to poison you with their filthy blades.",
-                "speaker": "Village Guard"
-              },
-              {
-                "text": "But if you're lucky, you might cross paths with a wandering sell-sword or scout. Some of them can be persuaded to join a worthy cause.",
-                "speaker": "Village Guard"
-              },
-              {
-                "text": "There's even rumors of a Stone Sentinel deep in the ruins. Ancient guardian, nearly indestructible. Wouldn't want to face that one alone.",
-                "speaker": "Village Guard"
-              }
-            ]
-          },
-          {
-            "text": "Maybe I'll stay in town a bit longer.",
-            "id": "stay",
-            "next": [
-              {
-                "text": "Smart. No shame in preparing properly. The blacksmith might have something useful for you.",
-                "speaker": "Village Guard"
-              }
-            ]
-          }
-        ]
+        "text": "A rogue who calls himself Zacharias Lightningsworn has been terrorizing the King's Road south of the village. Him and two of his Spark Thief lackeys.",
+        "speaker": "Village Guard"
+      },
+      {
+        "text": "Merchants won't go near that stretch of road. It's hurting the whole village.",
+        "speaker": "Village Guard"
+      },
+      {
+        "text": "If you can beat them in a fight and drive them off, I'll see to it you're well rewarded. What do you say?",
+        "speaker": "Village Guard"
+      }
+    ]
+  },
+
+  "village_guard_active": {
+    "name": "Village Guard",
+    "sprite": "res://assets/sprites/npcs/town_guard.png",
+    "lines": [
+      {
+        "text": "Zacharias is still out there on the King's Road. We're counting on you.",
+        "speaker": "Village Guard"
+      }
+    ]
+  },
+
+  "village_guard_complete": {
+    "name": "Village Guard",
+    "sprite": "res://assets/sprites/npcs/town_guard.png",
+    "lines": [
+      {
+        "text": "You actually did it! The merchants are already talking about opening the road again.",
+        "speaker": "Village Guard"
+      },
+      {
+        "text": "Here — 120 gold and a potion, as promised. You've earned every coin.",
+        "speaker": "Village Guard"
+      }
+    ]
+  },
+
+  "village_guard_done": {
+    "name": "Village Guard",
+    "sprite": "res://assets/sprites/npcs/town_guard.png",
+    "lines": [
+      {
+        "text": "The King's Road is clear thanks to you. Safe travels out there.",
+        "speaker": "Village Guard"
       }
     ]
   },
@@ -108,11 +109,11 @@
             "id": "rumors",
             "next": [
               {
-                "text": "Well... a Spark Thief's been spotted on the King's Road. Quick as lightning, that one. But I hear she's looking for work.",
+                "text": "Well... a Spark Thief's been spotted on the King's Road. Quick as lightning, that one. But I hear he's looking for work.",
                 "speaker": "Tavern Keeper"
               },
               {
-                "text": "Defeat her in a fair fight and she might just respect you enough to join your company.",
+                "text": "Defeat him in a fair fight and he might just respect you enough to join your company.",
                 "speaker": "Tavern Keeper"
               }
             ]
@@ -516,5 +517,163 @@
     "name": "Village Merchant",
     "sprite": "res://assets/sprites/npcs/merchant_npc.png",
     "lines": []
+  },
+
+  "mog": {
+    "name": "Mog",
+    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "lines": [
+      {
+        "text": "GRAK! You smell like trouble! Mog and his boys gonna smash you good!",
+        "speaker": "Mog"
+      },
+      {
+        "text": "Come on lads, get 'em!!",
+        "speaker": "Mog"
+      }
+    ]
+  },
+
+  "mog_defeated": {
+    "name": "Mog",
+    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "lines": [
+      {
+        "text": "Bah! Mog not finished with you! Mog remember your face!",
+        "speaker": "Mog"
+      },
+      {
+        "text": "Run away! RUN AWAY!",
+        "speaker": "Mog"
+      }
+    ]
+  },
+
+  "grix": {
+    "name": "Grix",
+    "sprite": "res://assets/sprites/npcs/goblin_overworld.png",
+    "lines": [
+      {
+        "text": "Heheheh... my pretties are hungry. They haven't eaten since yesterday!",
+        "speaker": "Grix"
+      },
+      {
+        "text": "Get 'em, my darlings! FEAST!",
+        "speaker": "Grix"
+      }
+    ]
+  },
+
+  "grix_defeated": {
+    "name": "Grix",
+    "sprite": "res://assets/sprites/npcs/goblin_overworld.png",
+    "lines": [
+      {
+        "text": "No no NO! My bats! My beautiful bats!",
+        "speaker": "Grix"
+      },
+      {
+        "text": "This isn't over... Grix always finds more bats...",
+        "speaker": "Grix"
+      }
+    ]
+  },
+
+  "skrag": {
+    "name": "Skrag",
+    "sprite": "res://assets/sprites/npcs/goblin_overworld.png",
+    "lines": [
+      {
+        "text": "You picked the wrong road, traveller. Skrag Ironjaw controls this pass!",
+        "speaker": "Skrag"
+      },
+      {
+        "text": "Boys! Show this fool what happens to trespassers!",
+        "speaker": "Skrag"
+      }
+    ]
+  },
+
+  "skrag_defeated": {
+    "name": "Skrag",
+    "sprite": "res://assets/sprites/npcs/goblin_overworld.png",
+    "lines": [
+      {
+        "text": "...Skrag underestimated you. Won't happen again.",
+        "speaker": "Skrag"
+      },
+      {
+        "text": "Next time bring more friends. Skrag will.",
+        "speaker": "Skrag"
+      }
+    ]
+  },
+
+  "urk": {
+    "name": "Urk",
+    "sprite": "res://assets/sprites/npcs/goblin_overworld.png",
+    "lines": [
+      {
+        "text": "STOP. You go no further. Urk's warband owns this land now.",
+        "speaker": "Urk"
+      },
+      {
+        "text": "Axes out. Crush them.",
+        "speaker": "Urk"
+      }
+    ]
+  },
+
+  "urk_defeated": {
+    "name": "Urk",
+    "sprite": "res://assets/sprites/npcs/goblin_overworld.png",
+    "lines": [
+      {
+        "text": "Grgh... strong. Very strong.",
+        "speaker": "Urk"
+      },
+      {
+        "text": "Urk retreat. But Urk not forget.",
+        "speaker": "Urk"
+      }
+    ]
+  },
+
+  "zog": {
+    "name": "Zog",
+    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "lines": [
+      {
+        "text": "HAHAHAHA! A lone wanderer on Zog's road! The Warchief is PLEASED!",
+        "speaker": "Zog"
+      },
+      {
+        "text": "I've crushed knights, rangers, and sorcerers on this very spot. You are nothing.",
+        "speaker": "Zog"
+      },
+      {
+        "text": "WARBAND! ATTACK!",
+        "speaker": "Zog"
+      }
+    ]
+  },
+
+  "zog_defeated": {
+    "name": "Zog",
+    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "lines": [
+      {
+        "text": "Impossible... ZOG DOES NOT LOSE!",
+        "speaker": "Zog"
+      },
+      {
+        "text": "...This road is yours. For now. But my warband stretches beyond these hills.",
+        "speaker": "Zog"
+      },
+      {
+        "text": "We will meet again, wanderer. And next time, Zog brings EVERYONE.",
+        "speaker": "Zog"
+      }
+    ]
   }
 }

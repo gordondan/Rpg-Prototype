@@ -37,6 +37,7 @@ var is_wild_battle: bool = true
 
 # Reserve party members that can swap in when an ally falls
 var player_reserves: Array = []
+var enemy_reserves: Array = []
 
 # Turn order for current round
 var _turn_order: Array = []  # Array of {creature, is_player, index}
@@ -50,11 +51,12 @@ var _waiting_for_player := false
 
 
 func start_battle(players: Array, enemies: Array,
-		wild: bool, reserves: Array = []) -> void:
+		wild: bool, reserves: Array = [], e_reserves: Array = []) -> void:
 	player_team = players
 	enemy_team = enemies
 	is_wild_battle = wild
 	player_reserves = reserves
+	enemy_reserves = e_reserves
 	_set_state(BattleState.INTRO)
 
 	# Intro messages
@@ -369,7 +371,9 @@ func _do_attack(turn_data: Dictionary, move_index: int, target_index: int,
 					battle_message.emit("%d more EXP to level %d" % [remaining, attacker.level + 1])
 					await get_tree().create_timer(1.0).timeout
 
-			if not is_player_attacking:
+			if is_player_attacking:
+				await _try_swap_enemy_reserve(tgt["index"])
+			else:
 				await _try_swap_reserve(tgt["index"])
 
 
@@ -418,6 +422,23 @@ func _try_swap_reserve(fallen_index: int) -> void:
 			player_team[fallen_index] = replacement
 			battle_message.emit("%s steps up to fight!" % replacement.nickname)
 			creature_hp_changed.emit(true, fallen_index,
+				replacement.current_hp, replacement.max_hp)
+			await get_tree().create_timer(1.5).timeout
+			return
+
+
+func _try_swap_enemy_reserve(fallen_index: int) -> void:
+	## Automatically swap in the next available enemy reserve when one falls.
+	if enemy_reserves.is_empty():
+		return
+
+	for i in range(enemy_reserves.size()):
+		if not enemy_reserves[i].is_fainted():
+			var replacement: CreatureInstance = enemy_reserves[i]
+			enemy_reserves.remove_at(i)
+			enemy_team[fallen_index] = replacement
+			battle_message.emit("A new enemy, %s, enters the fray!" % replacement.nickname)
+			creature_hp_changed.emit(false, fallen_index,
 				replacement.current_hp, replacement.max_hp)
 			await get_tree().create_timer(1.5).timeout
 			return
@@ -488,6 +509,8 @@ func _resolve_round() -> void:
 				await get_tree().create_timer(1.2).timeout
 				if data["is_player"]:
 					await _try_swap_reserve(data["index"])
+				else:
+					await _try_swap_enemy_reserve(data["index"])
 
 	if not await _check_battle_end():
 		_start_new_round()
@@ -498,12 +521,17 @@ func _resolve_round() -> void:
 func _check_battle_end() -> bool:
 	_set_state(BattleState.CHECK_END)
 
-	# All enemies down?
+	# All enemies down (active + reserves)?
 	var all_enemies_down := true
 	for e in enemy_team:
 		if not e.is_fainted():
 			all_enemies_down = false
 			break
+	if all_enemies_down:
+		for r in enemy_reserves:
+			if not r.is_fainted():
+				all_enemies_down = false
+				break
 
 	if all_enemies_down:
 		battle_message.emit("All enemies have been defeated!")

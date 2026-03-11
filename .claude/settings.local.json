@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/tyrel/AppData/Local/Programs//**)",
-      "Read(//c/Users/tyrel/**)"
+      "Read(//c/Users/tyrel/**)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git config:*)",
+      "Bash(git branch:*)"
     ]
   }
 }

@@ -20,8 +20,13 @@ const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 ## Optional multi-creature party. Each entry: {"creature_id": String, "level": int}
 ## If set, overrides rival_creature_id/rival_creature_level for the battle.
 @export var rival_party: Array = []
+## Optional reserve creatures the enemy can swap in (up to 3). Same format as rival_party.
+@export var rival_reserves: Array = []
+## If true, this NPC disappears after being defeated instead of offering post-defeat dialogue.
+@export var disappear_on_defeat: bool = false
 @export var defeated_flag: String = ""
 @export var post_defeat_dialogue_id: String = ""  # Dialogue shown after the player beats this rival
+@export var defeat_quest_id: String = ""          # Quest to advance a step when this rival is defeated
 @export var recruited_flag: String = ""           # Set by DialogueManager when player recruits them
 @export var line_of_sight_range: int = 4
 
@@ -110,7 +115,16 @@ func _on_dialogue_ended_start_battle() -> void:
 	else:
 		# Single-creature fallback (existing behaviour)
 		enemies.append(CreatureInstance.create(rival_creature_id, rival_creature_level))
-	BattleManager.start_rival_battle(enemies)
+
+	# Build enemy reserve team if any are defined
+	var e_reserves: Array = []
+	for entry in rival_reserves:
+		var cid: String = entry.get("creature_id", "")
+		var clv: int    = entry.get("level", 1)
+		if cid != "":
+			e_reserves.append(CreatureInstance.create(cid, clv))
+
+	BattleManager.start_rival_battle(enemies, e_reserves)
 	BattleManager.battle_finished.connect(_on_rival_defeated, CONNECT_ONE_SHOT)
 
 
@@ -120,8 +134,21 @@ func _initiate_rival_duel() -> void:
 
 
 func _on_rival_defeated(result: String) -> void:
-	if result == "win" and defeated_flag != "":
-		GameManager.set_flag(defeated_flag)
+	if result == "win":
+		if defeated_flag != "":
+			GameManager.set_flag(defeated_flag)
+		# Advance any quest that requires defeating this rival
+		if defeat_quest_id != "" and GameManager.is_quest_active(defeat_quest_id):
+			GameManager.advance_quest_step(defeat_quest_id)
+		# Disappear-on-defeat: show optional farewell dialogue, then remove from scene
+		if disappear_on_defeat:
+			if post_defeat_dialogue_id != "":
+				await get_tree().create_timer(0.4).timeout
+				DialogueManager.start_dialogue(post_defeat_dialogue_id)
+				DialogueManager.dialogue_ended.connect(func(): queue_free(), CONNECT_ONE_SHOT)
+			else:
+				queue_free()
+			return
 		# Show the post-defeat dialogue (e.g. recruit offer) after a short delay
 		if post_defeat_dialogue_id != "":
 			await get_tree().create_timer(0.4).timeout
