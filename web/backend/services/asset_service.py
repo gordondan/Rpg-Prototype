@@ -74,6 +74,8 @@ class AssetService:
             for f in sorted(dir_path.rglob("*")):
                 if f.is_dir() or f.suffix == ".import":
                     continue
+                if "/original/" in str(f):
+                    continue
                 rel = str(f.relative_to(self.repo_path))
                 meta = metadata.get(rel, {})
                 info = AssetInfo(

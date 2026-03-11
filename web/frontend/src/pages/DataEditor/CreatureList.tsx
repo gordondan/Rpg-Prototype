@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Search, Plus, ChevronDown, ChevronRight, X } from 'lucide-react'
+import { Search, Plus, ChevronDown, ChevronRight, X, RefreshCw } from 'lucide-react'
 import { TYPE_COLORS } from '@/theme/colors'
 import { type Creature, spritePath, creaturesApi } from '@/api/creatures'
 import { cn } from '@/lib/utils'
@@ -149,6 +149,18 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
     }
   }
 
+  const handleReprocess = async () => {
+    try {
+      const res = await fetch('/api/assets/reprocess-sprites', { method: 'POST' })
+      if (!res.ok) throw new Error(`Reprocess failed: ${res.status}`)
+      const data = await res.json()
+      toast.success(`Reprocessed ${data.count} sprites`)
+      onRefresh?.()
+    } catch (err) {
+      toast.error(`Failed to reprocess: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    }
+  }
+
   return (
     <div className="flex flex-col h-full border-r border-stone-light/30">
       <div className="p-3 border-b border-stone-light/30">
@@ -160,6 +172,15 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
         >
           <Plus className="size-3.5" />
           New Creature
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleReprocess}
+          className="w-full text-parchment/50 hover:text-parchment/70 justify-start text-xs"
+        >
+          <RefreshCw className="size-3.5" />
+          Reprocess Sprites
         </Button>
         <div className="relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-parchment/40" />

@@ -59,8 +59,9 @@ export default function CreatureForm({ id, creature: initial }: Props) {
 
   const downloadSprite = (variant: 'overworld' | 'battle') => {
     const path = spritePath(id, variant)
+    const originalPath = path.replace('assets/sprites/creatures/', 'assets/sprites/creatures/original/')
     const a = document.createElement('a')
-    a.href = `/api/assets/file/${path}`
+    a.href = `/api/assets/file/${originalPath}`
     a.download = path.split('/').pop() ?? `${id}.png`
     a.click()
   }
@@ -91,7 +92,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
             </div>
             <span className="text-[10px] text-parchment/40">Overworld</span>
             <div className="flex gap-1">
-              <input ref={owUploadRef} type="file" accept="image/png" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'overworld'); e.target.value = '' }} />
+              <input ref={owUploadRef} type="file" accept="image/png,image/jpeg,image/gif" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'overworld'); e.target.value = '' }} />
               <Button variant="ghost" size="icon-xs" title="Upload" onClick={() => owUploadRef.current?.click()} className="text-parchment/40 hover:text-gold"><Upload className="size-3" /></Button>
               <Button variant="ghost" size="icon-xs" title="Download" onClick={() => downloadSprite('overworld')} className="text-parchment/40 hover:text-gold"><Download className="size-3" /></Button>
             </div>
@@ -112,7 +113,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
             </div>
             <span className="text-[10px] text-parchment/40">Battle</span>
             <div className="flex gap-1">
-              <input ref={btUploadRef} type="file" accept="image/png" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'battle'); e.target.value = '' }} />
+              <input ref={btUploadRef} type="file" accept="image/png,image/jpeg,image/gif" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'battle'); e.target.value = '' }} />
               <Button variant="ghost" size="icon-xs" title="Upload" onClick={() => btUploadRef.current?.click()} className="text-parchment/40 hover:text-gold"><Upload className="size-3" /></Button>
               <Button variant="ghost" size="icon-xs" title="Download" onClick={() => downloadSprite('battle')} className="text-parchment/40 hover:text-gold"><Download className="size-3" /></Button>
             </div>
