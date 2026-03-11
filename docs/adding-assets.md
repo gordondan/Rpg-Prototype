@@ -19,7 +19,7 @@ All creature sprites live in `assets/sprites/creatures/`.
 
 ### Adding a New Creature with Sprites
 
-1. Create the creature data in `data/creatures/starters.json` or `data/creatures/wild.json` with a unique ID (e.g., `shadow_wolf`)
+1. Create the creature data in `data/creatures/creatures.json` with a unique ID and a `"category"` field (`"starter"` or `"wild"`)
 2. Add sprite files following the naming convention:
    - `assets/sprites/creatures/shadow_wolf.png` (overworld)
    - `assets/sprites/creatures/shadow_wolf_battle.png` (battle)
@@ -27,7 +27,7 @@ All creature sprites live in `assets/sprites/creatures/`.
 
 ### Adding Sprites for an Existing Creature
 
-1. Find the creature's ID in `data/creatures/starters.json` or `wild.json`
+1. Find the creature's ID in `data/creatures/creatures.json`
 2. Add the sprite files using that ID as the filename
 3. Refresh the web editor
 

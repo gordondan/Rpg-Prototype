@@ -49,7 +49,7 @@ Battle scenes, dialogue boxes, and the party editor are instantiated at runtime 
 ## Adding New Content
 
 ### New Creature
-1. Add entry to `data/creatures/wild.json` (or a new JSON file)
+1. Add entry to `data/creatures/creatures.json` with `"category": "wild"`
 2. Add battle sprite to `assets/sprites/creatures/{id}_battle.png`
 3. Define moves in `data/moves/moves.json` if needed
 4. Add to encounter tables in `data/maps/` to make it appear in the wild

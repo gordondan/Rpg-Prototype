@@ -37,7 +37,7 @@ monster-game/
 │       ├── portraits/         # NPC/creature portraits
 │       └── tilesets/          # Tileset art (runtime-loaded)
 ├── data/
-│   ├── creatures/             # starters.json, wild.json
+│   ├── creatures/             # creatures.json
 │   ├── dialogue/              # NPC dialogue trees (JSON)
 │   ├── maps/                  # Encounter tables (route_1.json, etc.)
 │   └── moves/                 # moves.json
