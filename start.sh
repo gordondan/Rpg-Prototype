@@ -52,6 +52,15 @@ if [ ! -d "$VENV" ]; then
   "$VENV/bin/pip" install -r "$SCRIPT_DIR/web/requirements.txt"
 fi
 
+# ---------- kill existing server on this port ----------
+
+PID=$(lsof -ti :"$PORT" 2>/dev/null || true)
+if [ -n "$PID" ]; then
+  echo "Killing existing process on port $PORT (PID $PID)"
+  kill "$PID" 2>/dev/null || true
+  sleep 1
+fi
+
 # ---------- start server ----------
 
 echo "Starting MonsterQuest editor at $URL"
