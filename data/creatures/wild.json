@@ -2,7 +2,7 @@
   "spark_thief": {
     "name": "Spark Thief",
     "description": "A quick-fingered rogue who channels lightning through stolen gemstones. Found lurking on trade roads.",
-    "types": ["electric"],
+    "types": ["storm"],
     "base_hp": 35,
     "base_attack": 40,
     "base_defense": 30,
@@ -24,7 +24,7 @@
   "goblin_firebomber": {
     "name": "Goblin Firebomber",
     "description": "A reckless goblin that hurls crude firebombs at anything that moves. Dangerously unpredictable.",
-    "types": ["normal"],
+    "types": ["no_affinity"],
     "base_hp": 40,
     "base_attack": 45,
     "base_defense": 35,
@@ -39,14 +39,14 @@
     "learnset": [
       {"level": 1, "move_id": "dagger_jab"},
       {"level": 3, "move_id": "war_cry"},
-      {"level": 6, "move_id": "fire_bolt"},
+      {"level": 5, "move_id": "firebomb"},
       {"level": 11, "move_id": "swift_strike"}
     ]
   },
   "stone_sentinel": {
     "name": "Stone Sentinel",
     "description": "A stoic guardian in heavy stone armor. Painfully slow but nearly impossible to bring down.",
-    "types": ["rock"],
+    "types": ["construct"],
     "base_hp": 45,
     "base_attack": 55,
     "base_defense": 70,
@@ -89,7 +89,7 @@
   "hex_weaver": {
     "name": "Hex Weaver",
     "description": "A timid apprentice witch found in the woods. Weaves minor curses and charms from spider silk.",
-    "types": ["bug"],
+    "types": ["witch"],
     "base_hp": 40,
     "base_attack": 35,
     "base_defense": 40,
@@ -110,7 +110,7 @@
   "emberclaw_seductress": {
     "name": "Emberclaw Seductress",
     "description": "A dangerous demon from the shadow realm who lures wanderers with enchanted flames. Masters of dark fire magic and impossible to resist.",
-    "types": ["dark", "fire"],
+    "types": ["shadow", "fire"],
     "base_hp": 42,
     "base_attack": 45,
     "base_defense": 38,
@@ -134,7 +134,7 @@
   "voidblade_succubus": {
     "name": "Voidblade Succubus",
     "description": "A fearsome demon warrior who cleaves through enemies with a blade forged from shadow and hellfire. Encountered only deep in cursed ruins.",
-    "types": ["dark", "fire"],
+    "types": ["shadow", "fire"],
     "base_hp": 58,
     "base_attack": 80,
     "base_defense": 52,
@@ -182,7 +182,7 @@
   "grove_druid": {
     "name": "Grove Druid",
     "description": "An ancient forest hermit who speaks to trees and coaxes spirits from the soil. Slow to anger, but his wrath shakes the roots.",
-    "types": ["grass"],
+    "types": ["nature"],
     "base_hp": 48,
     "base_attack": 30,
     "base_defense": 45,
@@ -206,7 +206,7 @@
   "succubus_mage": {
     "name": "Succubus Mage",
     "description": "A demon sorceress who commands both dark energy and arcane flame. Her glowing orb holds the power of a fallen star.",
-    "types": ["dark", "fire"],
+    "types": ["shadow", "fire"],
     "base_hp": 45,
     "base_attack": 35,
     "base_defense": 38,
@@ -229,7 +229,7 @@
   "succubus_sword": {
     "name": "Succubus Sword",
     "description": "A blade-wielding demoness whose dark sword cleaves through iron and spirit alike. Ruthless in combat and impossible to outrun.",
-    "types": ["dark", "fire"],
+    "types": ["shadow", "fire"],
     "base_hp": 52,
     "base_attack": 72,
     "base_defense": 50,
@@ -253,7 +253,7 @@
   "tide_cleric": {
     "name": "Tide Cleric",
     "description": "A devout cleric of the tidal order who channels the ocean's fury and its calming depths. Healers by nature, terrors in battle.",
-    "types": ["water"],
+    "types": ["aqua"],
     "base_hp": 50,
     "base_attack": 35,
     "base_defense": 45,
@@ -276,7 +276,7 @@
   "giant_bat": {
     "name": "Giant Bat",
     "description": "A massive cave bat that hunts at night. Its wingspan can blot out the moon, and its screech splits stone.",
-    "types": ["flying", "dark"],
+    "types": ["wind", "shadow"],
     "base_hp": 42,
     "base_attack": 50,
     "base_defense": 30,
@@ -298,7 +298,7 @@
   "orc_battleaxman": {
     "name": "Orc Battleaxman",
     "description": "A hulking orc warrior who wields a double-headed battleaxe like most wield a twig. Once he starts swinging, very little stops him.",
-    "types": ["normal", "rock"],
+    "types": ["warrior"],
     "base_hp": 65,
     "base_attack": 75,
     "base_defense": 55,
@@ -321,7 +321,7 @@
   "ork_grunt": {
     "name": "Ork Grunt",
     "description": "A rowdy ork foot soldier who charges in swinging a spiked club. Not clever, but doesn't need to be.",
-    "types": ["normal"],
+    "types": ["no_affinity"],
     "base_hp": 58,
     "base_attack": 62,
     "base_defense": 48,
@@ -343,7 +343,7 @@
   "ork_warrior": {
     "name": "Ork Warrior",
     "description": "A seasoned ork swordsman hardened by years of battle. Smarter and deadlier than the average grunt.",
-    "types": ["normal"],
+    "types": ["no_affinity"],
     "base_hp": 55,
     "base_attack": 65,
     "base_defense": 52,
@@ -366,7 +366,7 @@
   "wind_scout": {
     "name": "Elven Bandit",
     "description": "A swift ranger who rides the gales. Scouts ahead of caravans and strikes from above.",
-    "types": ["normal", "flying"],
+    "types": ["wind"],
     "base_hp": 40,
     "base_attack": 47,
     "base_defense": 35,

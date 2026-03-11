@@ -7,6 +7,7 @@ var _moves: Dictionary = {}
 var _encounter_tables: Dictionary = {}
 var _items: Dictionary = {}
 var _shops: Dictionary = {}
+var _quests: Dictionary = {}
 
 
 func _ready() -> void:
@@ -20,9 +21,10 @@ func _load_all_data() -> void:
 	_load_encounter_tables("res://data/maps/")
 	_load_json_into("res://data/items/items.json", _items)
 	_load_json_into("res://data/shops/shops.json", _shops)
+	_load_json_into("res://data/quests/quests.json", _quests)
 
-	print("[DataLoader] Loaded %d creatures, %d moves, %d encounter tables, %d items, %d shops" % [
-		_creatures.size(), _moves.size(), _encounter_tables.size(), _items.size(), _shops.size()
+	print("[DataLoader] Loaded %d creatures, %d moves, %d encounter tables, %d items, %d shops, %d quests" % [
+		_creatures.size(), _moves.size(), _encounter_tables.size(), _items.size(), _shops.size(), _quests.size()
 	])
 
 
@@ -105,3 +107,11 @@ func get_item_data(item_id: String) -> Dictionary:
 
 func get_shop_data(shop_id: String) -> Dictionary:
 	return _shops.get(shop_id, {})
+
+
+func get_quest_data(quest_id: String) -> Dictionary:
+	return _quests.get(quest_id, {})
+
+
+func get_all_quest_ids() -> Array:
+	return _quests.keys()

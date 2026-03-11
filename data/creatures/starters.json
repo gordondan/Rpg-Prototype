@@ -29,7 +29,7 @@
   "tide_cleric": {
     "name": "Tide Cleric",
     "description": "A novice healer from the coastal temples. Commands the power of the sea to protect allies.",
-    "types": ["water"],
+    "types": ["aqua"],
     "base_hp": 50,
     "base_attack": 48,
     "base_defense": 55,
@@ -56,7 +56,7 @@
   "mischievous_fairy": {
     "name": "Mischievous Fairy",
     "description": "A tiny, giggling trickster from the Feywild. Impossibly fast and loves playing pranks on anyone foolish enough to wander into the woods.",
-    "types": ["flying"],
+    "types": ["wind"],
     "base_hp": 38,
     "base_attack": 35,
     "base_defense": 30,
@@ -83,7 +83,7 @@
   "alexia": {
     "name": "Alexia the Ranger",
     "description": "A seasoned elven ranger who patrols the roads alone. Deadly accurate with a bow and quicker than anyone expects.",
-    "types": ["normal", "flying"],
+    "types": ["wind"],
     "base_hp": 52,
     "base_attack": 62,
     "base_defense": 45,
@@ -102,10 +102,51 @@
       {"level": 28, "move_id": "fae_wind"}
     ]
   },
+  "zacharias": {
+    "name": "Zacharias Lightningsworn",
+    "description": "A cunning rogue who channels stolen lightning through gemstone daggers. Commands a gang of spark thieves with sharp wit and sharper blades.",
+    "types": ["storm"],
+    "base_hp": 35,
+    "base_attack": 40,
+    "base_defense": 30,
+    "base_sp_attack": 50,
+    "base_sp_defense": 35,
+    "base_speed": 60,
+    "base_exp": 55,
+    "class": "rogue",
+    "learnset": [
+      {"level": 1, "move_id": "dagger_jab"},
+      {"level": 4, "move_id": "shock_bolt"},
+      {"level": 8, "move_id": "swift_strike"},
+      {"level": 12, "move_id": "lightning_stab"}
+    ]
+  },
+  "aqua_monk": {
+    "name": "Aqua Monk",
+    "description": "A wandering monk who channels the flow of water through disciplined combat. Calm in battle, devastating in motion.",
+    "types": ["aqua"],
+    "base_hp": 55,
+    "base_attack": 58,
+    "base_defense": 60,
+    "base_sp_attack": 62,
+    "base_sp_defense": 65,
+    "base_speed": 55,
+    "base_exp": 68,
+    "class": "monk",
+    "learnset": [
+      {"level": 1, "move_id": "staff_bash"},
+      {"level": 1, "move_id": "water_bolt"},
+      {"level": 5, "move_id": "iron_guard"},
+      {"level": 10, "move_id": "tidal_rush"},
+      {"level": 15, "move_id": "weaken_armor"},
+      {"level": 20, "move_id": "tidal_wave"},
+      {"level": 28, "move_id": "war_cry"}
+    ]
+  },
   "grove_druid": {
     "name": "Grove Druid",
     "description": "An apprentice of the ancient forest order. Draws power from the earth and living things.",
-    "types": ["grass"],
+    "types": ["nature"],
     "base_hp": 50,
     "base_attack": 49,
     "base_defense": 55,

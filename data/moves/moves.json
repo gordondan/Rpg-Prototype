@@ -1,7 +1,7 @@
 {
   "sword_strike": {
     "name": "Sword Strike",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
@@ -10,7 +10,7 @@
   },
   "staff_bash": {
     "name": "Staff Bash",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
@@ -19,7 +19,7 @@
   },
   "dagger_jab": {
     "name": "Dagger Jab",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
@@ -28,17 +28,18 @@
   },
   "war_cry": {
     "name": "War Cry",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "status",
     "power": 0,
     "accuracy": 100,
     "pp": 40,
-    "description": "A fierce shout that shakes the enemy's resolve, lowering their Attack.",
+    "target": "all_enemies",
+    "description": "A fierce shout that shakes all enemies' resolve, lowering their Attack.",
     "effect": {"stat": "attack", "stages": -1, "target": "enemy"}
   },
   "weaken_armor": {
     "name": "Weaken Armor",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "status",
     "power": 0,
     "accuracy": 100,
@@ -75,9 +76,19 @@
     "pp": 15,
     "description": "Unleashes a devastating torrent of fire magic."
   },
+  "firebomb": {
+    "name": "Firebomb",
+    "type": "fire",
+    "category": "special",
+    "power": 30,
+    "accuracy": 100,
+    "pp": 20,
+    "target": "all_enemies",
+    "description": "Hurls a blazing bomb that explodes on impact, hitting all enemies at once."
+  },
   "smoke_bomb": {
     "name": "Smoke Bomb",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "status",
     "power": 0,
     "accuracy": 100,
@@ -86,7 +97,7 @@
   },
   "cross_slash": {
     "name": "Cross Slash",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "physical",
     "power": 70,
     "accuracy": 100,
@@ -95,7 +106,7 @@
   },
   "water_bolt": {
     "name": "Water Bolt",
-    "type": "water",
+    "type": "aqua",
     "category": "special",
     "power": 40,
     "accuracy": 100,
@@ -104,7 +115,7 @@
   },
   "shadow_bite": {
     "name": "Shadow Bite",
-    "type": "dark",
+    "type": "shadow",
     "category": "physical",
     "power": 60,
     "accuracy": 100,
@@ -113,7 +124,7 @@
   },
   "tidal_rush": {
     "name": "Tidal Rush",
-    "type": "water",
+    "type": "aqua",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
@@ -123,7 +134,7 @@
   },
   "tidal_wave": {
     "name": "Tidal Wave",
-    "type": "water",
+    "type": "aqua",
     "category": "special",
     "power": 90,
     "accuracy": 100,
@@ -132,7 +143,7 @@
   },
   "thorn_lash": {
     "name": "Thorn Lash",
-    "type": "grass",
+    "type": "nature",
     "category": "physical",
     "power": 45,
     "accuracy": 100,
@@ -141,7 +152,7 @@
   },
   "life_drain": {
     "name": "Life Drain",
-    "type": "grass",
+    "type": "nature",
     "category": "status",
     "power": 0,
     "accuracy": 90,
@@ -150,7 +161,7 @@
   },
   "leaf_barrage": {
     "name": "Leaf Barrage",
-    "type": "grass",
+    "type": "nature",
     "category": "physical",
     "power": 55,
     "accuracy": 95,
@@ -159,7 +170,7 @@
   },
   "slumber_spore": {
     "name": "Slumber Spore",
-    "type": "grass",
+    "type": "nature",
     "category": "status",
     "power": 0,
     "accuracy": 75,
@@ -169,7 +180,7 @@
   },
   "solar_wrath": {
     "name": "Solar Wrath",
-    "type": "grass",
+    "type": "nature",
     "category": "special",
     "power": 120,
     "accuracy": 100,
@@ -178,7 +189,7 @@
   },
   "shock_bolt": {
     "name": "Shock Bolt",
-    "type": "electric",
+    "type": "storm",
     "category": "special",
     "power": 40,
     "accuracy": 100,
@@ -187,7 +198,7 @@
   },
   "lightning_stab": {
     "name": "Lightning Stab",
-    "type": "electric",
+    "type": "storm",
     "category": "physical",
     "power": 65,
     "accuracy": 100,
@@ -196,7 +207,7 @@
   },
   "swift_strike": {
     "name": "Swift Strike",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "physical",
     "power": 40,
     "accuracy": 100,
@@ -206,7 +217,7 @@
   },
   "gale_shot": {
     "name": "Gale Shot",
-    "type": "flying",
+    "type": "wind",
     "category": "special",
     "power": 40,
     "accuracy": 100,
@@ -215,17 +226,18 @@
   },
   "iron_guard": {
     "name": "Iron Guard",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "status",
     "power": 0,
     "accuracy": 100,
     "pp": 30,
-    "description": "Raises a heavy shield, greatly increasing Defense.",
-    "effect": {"stat": "defense", "stages": 1, "target": "self"}
+    "target": "all_allies",
+    "description": "Raises shields across the whole party, increasing Defense for all allies.",
+    "effect": {"stat": "defense", "stages": 1, "target": "ally"}
   },
   "boulder_hurl": {
     "name": "Boulder Hurl",
-    "type": "rock",
+    "type": "construct",
     "category": "physical",
     "power": 50,
     "accuracy": 90,
@@ -234,7 +246,7 @@
   },
   "headbutt": {
     "name": "Headbutt",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "physical",
     "power": 70,
     "accuracy": 100,
@@ -243,7 +255,7 @@
   },
   "binding_hex": {
     "name": "Binding Hex",
-    "type": "bug",
+    "type": "witch",
     "category": "status",
     "power": 0,
     "accuracy": 95,
@@ -253,7 +265,7 @@
   },
   "venom_fang": {
     "name": "Venom Fang",
-    "type": "bug",
+    "type": "witch",
     "category": "physical",
     "power": 60,
     "accuracy": 100,
@@ -273,7 +285,7 @@
   },
   "dirty_trick": {
     "name": "Dirty Trick",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "status",
     "power": 0,
     "accuracy": 90,
@@ -283,7 +295,7 @@
   },
   "pixie_dust": {
     "name": "Pixie Dust",
-    "type": "flying",
+    "type": "wind",
     "category": "special",
     "power": 45,
     "accuracy": 100,
@@ -292,7 +304,7 @@
   },
   "giggle_hex": {
     "name": "Giggle Hex",
-    "type": "normal",
+    "type": "no_affinity",
     "category": "status",
     "power": 0,
     "accuracy": 95,
@@ -302,7 +314,7 @@
   },
   "fae_wind": {
     "name": "Fae Wind",
-    "type": "flying",
+    "type": "wind",
     "category": "special",
     "power": 65,
     "accuracy": 95,
@@ -311,7 +323,7 @@
   },
   "starfall": {
     "name": "Starfall",
-    "type": "flying",
+    "type": "wind",
     "category": "special",
     "power": 90,
     "accuracy": 100,

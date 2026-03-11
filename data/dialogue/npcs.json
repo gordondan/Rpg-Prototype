@@ -226,6 +226,145 @@
     ]
   },
 
+  "sylwen_active": {
+    "name": "Sylwen",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_rear.png",
+    "lines": [
+      {
+        "text": "Any news of Elara? I've been watching the road all morning...",
+        "speaker": "Sylwen"
+      },
+      {
+        "text": "Please — if you find her, just let me know she's safe.",
+        "speaker": "Sylwen"
+      }
+    ]
+  },
+
+  "sylwen_complete": {
+    "name": "Sylwen",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_rear.png",
+    "lines": [
+      {
+        "text": "She's safe?! Oh, thank the stars...",
+        "speaker": "Sylwen"
+      },
+      {
+        "text": "I knew she'd lose track of time out there. That's always been her way.",
+        "speaker": "Sylwen"
+      },
+      {
+        "text": "Thank you, truly. Please — take this. It's not much, but I hope it helps on your travels.",
+        "speaker": "Sylwen"
+      },
+      {
+        "text": "Received 75 gold and 2 Healing Potions!",
+        "speaker": ""
+      }
+    ]
+  },
+
+  "sylwen_done": {
+    "name": "Sylwen",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld_rear.png",
+    "lines": [
+      {
+        "text": "Elara made it home safely, thanks to you. I won't forget your kindness.",
+        "speaker": "Sylwen"
+      }
+    ]
+  },
+
+  "elara_quest": {
+    "name": "Elara",
+    "sprite": "res://assets/sprites/npcs/female_elf_overworld.png",
+    "lines": [
+      {
+        "text": "You know Sylwen? Oh — she must be worried sick.",
+        "speaker": "Elara"
+      },
+      {
+        "text": "I found a rare herb grove near the ruins and completely lost track of time. Please tell her I'm alright — I'll be back in the village by nightfall.",
+        "speaker": "Elara"
+      },
+      {
+        "text": "And thank you for coming all the way out here to find me.",
+        "speaker": "Elara"
+      }
+    ]
+  },
+
+  "zacharias": {
+    "name": "Zacharias",
+    "sprite": "res://assets/sprites/npcs/zacharias_overworld.png",
+    "lines": [
+      {
+        "text": "Well, well. You've got nerve walking into our stretch of road.",
+        "speaker": "Zacharias"
+      },
+      {
+        "text": "My boys and I have been running this route for months. Nobody passes without a fight.",
+        "speaker": "Zacharias"
+      },
+      {
+        "text": "Let's see if you're worth the trouble. Come on, lads!",
+        "speaker": "Zacharias"
+      }
+    ]
+  },
+
+  "zacharias_defeated": {
+    "name": "Zacharias",
+    "sprite": "res://assets/sprites/npcs/zacharias_overworld.png",
+    "lines": [
+      {
+        "text": "...Ha. You actually beat us. All three of us.",
+        "speaker": "Zacharias"
+      },
+      {
+        "text": "I'm not one to waste talent. Someone who can handle the Lightningsworn gang might actually be worth following.",
+        "speaker": "Zacharias",
+        "choices": [
+          {
+            "text": "Ride with me.",
+            "id": "recruit_zacharias",
+            "next": [
+              {
+                "text": "You've got yourself a thief. Don't expect me to play nice with the others.",
+                "speaker": "Zacharias"
+              },
+              {
+                "text": "Zacharias joined your party!",
+                "speaker": ""
+              }
+            ]
+          },
+          {
+            "text": "Not interested.",
+            "id": "decline_zacharias",
+            "next": [
+              {
+                "text": "Suit yourself. I'll be lurking around here if you change your mind.",
+                "speaker": "Zacharias"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "zacharias_recruited_dialogue": {
+    "name": "Zacharias",
+    "sprite": "res://assets/sprites/npcs/zacharias_overworld.png",
+    "lines": [
+      {
+        "text": "Still with you, boss. Don't make me regret it.",
+        "speaker": "Zacharias"
+      }
+    ]
+  },
+
   "alexia_ranger": {
     "name": "Alexia",
     "sprite": "res://assets/sprites/npcs/female_elf_overworld_aggressive.png",
@@ -293,6 +432,62 @@
       {
         "text": "I'm already with you. Stop dawdling.",
         "speaker": "Alexia"
+      }
+    ]
+  },
+
+  "aqua_monk": {
+    "name": "Aqua Monk",
+    "sprite": "res://assets/sprites/npcs/aqua_monk_overworld.png",
+    "lines": [
+      {
+        "text": "Still your mind. The water does not rush — it finds its path.",
+        "speaker": "Aqua Monk"
+      },
+      {
+        "text": "I have been meditating at this spring for many moons. You carry the weight of a long road with you.",
+        "speaker": "Aqua Monk"
+      },
+      {
+        "text": "Perhaps our paths are meant to join for a while. I offer my strength to your cause, if you will have it.",
+        "speaker": "Aqua Monk",
+        "choices": [
+          {
+            "text": "Travel with me.",
+            "id": "recruit_aqua_monk",
+            "next": [
+              {
+                "text": "Then let us move like water — persistent, adaptable, unstoppable.",
+                "speaker": "Aqua Monk"
+              },
+              {
+                "text": "Aqua Monk joined your party!",
+                "speaker": ""
+              }
+            ]
+          },
+          {
+            "text": "I travel alone for now.",
+            "id": "decline_aqua_monk",
+            "next": [
+              {
+                "text": "The offer stands. I will be here when you are ready.",
+                "speaker": "Aqua Monk"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "aqua_monk_recruited_dialogue": {
+    "name": "Aqua Monk",
+    "sprite": "res://assets/sprites/npcs/aqua_monk_overworld.png",
+    "lines": [
+      {
+        "text": "I am with you. Like water, I follow where I am needed.",
+        "speaker": "Aqua Monk"
       }
     ]
   },

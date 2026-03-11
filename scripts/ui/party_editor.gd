@@ -79,9 +79,9 @@ func _create_creature_row(creature, index: int, source: String) -> HBoxContainer
 	btn.add_theme_font_size_override("font_size", 8)
 
 	var hp_text := "%d/%d" % [creature.current_hp, creature.max_hp]
-	var type_text := "/".join(creature.types)
+	var type_text := "/".join(creature.types.map(func(t): return t.replace("_", " ").capitalize()))
 	var exp_needed: int = creature._exp_for_next_level()
-	btn.text = "%s  Lv.%d  %s  HP:%s  XP:%d/%d" % [creature.nickname, creature.level, type_text, hp_text, creature.experience, exp_needed]
+	btn.text = "%s  Lv.%d  [%s]  HP:%s  XP:%d/%d" % [creature.nickname, creature.level, type_text, hp_text, creature.experience, exp_needed]
 
 	btn.pressed.connect(_on_creature_selected.bind(source, index))
 	row.add_child(btn)
@@ -101,7 +101,7 @@ func _on_creature_selected(source: String, index: int) -> void:
 
 	# Show creature info and available actions
 	var hp_text := "%d/%d HP" % [creature.current_hp, creature.max_hp]
-	var type_text := "/".join(creature.types)
+	var type_text := "/".join(creature.types.map(func(t): return t.replace("_", " ").capitalize()))
 	var moves_text := ""
 	for m in creature.moves:
 		var move_data: Dictionary = DataLoader.get_move_data(m["id"])
@@ -111,7 +111,7 @@ func _on_creature_selected(source: String, index: int) -> void:
 	var exp_needed: int = creature._exp_for_next_level()
 	var exp_text := "EXP: %d / %d  (need %d more)" % [creature.experience, exp_needed, exp_needed - creature.experience]
 
-	info_label.text = "%s (Lv.%d) — %s — %s\n%s\nMoves: %s" % [
+	info_label.text = "%s (Lv.%d) — Affinity: %s — %s\n%s\nMoves: %s" % [
 		creature.nickname, creature.level, type_text, hp_text, exp_text, moves_text
 	]
 

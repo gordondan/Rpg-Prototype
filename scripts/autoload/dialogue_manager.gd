@@ -152,6 +152,10 @@ func _on_choice_made(choice_index: int, choice_id: String) -> void:
 			_recruit_creature("mischievous_fairy", 5, "fairy_recruited", "MischievousFairy")
 		"recruit_alexia":
 			_recruit_creature("alexia", 8, "alexia_recruited", "AlexiaRanger")
+		"recruit_aqua_monk":
+			_recruit_creature("aqua_monk", 7, "aqua_monk_recruited", "AquaMonk")
+		"recruit_zacharias":
+			_recruit_creature("zacharias", 5, "zacharias_recruited", "Zacharias")
 
 
 func _recruit_creature(creature_id: String, level: int, flag_name: String, npc_node_name: String = "") -> void:
@@ -166,10 +170,11 @@ func _recruit_creature(creature_id: String, level: int, flag_name: String, npc_n
 		print("[DialogueManager] Recruited %s (Lv.%d) — added to party!" % [creature.nickname, level])
 	else:
 		print("[DialogueManager] Recruited %s (Lv.%d) — party full, sent to barracks." % [creature.nickname, level])
-		# Swap the follow-up to mention barracks
+		# Replace all upcoming dialogue with a clear party-full notification
 		if _dialogue_box and is_instance_valid(_dialogue_box):
 			_dialogue_box.replace_upcoming_lines([
-				{"text": "%s joined your company! Your party is full, so they headed to the barracks." % creature.nickname, "speaker": ""}
+				{"text": "%s joined your company!" % creature.nickname, "speaker": ""},
+				{"text": "Your party is full. %s will wait in the barracks until you make room." % creature.nickname, "speaker": ""},
 			])
 
 	# Remove the NPC from the map after dialogue finishes

@@ -29,6 +29,8 @@ var _full_text := ""
 var _visible_chars := 0
 var _char_timer := 0.0
 var _fast_mode := false
+# Set by replace_upcoming_lines() so _on_choice_pressed knows not to overwrite with next_lines
+var _lines_replaced := false
 
 # Choice buttons pool
 var _choice_buttons: Array[Button] = []
@@ -185,9 +187,10 @@ func _advance_dialogue() -> void:
 
 func replace_upcoming_lines(new_lines: Array) -> void:
 	## Replace all lines after the current one with new_lines.
-	## Called by DialogueManager to swap follow-up text (e.g. not enough gold).
+	## Called by DialogueManager to swap follow-up text (e.g. not enough gold, party full).
 	_lines = _lines.slice(0, _current_line_index + 1)
 	_lines.append_array(new_lines)
+	_lines_replaced = true  # Signal to _on_choice_pressed not to re-append next_lines
 
 
 func _show_choices(choices: Array) -> void:
@@ -217,21 +220,24 @@ func _clear_choices() -> void:
 func _on_choice_pressed(index: int, choice_id: String) -> void:
 	_is_waiting_for_choice = false
 	_clear_choices()
+	_lines_replaced = false  # Reset before emitting — replace_upcoming_lines may set it
 	choice_made.emit(index, choice_id)
 
-	# Check if the choice has follow-up lines
-	var entry = _lines[_current_line_index]
-	if entry is Dictionary:
-		var choices: Array = entry.get("choices", [])
-		if index < choices.size():
-			var chosen = choices[index]
-			var next_lines: Array = chosen.get("next", [])
-			if next_lines.size() > 0:
-				# Insert the follow-up lines after the current position
-				var remaining := _lines.slice(_current_line_index + 1)
-				_lines = _lines.slice(0, _current_line_index + 1)
-				_lines.append_array(next_lines)
-				_lines.append_array(remaining)
+	# Only insert the choice's follow-up lines if nothing replaced them already
+	# (e.g. party-full barracks redirect, or not-enough-gold rejection)
+	if not _lines_replaced:
+		var entry = _lines[_current_line_index]
+		if entry is Dictionary:
+			var choices: Array = entry.get("choices", [])
+			if index < choices.size():
+				var chosen = choices[index]
+				var next_lines: Array = chosen.get("next", [])
+				if next_lines.size() > 0:
+					# Insert the follow-up lines after the current position
+					var remaining := _lines.slice(_current_line_index + 1)
+					_lines = _lines.slice(0, _current_line_index + 1)
+					_lines.append_array(next_lines)
+					_lines.append_array(remaining)
 
 	_current_line_index += 1
 	_show_current_line()

@@ -77,6 +77,7 @@ const SPRITE_OVERRIDES := {
 	"emberclaw_seductress": "res://assets/sprites/creatures/emberclaw_seductress_battle.png",
 	"voidblade_succubus": "res://assets/sprites/creatures/voidblade_succubus_battle.png",
 	"alexia": "res://assets/sprites/creatures/wind_scout_battle.png",
+	"zacharias": "res://assets/sprites/creatures/spark_thief_battle.png",
 }
 
 var move_buttons: Array = []
@@ -358,7 +359,7 @@ func _update_move_buttons() -> void:
 			var move_data := DataLoader.get_move_data(creature.moves[i]["id"])
 			move_buttons[i].text = "%s\n%s  PP:%d/%d" % [
 				move_data.get("name", "???"),
-				move_data.get("type", "???").to_upper(),
+				move_data.get("type", "???").replace("_", " ").capitalize(),
 				creature.moves[i]["current_pp"],
 				creature.moves[i]["max_pp"]
 			]
