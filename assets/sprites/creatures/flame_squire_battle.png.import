@@ -2,13 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://flame_squire_battle"
-path="res://assets/sprites/creatures/flame_squire_battle.png"
+uid="uid://b42fgrpj7jxg4"
+path="res://.godot/imported/flame_squire_battle.png-9e21ee361f431c62d7661668f53a5aec.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/sprites/creatures/flame_squire_battle.png"
-dest_files=["res://assets/sprites/creatures/flame_squire_battle.png"]
+dest_files=["res://.godot/imported/flame_squire_battle.png-9e21ee361f431c62d7661668f53a5aec.ctex"]
 
 [params]
 

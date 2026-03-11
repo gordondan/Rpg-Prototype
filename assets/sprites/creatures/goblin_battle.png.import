@@ -2,13 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://goblin_battle"
-path="res://assets/sprites/creatures/goblin_battle.png"
+uid="uid://e18884txfkwe"
+path="res://.godot/imported/goblin_battle.png-39fe7f1e03d49af626acf90fe86b0444.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/sprites/creatures/goblin_battle.png"
-dest_files=["res://assets/sprites/creatures/goblin_battle.png"]
+dest_files=["res://.godot/imported/goblin_battle.png-39fe7f1e03d49af626acf90fe86b0444.ctex"]
 
 [params]
 
