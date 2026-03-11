@@ -258,9 +258,9 @@ func test_encounter_weights_sum():
 		assert_gt(weight, 0.0, "Weight should be positive for %s" % entry["creature_id"])
 		total += weight
 
-	# route_1 weights: 35 + 25 + 20 + 15 + 5 = 100
-	assert_eq(total, 100.0,
-		"route_1 weights should sum to 100")
+	# route_1 weights: 45 + 15 + 20 + 15 + 5 + 10 = 110
+	assert_eq(total, 110.0,
+		"route_1 weights should sum to 110")
 
 
 # ---------------------------------------------------------------------------
