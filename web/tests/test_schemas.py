@@ -6,19 +6,12 @@ from backend.models.schemas import Creature, Move, Item, GameMap, Shop
 REPO = Path(__file__).parent.parent.parent  # monster-game root
 
 
-def test_creature_schema_matches_starters():
-    data = json.loads((REPO / "data/creatures/starters.json").read_text())
+def test_creature_schema():
+    data = json.loads((REPO / "data/creatures/creatures.json").read_text())
     for cid, cdata in data.items():
         creature = Creature.model_validate(cdata)
         assert creature.name
-
-
-def test_creature_schema_matches_wild():
-    data = json.loads((REPO / "data/creatures/wild.json").read_text())
-    for cid, cdata in data.items():
-        creature = Creature.model_validate(cdata)
-        # Some wild creatures use recruitable=false instead of recruit_method
-        assert creature.recruit_method is not None or creature.recruitable is not None
+        assert cdata["category"] in ("starter", "wild")
 
 
 def test_move_schema():

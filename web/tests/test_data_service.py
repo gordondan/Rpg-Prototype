@@ -78,3 +78,33 @@ def test_delete_map(data_service):
 
 def test_delete_map_not_found(data_service):
     assert data_service.delete_map("nonexistent") is False
+
+
+def test_create_creature(data_service):
+    result = data_service.create_creature("test_creature", {
+        "name": "Test", "description": "", "types": ["normal"],
+        "base_hp": 1, "base_attack": 1, "base_defense": 1,
+        "base_sp_attack": 1, "base_sp_defense": 1, "base_speed": 1,
+        "base_exp": 1, "class": "monster", "category": "wild", "learnset": [],
+    })
+    assert result is True
+    assert "test_creature" in data_service.get_all_creatures()
+
+
+def test_create_creature_duplicate(data_service):
+    assert data_service.create_creature("flame_squire", {"name": "Dup"}) is False
+
+
+def test_delete_creature(data_service):
+    data_service.create_creature("to_delete", {
+        "name": "Del", "description": "", "types": ["normal"],
+        "base_hp": 1, "base_attack": 1, "base_defense": 1,
+        "base_sp_attack": 1, "base_sp_defense": 1, "base_speed": 1,
+        "base_exp": 1, "class": "monster", "category": "wild", "learnset": [],
+    })
+    assert data_service.delete_creature("to_delete") is True
+    assert "to_delete" not in data_service.get_all_creatures()
+
+
+def test_delete_creature_not_found(data_service):
+    assert data_service.delete_creature("nonexistent") is False

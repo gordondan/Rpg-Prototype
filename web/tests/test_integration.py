@@ -249,3 +249,24 @@ def test_quest_crud(client):
     assert r.status_code == 200
     r = client.get("/api/quests/test_quest")
     assert r.status_code == 404
+
+
+def test_create_creature(client):
+    r = client.post("/api/creatures/")
+    assert r.status_code == 200
+    data = r.json()
+    assert "creature_id" in data
+    creature_id = data["creature_id"]
+    r = client.get(f"/api/creatures/{creature_id}")
+    assert r.status_code == 200
+    assert r.json()["name"] == "New Creature"
+    assert r.json()["category"] == "wild"
+
+
+def test_delete_creature(client):
+    r = client.post("/api/creatures/")
+    creature_id = r.json()["creature_id"]
+    r = client.delete(f"/api/creatures/{creature_id}")
+    assert r.status_code == 200
+    r = client.get(f"/api/creatures/{creature_id}")
+    assert r.status_code == 404
