@@ -11,6 +11,16 @@ REPO = Path(__file__).parent.parent.parent
 @pytest.fixture
 def data_service(tmp_path):
     shutil.copytree(REPO / "data", tmp_path / "data")
+    # Strip any existing sprite fields so apply_sprite_matches has work to do
+    for json_file in ["starters.json", "wild.json"]:
+        path = tmp_path / "data" / "creatures" / json_file
+        if path.exists():
+            import json
+            data = json.loads(path.read_text())
+            for creature in data.values():
+                creature.pop("sprite_overworld", None)
+                creature.pop("sprite_battle", None)
+            path.write_text(json.dumps(data, indent=2) + "\n")
     sprites_dir = tmp_path / "assets" / "sprites" / "creatures"
     sprites_dir.mkdir(parents=True)
     src = REPO / "assets" / "sprites" / "creatures"

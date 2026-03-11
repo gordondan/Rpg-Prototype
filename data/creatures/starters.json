@@ -2,7 +2,9 @@
   "flame_squire": {
     "name": "Flame Squire",
     "description": "A young knight-in-training who wields a blazing short sword. Eager to prove themselves in battle.",
-    "types": ["fire"],
+    "types": [
+      "fire"
+    ],
     "base_hp": 44,
     "base_attack": 52,
     "base_defense": 43,
@@ -17,19 +19,42 @@
       "flavor": "After proving their valor, the Flame Squire is promoted to Inferno Knight."
     },
     "learnset": [
-      {"level": 1, "move_id": "sword_strike"},
-      {"level": 1, "move_id": "war_cry"},
-      {"level": 6, "move_id": "fire_bolt"},
-      {"level": 10, "move_id": "smoke_bomb"},
-      {"level": 15, "move_id": "blazing_blade"},
-      {"level": 20, "move_id": "cross_slash"},
-      {"level": 25, "move_id": "inferno"}
+      {
+        "level": 1,
+        "move_id": "sword_strike"
+      },
+      {
+        "level": 1,
+        "move_id": "war_cry"
+      },
+      {
+        "level": 6,
+        "move_id": "fire_bolt"
+      },
+      {
+        "level": 10,
+        "move_id": "smoke_bomb"
+      },
+      {
+        "level": 15,
+        "move_id": "blazing_blade"
+      },
+      {
+        "level": 20,
+        "move_id": "cross_slash"
+      },
+      {
+        "level": 25,
+        "move_id": "inferno"
+      }
     ]
   },
   "tide_cleric": {
     "name": "Tide Cleric",
     "description": "A novice healer from the coastal temples. Commands the power of the sea to protect allies.",
-    "types": ["aqua"],
+    "types": [
+      "aqua"
+    ],
     "base_hp": 50,
     "base_attack": 48,
     "base_defense": 55,
@@ -44,19 +69,42 @@
       "flavor": "Through devotion and study, the Tide Cleric rises to become a Storm Priest."
     },
     "learnset": [
-      {"level": 1, "move_id": "staff_bash"},
-      {"level": 1, "move_id": "war_cry"},
-      {"level": 6, "move_id": "water_bolt"},
-      {"level": 10, "move_id": "weaken_armor"},
-      {"level": 15, "move_id": "shadow_bite"},
-      {"level": 20, "move_id": "tidal_rush"},
-      {"level": 25, "move_id": "tidal_wave"}
+      {
+        "level": 1,
+        "move_id": "staff_bash"
+      },
+      {
+        "level": 1,
+        "move_id": "war_cry"
+      },
+      {
+        "level": 6,
+        "move_id": "water_bolt"
+      },
+      {
+        "level": 10,
+        "move_id": "weaken_armor"
+      },
+      {
+        "level": 15,
+        "move_id": "shadow_bite"
+      },
+      {
+        "level": 20,
+        "move_id": "tidal_rush"
+      },
+      {
+        "level": 25,
+        "move_id": "tidal_wave"
+      }
     ]
   },
   "mischievous_fairy": {
     "name": "Mischievous Fairy",
     "description": "A tiny, giggling trickster from the Feywild. Impossibly fast and loves playing pranks on anyone foolish enough to wander into the woods.",
-    "types": ["wind"],
+    "types": [
+      "wind"
+    ],
     "base_hp": 38,
     "base_attack": 35,
     "base_defense": 30,
@@ -71,19 +119,43 @@
       "flavor": "Having caused enough chaos, the Mischievous Fairy ascends into an Archfey Sylph."
     },
     "learnset": [
-      {"level": 1, "move_id": "pixie_dust"},
-      {"level": 1, "move_id": "giggle_hex"},
-      {"level": 5, "move_id": "swift_strike"},
-      {"level": 9, "move_id": "gale_shot"},
-      {"level": 14, "move_id": "fae_wind"},
-      {"level": 20, "move_id": "smoke_bomb"},
-      {"level": 25, "move_id": "starfall"}
-    ]
+      {
+        "level": 1,
+        "move_id": "pixie_dust"
+      },
+      {
+        "level": 1,
+        "move_id": "giggle_hex"
+      },
+      {
+        "level": 5,
+        "move_id": "swift_strike"
+      },
+      {
+        "level": 9,
+        "move_id": "gale_shot"
+      },
+      {
+        "level": 14,
+        "move_id": "fae_wind"
+      },
+      {
+        "level": 20,
+        "move_id": "smoke_bomb"
+      },
+      {
+        "level": 25,
+        "move_id": "starfall"
+      }
+    ],
+    "sprite_battle": "assets/sprites/creatures/mischievous_fairy_battle.png"
   },
   "alexia": {
     "name": "Alexia the Ranger",
     "description": "A seasoned elven ranger who patrols the roads alone. Deadly accurate with a bow and quicker than anyone expects.",
-    "types": ["wind"],
+    "types": [
+      "wind"
+    ],
     "base_hp": 52,
     "base_attack": 62,
     "base_defense": 45,
@@ -93,19 +165,42 @@
     "base_exp": 70,
     "class": "ranger",
     "learnset": [
-      {"level": 1, "move_id": "swift_strike"},
-      {"level": 1, "move_id": "war_cry"},
-      {"level": 5, "move_id": "gale_shot"},
-      {"level": 10, "move_id": "cross_slash"},
-      {"level": 15, "move_id": "smoke_bomb"},
-      {"level": 20, "move_id": "starfall"},
-      {"level": 28, "move_id": "fae_wind"}
+      {
+        "level": 1,
+        "move_id": "swift_strike"
+      },
+      {
+        "level": 1,
+        "move_id": "war_cry"
+      },
+      {
+        "level": 5,
+        "move_id": "gale_shot"
+      },
+      {
+        "level": 10,
+        "move_id": "cross_slash"
+      },
+      {
+        "level": 15,
+        "move_id": "smoke_bomb"
+      },
+      {
+        "level": 20,
+        "move_id": "starfall"
+      },
+      {
+        "level": 28,
+        "move_id": "fae_wind"
+      }
     ]
   },
   "zacharias": {
     "name": "Zacharias Lightningsworn",
     "description": "A cunning rogue who channels stolen lightning through gemstone daggers. Commands a gang of spark thieves with sharp wit and sharper blades.",
-    "types": ["storm"],
+    "types": [
+      "storm"
+    ],
     "base_hp": 35,
     "base_attack": 40,
     "base_defense": 30,
@@ -115,16 +210,30 @@
     "base_exp": 55,
     "class": "rogue",
     "learnset": [
-      {"level": 1, "move_id": "dagger_jab"},
-      {"level": 4, "move_id": "shock_bolt"},
-      {"level": 8, "move_id": "swift_strike"},
-      {"level": 12, "move_id": "lightning_stab"}
+      {
+        "level": 1,
+        "move_id": "dagger_jab"
+      },
+      {
+        "level": 4,
+        "move_id": "shock_bolt"
+      },
+      {
+        "level": 8,
+        "move_id": "swift_strike"
+      },
+      {
+        "level": 12,
+        "move_id": "lightning_stab"
+      }
     ]
   },
   "aqua_monk": {
     "name": "Aqua Monk",
     "description": "A wandering monk who channels the flow of water through disciplined combat. Calm in battle, devastating in motion.",
-    "types": ["aqua"],
+    "types": [
+      "aqua"
+    ],
     "base_hp": 55,
     "base_attack": 58,
     "base_defense": 60,
@@ -134,19 +243,44 @@
     "base_exp": 68,
     "class": "monk",
     "learnset": [
-      {"level": 1, "move_id": "staff_bash"},
-      {"level": 1, "move_id": "water_bolt"},
-      {"level": 5, "move_id": "iron_guard"},
-      {"level": 10, "move_id": "tidal_rush"},
-      {"level": 15, "move_id": "weaken_armor"},
-      {"level": 20, "move_id": "tidal_wave"},
-      {"level": 28, "move_id": "war_cry"}
-    ]
+      {
+        "level": 1,
+        "move_id": "staff_bash"
+      },
+      {
+        "level": 1,
+        "move_id": "water_bolt"
+      },
+      {
+        "level": 5,
+        "move_id": "iron_guard"
+      },
+      {
+        "level": 10,
+        "move_id": "tidal_rush"
+      },
+      {
+        "level": 15,
+        "move_id": "weaken_armor"
+      },
+      {
+        "level": 20,
+        "move_id": "tidal_wave"
+      },
+      {
+        "level": 28,
+        "move_id": "war_cry"
+      }
+    ],
+    "sprite_overworld": "assets/sprites/creatures/Aqua Monk Female.png",
+    "sprite_battle": "assets/sprites/creatures/aqua_monk_battle.png"
   },
   "grove_druid": {
     "name": "Grove Druid",
     "description": "An apprentice of the ancient forest order. Draws power from the earth and living things.",
-    "types": ["nature"],
+    "types": [
+      "nature"
+    ],
     "base_hp": 50,
     "base_attack": 49,
     "base_defense": 55,
@@ -161,13 +295,34 @@
       "flavor": "Bonded deeply with nature, the Grove Druid becomes an Elder Warden."
     },
     "learnset": [
-      {"level": 1, "move_id": "staff_bash"},
-      {"level": 1, "move_id": "war_cry"},
-      {"level": 6, "move_id": "thorn_lash"},
-      {"level": 10, "move_id": "life_drain"},
-      {"level": 15, "move_id": "leaf_barrage"},
-      {"level": 20, "move_id": "slumber_spore"},
-      {"level": 25, "move_id": "solar_wrath"}
+      {
+        "level": 1,
+        "move_id": "staff_bash"
+      },
+      {
+        "level": 1,
+        "move_id": "war_cry"
+      },
+      {
+        "level": 6,
+        "move_id": "thorn_lash"
+      },
+      {
+        "level": 10,
+        "move_id": "life_drain"
+      },
+      {
+        "level": 15,
+        "move_id": "leaf_barrage"
+      },
+      {
+        "level": 20,
+        "move_id": "slumber_spore"
+      },
+      {
+        "level": 25,
+        "move_id": "solar_wrath"
+      }
     ]
   }
 }

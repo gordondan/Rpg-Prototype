@@ -125,6 +125,13 @@ class DataService:
         creatures = self.get_all_creatures()
         matches: dict[str, dict[str, str | None]] = {}
 
+        # Build a lowercase lookup for case-insensitive matching
+        lower_sprites: dict[str, str] = {f.lower(): p for f, p in sprite_files.items()}
+
+        def normalize(s: str) -> str:
+            """Normalize to lowercase, strip spaces/underscores for fuzzy compare."""
+            return s.lower().replace(" ", "").replace("_", "")
+
         for creature_id, creature_data in creatures.items():
             name = creature_data.get("name", creature_id)
             overworld = None
@@ -134,20 +141,36 @@ class DataService:
             if battle_name in sprite_files:
                 battle = sprite_files[battle_name]
 
+            # Try exact and case-insensitive matches first
             name_underscore = name.replace(" ", "_") + ".png"
             name_spaces = name + ".png"
             id_based = creature_id + ".png"
+            id_spaces = creature_id.replace("_", " ") + ".png"
 
-            for candidate in [name_underscore, name_spaces, id_based]:
+            for candidate in [name_underscore, name_spaces, id_based, id_spaces]:
                 if candidate in sprite_files:
                     overworld = sprite_files[candidate]
                     break
-                for fname, fpath in sprite_files.items():
-                    if fname.lower() == candidate.lower():
-                        overworld = fpath
-                        break
-                if overworld:
+                low = candidate.lower()
+                if low in lower_sprites:
+                    overworld = lower_sprites[low]
                     break
+
+            # Fallback: find files whose stem starts with the creature ID or name
+            # Prefer the shortest (most specific) match
+            if not overworld:
+                norm_id = normalize(creature_id)
+                norm_name = normalize(name)
+                candidates = []
+                for fname, fpath in sprite_files.items():
+                    if "_battle" in fname.lower():
+                        continue
+                    norm_fname = normalize(fname.rsplit(".", 1)[0])
+                    if norm_fname.startswith(norm_id) or norm_fname.startswith(norm_name):
+                        candidates.append((len(norm_fname), fpath))
+                if candidates:
+                    candidates.sort()
+                    overworld = candidates[0][1]
 
             matches[creature_id] = {"overworld": overworld, "battle": battle}
 
