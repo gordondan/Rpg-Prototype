@@ -2,8 +2,9 @@ import argparse
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.routers import creatures, moves, items, maps, shops, assets, git_ops
@@ -34,7 +35,18 @@ def health():
 # Serve React build if it exists
 frontend_build = Path(__file__).parent.parent / "frontend" / "dist"
 if frontend_build.exists():
-    app.mount("/", StaticFiles(directory=str(frontend_build), html=True), name="frontend")
+    # Serve static assets (JS, CSS, images) directly
+    app.mount("/assets", StaticFiles(directory=str(frontend_build / "assets")), name="static-assets")
+
+    # SPA catch-all: serve index.html for all non-API routes
+    @app.get("/{path:path}")
+    async def serve_spa(request: Request, path: str):
+        # If path points to an actual file in dist, serve it
+        file_path = frontend_build / path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        # Otherwise serve index.html for SPA routing
+        return FileResponse(frontend_build / "index.html")
 
 
 if __name__ == "__main__":
