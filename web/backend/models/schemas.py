@@ -28,6 +28,7 @@ class Creature(BaseModel):
     base_speed: int
     base_exp: int
     class_: str = Field(alias="class")
+    category: str = "wild"
     evolution: Evolution | None = None
     recruit_method: str | None = None
     recruit_chance: float | None = None

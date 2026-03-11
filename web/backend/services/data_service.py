@@ -18,36 +18,40 @@ class DataService:
 
     # --- Creatures ---
 
+    def _creatures_path(self) -> Path:
+        return self.data_path / "creatures" / "creatures.json"
+
     def get_all_creatures(self) -> dict[str, dict]:
-        creatures = {}
-        starters_path = self.data_path / "creatures" / "starters.json"
-        wild_path = self.data_path / "creatures" / "wild.json"
-        if starters_path.exists():
-            creatures.update(self._read_json(starters_path))
-        if wild_path.exists():
-            creatures.update(self._read_json(wild_path))
-        return creatures
+        path = self._creatures_path()
+        return self._read_json(path) if path.exists() else {}
 
     def get_creature(self, creature_id: str) -> dict | None:
-        all_creatures = self.get_all_creatures()
-        return all_creatures.get(creature_id)
-
-    def _find_creature_file(self, creature_id: str) -> Path | None:
-        # Check wild.json first since get_all_creatures gives it priority
-        for filename in ["wild.json", "starters.json"]:
-            path = self.data_path / "creatures" / filename
-            if path.exists():
-                data = self._read_json(path)
-                if creature_id in data:
-                    return path
-        return None
+        return self.get_all_creatures().get(creature_id)
 
     def update_creature(self, creature_id: str, creature_data: dict) -> bool:
-        path = self._find_creature_file(creature_id)
-        if not path:
-            return False
+        path = self._creatures_path()
         data = self._read_json(path)
+        if creature_id not in data:
+            return False
         data[creature_id] = creature_data
+        self._write_json(path, data)
+        return True
+
+    def create_creature(self, creature_id: str, creature_data: dict) -> bool:
+        path = self._creatures_path()
+        data = self._read_json(path) if path.exists() else {}
+        if creature_id in data:
+            return False
+        data[creature_id] = creature_data
+        self._write_json(path, data)
+        return True
+
+    def delete_creature(self, creature_id: str) -> bool:
+        path = self._creatures_path()
+        data = self._read_json(path)
+        if creature_id not in data:
+            return False
+        del data[creature_id]
         self._write_json(path, data)
         return True
 

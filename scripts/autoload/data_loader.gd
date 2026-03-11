@@ -15,8 +15,7 @@ func _ready() -> void:
 
 
 func _load_all_data() -> void:
-	_load_creatures("res://data/creatures/starters.json")
-	_load_creatures("res://data/creatures/wild.json")
+	_load_creatures("res://data/creatures/creatures.json")
 	_load_moves("res://data/moves/moves.json")
 	_load_encounter_tables("res://data/maps/")
 	_load_json_into("res://data/items/items.json", _items)
