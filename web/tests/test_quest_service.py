@@ -52,10 +52,11 @@ def test_create_quest_duplicate(data_service):
 
 
 def test_get_all_quests(data_service):
+    initial_count = len(data_service.get_all_quests())
     data_service.create_quest("q1", SAMPLE_QUEST)
     data_service.create_quest("q2", {**SAMPLE_QUEST, "name": "Quest 2"})
     quests = data_service.get_all_quests()
-    assert len(quests) == 2
+    assert len(quests) == initial_count + 2
 
 
 def test_update_quest(data_service):
