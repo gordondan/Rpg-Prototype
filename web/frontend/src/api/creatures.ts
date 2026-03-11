@@ -1,4 +1,4 @@
-import { get, put } from './client'
+import { get, put, post, httpDelete } from './client'
 
 export interface Creature {
   name: string
@@ -12,10 +12,13 @@ export interface Creature {
   base_speed: number
   base_exp: number
   class: string
+  category: string
   evolution?: { creature_id: string; level: number; flavor: string }
   recruit_method?: string
   recruit_chance?: number
   recruit_dialogue?: string
+  has_overworld_sprite?: boolean
+  has_battle_sprite?: boolean
   learnset: { level: number; move_id: string }[]
 }
 
@@ -29,4 +32,6 @@ export const creaturesApi = {
   list: () => get<Record<string, Creature>>('/creatures/'),
   getOne: (id: string) => get<Creature>(`/creatures/${id}`),
   update: (id: string, data: Creature) => put<Creature>(`/creatures/${id}`, data),
+  create: () => post<{ status: string; creature_id: string }>('/creatures/'),
+  delete: (id: string) => httpDelete<{ status: string }>(`/creatures/${id}`),
 }
