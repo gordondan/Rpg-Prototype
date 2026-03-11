@@ -128,3 +128,33 @@ DialogueChoice.model_rebuild()
 class AssetMeta(BaseModel):
     status: str = "active"
     notes: str = ""
+
+
+# --- Quests ---
+
+class QuestReward(BaseModel):
+    gold: int = 0
+    items: list[str] = []
+    exp: int = 0
+
+
+class QuestStage(BaseModel):
+    id: str
+    type: str  # talk_to_npc, defeat_creatures, collect_items, reach_location, boss_encounter
+    description: str
+    npc_id: str | None = None
+    dialogue_id: str | None = None
+    creature_id: str | None = None
+    count: int | None = None
+    item_id: str | None = None
+    map_id: str | None = None
+    level: int | None = None
+
+
+class Quest(BaseModel):
+    name: str
+    description: str
+    map_id: str
+    prerequisite_quest_id: str | None = None
+    reward: QuestReward
+    stages: list[QuestStage]
