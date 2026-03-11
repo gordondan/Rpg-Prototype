@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from backend.routers import creatures, moves, items, maps, shops, assets, git_ops
+from backend.routers import creatures, moves, items, maps, shops, assets, git_ops, quests
 
 app = FastAPI(title="MonsterQuest Asset Browser", version="0.1.0")
 
@@ -25,6 +25,7 @@ app.include_router(maps.router)
 app.include_router(shops.router)
 app.include_router(assets.router)
 app.include_router(git_ops.router)
+app.include_router(quests.router)
 
 
 @app.get("/api/health")

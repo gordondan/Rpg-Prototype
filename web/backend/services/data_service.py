@@ -110,9 +110,125 @@ class DataService:
         self._write_json(path, data)
         return True
 
+    def auto_match_sprites(self) -> dict[str, dict[str, str | None]]:
+        """Scan assets/sprites/creatures/ and fuzzy-match filenames to creature IDs."""
+        sprites_dir = self.repo_path / "assets" / "sprites" / "creatures"
+        if not sprites_dir.exists():
+            return {}
+
+        sprite_files: dict[str, str] = {}
+        for f in sprites_dir.glob("*.png"):
+            if f.suffix == ".import":
+                continue
+            sprite_files[f.name] = str(f.relative_to(self.repo_path))
+
+        creatures = self.get_all_creatures()
+        matches: dict[str, dict[str, str | None]] = {}
+
+        for creature_id, creature_data in creatures.items():
+            name = creature_data.get("name", creature_id)
+            overworld = None
+            battle = None
+
+            battle_name = f"{creature_id}_battle.png"
+            if battle_name in sprite_files:
+                battle = sprite_files[battle_name]
+
+            name_underscore = name.replace(" ", "_") + ".png"
+            name_spaces = name + ".png"
+            id_based = creature_id + ".png"
+
+            for candidate in [name_underscore, name_spaces, id_based]:
+                if candidate in sprite_files:
+                    overworld = sprite_files[candidate]
+                    break
+                for fname, fpath in sprite_files.items():
+                    if fname.lower() == candidate.lower():
+                        overworld = fpath
+                        break
+                if overworld:
+                    break
+
+            matches[creature_id] = {"overworld": overworld, "battle": battle}
+
+        return matches
+
+    def apply_sprite_matches(self, matches: dict[str, dict[str, str | None]]) -> int:
+        count = 0
+        for creature_id, paths in matches.items():
+            creature = self.get_creature(creature_id)
+            if not creature:
+                continue
+            changed = False
+            if paths.get("overworld") and creature.get("sprite_overworld") != paths["overworld"]:
+                creature["sprite_overworld"] = paths["overworld"]
+                changed = True
+            if paths.get("battle") and creature.get("sprite_battle") != paths["battle"]:
+                creature["sprite_battle"] = paths["battle"]
+                changed = True
+            if changed:
+                self.update_creature(creature_id, creature)
+                count += 1
+        return count
+
     def get_changed_files(self) -> list[str]:
         changed = []
         for pattern in ["creatures/*.json", "moves/*.json", "items/*.json", "maps/*.json", "shops/*.json"]:
             for f in (self.data_path).glob(pattern):
                 changed.append(str(f.relative_to(self.repo_path)))
         return changed
+
+    # --- Map Create & Delete ---
+
+    def create_map(self, map_id: str, map_data: dict) -> bool:
+        path = self.data_path / "maps" / f"{map_id}.json"
+        if path.exists():
+            return False
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._write_json(path, map_data)
+        return True
+
+    def delete_map(self, map_id: str) -> bool:
+        path = self.data_path / "maps" / f"{map_id}.json"
+        if not path.exists():
+            return False
+        path.unlink()
+        return True
+
+    # --- Quests ---
+
+    def get_all_quests(self) -> dict[str, dict]:
+        quests = {}
+        quests_dir = self.data_path / "quests"
+        if quests_dir.exists():
+            for f in quests_dir.glob("*.json"):
+                quests[f.stem] = self._read_json(f)
+        return quests
+
+    def get_quest(self, quest_id: str) -> dict | None:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if path.exists():
+            return self._read_json(path)
+        return None
+
+    def create_quest(self, quest_id: str, quest_data: dict) -> bool:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if path.exists():
+            return False
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._write_json(path, quest_data)
+        return True
+
+    def update_quest(self, quest_id: str, quest_data: dict) -> bool:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if not path.exists():
+            return False
+        self._write_json(path, quest_data)
+        return True
+
+    def delete_quest(self, quest_id: str) -> bool:
+        path = self.data_path / "quests" / f"{quest_id}.json"
+        if not path.exists():
+            return False
+        path.unlink()
+        return True

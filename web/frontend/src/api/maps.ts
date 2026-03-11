@@ -1,4 +1,4 @@
-import { get, put } from './client'
+import { get, put, post, httpDelete } from './client'
 
 export interface GameMap {
   name: string
@@ -8,5 +8,7 @@ export interface GameMap {
 
 export const mapsApi = {
   list: () => get<Record<string, GameMap>>('/maps/'),
+  create: (id: string, data: GameMap) => post<{ status: string; map_id: string }>('/maps/', { id, ...data }),
   update: (id: string, data: GameMap) => put<GameMap>(`/maps/${id}`, data),
+  delete: (id: string) => httpDelete<{ status: string }>(`/maps/${id}`),
 }

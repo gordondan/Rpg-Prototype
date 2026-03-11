@@ -5,6 +5,7 @@ import { movesApi, type Move } from '@/api/moves'
 import { itemsApi, type Item } from '@/api/items'
 import { mapsApi, type GameMap } from '@/api/maps'
 import { shopsApi, type Shop } from '@/api/shops'
+import { questsApi, type Quest } from '@/api/quests'
 import CreatureList from './CreatureList'
 import CreatureForm from './CreatureForm'
 import MovesList from './MovesList'
@@ -15,6 +16,8 @@ import MapsList from './MapsList'
 import MapForm from './MapForm'
 import ShopsList from './ShopsList'
 import ShopForm from './ShopForm'
+import QuestsList from './QuestsList'
+import QuestForm from './QuestForm'
 import { toast } from 'sonner'
 
 export default function DataEditor() {
@@ -25,6 +28,7 @@ export default function DataEditor() {
   const [items, setItems] = useState<Record<string, Item>>({})
   const [maps, setMaps] = useState<Record<string, GameMap>>({})
   const [shops, setShops] = useState<Record<string, Shop>>({})
+  const [quests, setQuests] = useState<Record<string, Quest>>({})
   const [loading, setLoading] = useState(false)
 
   const loadData = useCallback(async () => {
@@ -55,6 +59,11 @@ export default function DataEditor() {
         case 'shops': {
           const data = await shopsApi.list()
           setShops(data)
+          break
+        }
+        case 'quests': {
+          const data = await questsApi.list()
+          setQuests(data)
           break
         }
       }
@@ -91,10 +100,13 @@ export default function DataEditor() {
           <ItemsList items={items} selectedId={selectedId} onSelect={setSelectedId} />
         )}
         {category === 'maps' && (
-          <MapsList maps={maps} selectedId={selectedId} onSelect={setSelectedId} />
+          <MapsList maps={maps} selectedId={selectedId} onSelect={setSelectedId} onRefresh={loadData} />
         )}
         {category === 'shops' && (
           <ShopsList shops={shops} selectedId={selectedId} onSelect={setSelectedId} />
+        )}
+        {category === 'quests' && (
+          <QuestsList quests={quests} selectedId={selectedId} onSelect={setSelectedId} onRefresh={loadData} />
         )}
       </div>
 
@@ -112,10 +124,21 @@ export default function DataEditor() {
               <ItemForm id={selectedId} item={items[selectedId]} />
             )}
             {category === 'maps' && maps[selectedId] && (
-              <MapForm id={selectedId} map={maps[selectedId]} />
+              <MapForm
+                id={selectedId}
+                map={maps[selectedId]}
+                onDelete={() => { setSelectedId(null); loadData() }}
+              />
             )}
             {category === 'shops' && shops[selectedId] && (
               <ShopForm id={selectedId} shop={shops[selectedId]} />
+            )}
+            {category === 'quests' && quests[selectedId] && (
+              <QuestForm
+                id={selectedId}
+                quest={quests[selectedId]}
+                onDelete={() => { setSelectedId(null); loadData() }}
+              />
             )}
           </>
         ) : (

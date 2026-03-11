@@ -11,6 +11,7 @@ import {
   ChevronRight,
   ChevronLeft,
   PawPrint,
+  ScrollText,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -22,6 +23,7 @@ const dataEditorLinks = [
   { to: '/editor/items', label: 'Items', icon: Package },
   { to: '/editor/maps', label: 'Maps', icon: Map },
   { to: '/editor/shops', label: 'Shops', icon: Store },
+  { to: '/editor/quests', label: 'Quests', icon: ScrollText },
 ]
 
 const mainLinks = [
