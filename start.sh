@@ -59,4 +59,5 @@ echo "Starting MonsterQuest editor at $URL"
 open_browser &
 
 cd "$SCRIPT_DIR/web"
+export PYTHONPATH="$SCRIPT_DIR/web"
 "$VENV/bin/python" backend/app.py --host 127.0.0.1 --port "$PORT"
