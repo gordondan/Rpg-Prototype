@@ -19,7 +19,21 @@
       "Bash(find ~/source/repos -name \".env*\" -o -name \"docker-compose*.yml\" 2>/dev/null | sort)",
       "Bash(docker inspect:*)",
       "Bash(find /Users/gordon/source/repos/todo-lists/src -type f -name \"*.py\" 2>/dev/null | head -10)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(cd \"C:\\\\Users\\\\tyrel\\\\Documents\\\\monster-quest\\\\Rpg-Prototype\" && bash start-web.sh 2>&1; echo \"EXIT CODE: $?\")",
+      "Bash(command -v npm)",
+      "Read(//c/Program Files/nodejs/**)",
+      "Read(//c/Users/tyrel/Documents/monster-quest/Rpg-Prototype/$APPDATA/npm/**)",
+      "Bash(powershell.exe -NoProfile -Command \"Get-Command npm -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source\")",
+      "Bash(winget install:*)",
+      "Bash(export PATH=\"/c/Program Files/nodejs:$PATH\" && cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && bash -x start-web.sh 2>&1)",
+      "Bash(powershell.exe -NoProfile -Command \"Get-Command python -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source; Get-Command python3 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source\")",
+      "Bash(powershell.exe -NoProfile -Command \"Get-ChildItem 'C:\\\\Users\\\\tyrel\\\\AppData\\\\Local\\\\Programs\\\\Python' -ErrorAction SilentlyContinue; Get-ChildItem 'C:\\\\Python*' -ErrorAction SilentlyContinue; py --version 2>&1\")",
+      "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && bash -x start-web.sh 2>&1)",
+      "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && bash start-web.sh 2>&1)",
+      "Bash(sleep 5 && curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/editor/creatures 2>&1)",
+      "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/web\" && export PYTHONPATH=\"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/web\" && .venv/Scripts/python backend/app.py --host 127.0.0.1 --port 8000 2>&1)",
+      "Bash(sleep 20 && curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/editor/creatures 2>&1)"
     ]
   }
 }
