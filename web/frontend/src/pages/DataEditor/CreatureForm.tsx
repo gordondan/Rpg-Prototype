@@ -79,6 +79,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
           <div className="flex flex-col items-center gap-1">
             <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
               <img
+                key={`ow-${spriteRev}`}
                 src={`/api/assets/thumbnail/${spritePath(id)}?size=128&v=${spriteRev}`}
                 alt={`${form.name} overworld`}
                 className="size-20 object-contain"
@@ -99,6 +100,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
           <div className="flex flex-col items-center gap-1">
             <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
               <img
+                key={`bt-${spriteRev}`}
                 src={`/api/assets/thumbnail/${spritePath(id, 'battle')}?size=128&v=${spriteRev}`}
                 alt={`${form.name} battle`}
                 className="size-20 object-contain"
