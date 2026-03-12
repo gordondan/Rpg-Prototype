@@ -106,8 +106,13 @@ func _launch_battle(player_active: Array, enemy_team: Array,
 		push_error("[BattleManager] Could not load battle scene: %s" % BATTLE_SCENE_PATH)
 		return
 
+	var current := get_tree().current_scene
+	if not is_instance_valid(current):
+		push_error("[BattleManager] current_scene is invalid — cannot launch battle")
+		return
+
 	var instance: Node = battle_scene.instantiate()
-	get_tree().current_scene.add_child(instance)
+	current.add_child(instance)
 
 	if instance.has_method("setup_battle"):
 		instance.call("setup_battle", player_active, enemy_team, is_wild, reserves, enemy_reserves)

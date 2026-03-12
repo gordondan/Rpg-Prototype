@@ -28,9 +28,15 @@ func _load_all_data() -> void:
 
 
 func _load_creatures(path: String) -> void:
+	## Only store entries that have creature stats (base_hp).
+	## characters.json also contains dialogue-only NPC entries; those are
+	## handled by DialogueManager and must not pollute the creatures dict.
 	var data = _load_json(path)
 	if data is Dictionary:
-		_creatures.merge(data)
+		for key in data:
+			var entry: Dictionary = data[key]
+			if entry.has("base_hp"):
+				_creatures[key] = entry
 
 
 func _load_moves(path: String) -> void:

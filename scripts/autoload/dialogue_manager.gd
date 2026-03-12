@@ -121,8 +121,13 @@ func _begin_dialogue(lines: Array) -> void:
 			push_error("Could not load dialogue box scene!")
 			_is_active = false
 			return
+		var current := get_tree().current_scene
+		if not is_instance_valid(current):
+			push_error("[DialogueManager] current_scene is invalid — cannot open dialogue box")
+			_is_active = false
+			return
 		_dialogue_box = scene.instantiate()
-		get_tree().current_scene.add_child(_dialogue_box)
+		current.add_child(_dialogue_box)
 
 	# Connect signals
 	if not _dialogue_box.dialogue_finished.is_connected(_on_dialogue_finished):

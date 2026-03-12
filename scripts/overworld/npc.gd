@@ -180,6 +180,9 @@ func _on_rival_defeated(result: String) -> void:
 		if disappear_on_defeat:
 			if post_defeat_dialogue_id != "":
 				await get_tree().create_timer(0.4).timeout
+				if not is_instance_valid(self):
+					return
+				DialogueManager.set_active_npc(self)
 				DialogueManager.start_dialogue(post_defeat_dialogue_id)
 				DialogueManager.dialogue_ended.connect(func(): queue_free(), CONNECT_ONE_SHOT)
 			else:
@@ -188,6 +191,9 @@ func _on_rival_defeated(result: String) -> void:
 		# Show the post-defeat dialogue (e.g. recruit offer) after a short delay
 		if post_defeat_dialogue_id != "":
 			await get_tree().create_timer(0.4).timeout
+			if not is_instance_valid(self):
+				return
+			DialogueManager.set_active_npc(self)
 			DialogueManager.start_dialogue(post_defeat_dialogue_id)
 
 
@@ -249,9 +255,12 @@ func _show_quest_notification() -> void:
 	## Spawn the "New Quest" toast notification.
 	var notif_script := load("res://scripts/ui/quest_notification.gd")
 	if notif_script:
+		var current := get_tree().current_scene
+		if not is_instance_valid(current):
+			return
 		var notif_node := CanvasLayer.new()
 		notif_node.set_script(notif_script)
-		get_tree().current_scene.add_child(notif_node)
+		current.add_child(notif_node)
 
 
 func _open_shop() -> void:
@@ -259,10 +268,14 @@ func _open_shop() -> void:
 	if not shop_script:
 		push_error("[NPC] Could not load shop.gd")
 		return
+	var current := get_tree().current_scene
+	if not is_instance_valid(current):
+		push_error("[NPC] current_scene is invalid — cannot open shop")
+		return
 	var shop_node := CanvasLayer.new()
 	shop_node.set_script(shop_script)
 	shop_node.set("shop_id", shop_id)
-	get_tree().current_scene.add_child(shop_node)
+	current.add_child(shop_node)
 
 
 func _update_sight_ray() -> void:
