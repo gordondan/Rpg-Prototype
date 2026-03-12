@@ -103,6 +103,31 @@ func play_sfx(path: String) -> void:
 	_sfx_players[0].play()
 
 
+# ─── Character Sounds ───────────────────────────────────────────
+
+func play_character_sound(character_id: String, sound_type: String = "") -> void:
+	## Play a sound attached to a character. If sound_type is given (e.g. "attack",
+	## "defend", "greet"), only matching sounds are considered. If multiple match,
+	## one is chosen at random. Pass "" for sound_type to pick from all sounds.
+	var data := DataLoader.get_creature_data(character_id)
+	var sounds: Array = data.get("sounds", [])
+	if sounds.is_empty():
+		return
+
+	var matching: Array = []
+	for s in sounds:
+		if sound_type == "" or s.get("type", "") == sound_type:
+			matching.append(s)
+
+	if matching.is_empty():
+		return
+
+	var chosen: Dictionary = matching[randi() % matching.size()]
+	var path: String = chosen.get("path", "")
+	if path != "":
+		play_sfx(path)
+
+
 # ─── Audio Loading ──────────────────────────────────────────────
 
 func _load_audio(path: String) -> AudioStream:
@@ -144,7 +169,59 @@ func _load_ogg(file_path: String) -> AudioStreamOggVorbis:
 
 
 func _load_wav(file_path: String) -> AudioStreamWAV:
-	# Basic WAV loading — for simple cases
-	if ResourceLoader.exists(file_path):
-		return load(file_path) as AudioStreamWAV
-	return null
+	## Runtime WAV loader — parses the RIFF header to create an AudioStreamWAV
+	## without relying on Godot's import system.
+	var file := FileAccess.open(file_path, FileAccess.READ)
+	if not file:
+		return null
+
+	# Read RIFF header
+	var riff := file.get_buffer(4).get_string_from_ascii()
+	if riff != "RIFF":
+		return null
+	file.get_32()  # chunk size (skip)
+	var wave := file.get_buffer(4).get_string_from_ascii()
+	if wave != "WAVE":
+		return null
+
+	var format_type: int = 1
+	var channels: int = 1
+	var sample_rate: int = 44100
+	var bits_per_sample: int = 16
+	var audio_data: PackedByteArray = PackedByteArray()
+
+	# Parse chunks
+	while file.get_position() < file.get_length():
+		var chunk_id := file.get_buffer(4).get_string_from_ascii()
+		var chunk_size: int = file.get_32()
+		if chunk_id == "fmt ":
+			format_type = file.get_16()   # 1 = PCM
+			channels = file.get_16()
+			sample_rate = file.get_32()
+			file.get_32()                 # byte rate (skip)
+			file.get_16()                 # block align (skip)
+			bits_per_sample = file.get_16()
+			# Skip any extra fmt bytes
+			var extra := chunk_size - 16
+			if extra > 0:
+				file.get_buffer(extra)
+		elif chunk_id == "data":
+			audio_data = file.get_buffer(chunk_size)
+		else:
+			file.get_buffer(chunk_size)   # skip unknown chunks
+
+	if audio_data.is_empty():
+		return null
+
+	var stream := AudioStreamWAV.new()
+	stream.data = audio_data
+	stream.mix_rate = sample_rate
+	stream.stereo = channels == 2
+	match bits_per_sample:
+		8:
+			stream.format = AudioStreamWAV.FORMAT_8_BITS
+		16:
+			stream.format = AudioStreamWAV.FORMAT_16_BITS
+		_:
+			stream.format = AudioStreamWAV.FORMAT_16_BITS
+	return stream

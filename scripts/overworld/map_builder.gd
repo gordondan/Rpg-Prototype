@@ -495,6 +495,7 @@ func _place_npcs() -> void:
 			"post_defeat_dialogue_id": "alexia_ranger_defeated",
 			"recruited_flag": "alexia_recruited",
 			"line_of_sight_range": 5,
+			"character_id": "alexia",
 		})
 
 	# -------------------------------------------------------------------------

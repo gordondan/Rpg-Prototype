@@ -36,7 +36,7 @@ def get_file(path: str):
     suffix = full_path.suffix.lower()
     media_types = {
         ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
-        ".webp": "image/webp", ".mp3": "audio/mpeg", ".ogg": "audio/ogg",
+        ".webp": "image/webp", ".mp3": "audio/mpeg", ".ogg": "audio/ogg", ".wav": "audio/wav",
     }
     return Response(
         content=full_path.read_bytes(),
@@ -49,6 +49,8 @@ async def upload_asset(path: str, file: UploadFile = File(...)):
     content = await file.read()
     if path.startswith("assets/sprites/creatures/") and not path.startswith("assets/sprites/creatures/original/"):
         asset_svc.process_sprite(path, content)
+    elif path.startswith("assets/audio/sfx/"):
+        path = asset_svc.process_audio(path, content)
     else:
         asset_svc.save_uploaded_file(path, content)
     return {"status": "uploaded", "path": path}

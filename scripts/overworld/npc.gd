@@ -32,11 +32,16 @@ const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 @export var recruit_creature_id: String = ""
 @export var recruit_creature_level: int = 1
 @export var line_of_sight_range: int = 4
+## Character key in characters.json — used for sound lookups.
+## Defaults to dialogue_id if not set.
+@export var character_id: String = ""
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var sight_ray: RayCast2D = $SightRay
 
 var facing_direction := Vector2.DOWN
+var _last_greet_time: float = -999.0
+const GREET_DEBOUNCE := 15.0
 ## The persistent creature instance this NPC represents.
 ## Created once on spawn — used in battle as the lead enemy, and transferred directly
 ## to the player's party on recruitment rather than creating a fresh object.
@@ -45,7 +50,10 @@ var creature_instance: CreatureInstance = null
 
 func _ready() -> void:
 	add_to_group("npc")
+	if character_id == "":
+		character_id = dialogue_id
 	_create_creature_instance()
+	_setup_greet_area()
 	if is_rival and sight_ray:
 		_update_sight_ray()
 
@@ -284,3 +292,30 @@ func _open_shop() -> void:
 func _update_sight_ray() -> void:
 	if sight_ray:
 		sight_ray.target_position = facing_direction * 16 * line_of_sight_range
+
+
+# ─── Proximity Greeting ────────────────────────────────────────
+
+func _setup_greet_area() -> void:
+	## Create a proximity Area2D that fires a greet sound when the player walks near.
+	var area := Area2D.new()
+	area.name = "GreetArea"
+	area.collision_layer = 0
+	area.collision_mask = 1  # detect player (layer 1)
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = 32.0  # ~2 tile radius
+	shape.shape = circle
+	area.add_child(shape)
+	add_child(area)
+	area.body_entered.connect(_on_greet_area_entered)
+
+
+func _on_greet_area_entered(body: Node) -> void:
+	if not body.is_in_group("player"):
+		return
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _last_greet_time < GREET_DEBOUNCE:
+		return
+	_last_greet_time = now
+	AudioManager.play_character_sound(character_id, "greet")

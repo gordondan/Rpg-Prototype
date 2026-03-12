@@ -16,6 +16,11 @@ export interface DialogueEntry {
   lines: DialogueLine[]
 }
 
+export interface SoundEntry {
+  type: string // attack, defend, greet
+  path: string
+}
+
 export interface Creature {
   name: string
   description: string
@@ -36,6 +41,7 @@ export interface Creature {
   has_overworld_sprite?: boolean
   has_battle_sprite?: boolean
   learnset: { level: number; move_id: string }[]
+  sounds: SoundEntry[]
   npc_sprite?: string
   dialogues?: Record<string, DialogueEntry>
 }

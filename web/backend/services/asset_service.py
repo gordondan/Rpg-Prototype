@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import shutil
+import subprocess
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -168,6 +171,60 @@ class AssetService:
                 f.unlink()
                 count += 1
         return count
+
+    # Target format for game-ready SFX
+    AUDIO_SAMPLE_RATE = 44100
+    AUDIO_CHANNELS = 1  # mono
+    AUDIO_BIT_DEPTH = 16  # 16-bit PCM
+
+    def process_audio(self, rel_path: str, content: bytes) -> str:
+        """Save original to original/ subdir, convert to 16-bit PCM WAV 44100Hz mono.
+
+        Returns the final rel_path (always .wav regardless of input format).
+        """
+        full_path = self.repo_path / rel_path
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Save original
+        original_dir = full_path.parent / "original"
+        original_dir.mkdir(parents=True, exist_ok=True)
+        original_path = original_dir / full_path.name
+        original_path.write_bytes(content)
+
+        # Output is always .wav
+        wav_path = full_path.with_suffix(".wav")
+        wav_rel = str(wav_path.relative_to(self.repo_path))
+
+        if shutil.which("ffmpeg"):
+            self._convert_audio_ffmpeg(original_path, wav_path)
+        else:
+            # No ffmpeg — save as-is and warn
+            print("[audio] ffmpeg not found — saving file without conversion")
+            print("[audio] Install ffmpeg for automatic format conversion: brew install ffmpeg")
+            full_path.write_bytes(content)
+            return rel_path
+
+        return wav_rel
+
+    def _convert_audio_ffmpeg(self, input_path: Path, output_path: Path) -> None:
+        """Convert any audio file to 16-bit PCM WAV, 44100Hz, mono using ffmpeg."""
+        try:
+            subprocess.run(
+                [
+                    "ffmpeg", "-y",
+                    "-i", str(input_path),
+                    "-ar", str(self.AUDIO_SAMPLE_RATE),
+                    "-ac", str(self.AUDIO_CHANNELS),
+                    "-sample_fmt", "s16",  # 16-bit signed PCM
+                    "-c:a", "pcm_s16le",
+                    str(output_path),
+                ],
+                capture_output=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"[ffmpeg] conversion failed: {e.stderr.decode()}")
+            raise RuntimeError(f"Audio conversion failed: {e.stderr.decode()}")
 
     def delete_asset(self, rel_path: str) -> bool:
         full_path = self.repo_path / rel_path

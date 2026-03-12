@@ -20,6 +20,11 @@ class DialogueEntry(BaseModel):
     lines: list[DialogueLine] = []
 
 
+class SoundEntry(BaseModel):
+    type: str  # attack, defend, greet
+    path: str
+
+
 class Creature(BaseModel):
     name: str
     description: str
@@ -39,6 +44,7 @@ class Creature(BaseModel):
     recruit_dialogue: str | None = None
     recruitable: bool | None = None
     learnset: list[LearnsetEntry] = []
+    sounds: list[SoundEntry] = []
     npc_sprite: str | None = None
     dialogues: dict[str, DialogueEntry] | None = None
 
