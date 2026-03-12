@@ -1084,5 +1084,24 @@
     "class": "monster",
     "category": "wild",
     "learnset": []
+  },
+  "new_creature_2": {
+    "name": "The Loki",
+    "description": "Dog Gone",
+    "types": [
+      "normal"
+    ],
+    "base_hp": 200,
+    "base_attack": 200,
+    "base_defense": 200,
+    "base_sp_attack": 200,
+    "base_sp_defense": 200,
+    "base_speed": 200,
+    "base_exp": 50,
+    "class": "monster",
+    "category": "wild",
+    "learnset": [],
+    "has_overworld_sprite": false,
+    "has_battle_sprite": false
   }
 }
