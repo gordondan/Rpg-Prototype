@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://37c2d86b3a3048e9b508"
-path="res://.godot/imported/wind_scout_male_battle.png-37c2d86b3a3048e9b508.ctex"
+uid="uid://wnye84f2i7pf"
+path="res://.godot/imported/wind_scout_male_battle.png-9946ce0200d70253c7f0520d0b16169c.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/sprites/creatures/wind_scout_male_battle.png"
-dest_files=["res://.godot/imported/wind_scout_male_battle.png-37c2d86b3a3048e9b508.ctex"]
+dest_files=["res://.godot/imported/wind_scout_male_battle.png-9946ce0200d70253c7f0520d0b16169c.ctex"]
 
 [params]
 

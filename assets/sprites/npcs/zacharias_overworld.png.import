@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e564fe6d6dfa4e25bab0"
-path="res://.godot/imported/zacharias_overworld.png-e564fe6d6dfa4e25bab0.ctex"
+uid="uid://bx2nvkwerejff"
+path="res://.godot/imported/zacharias_overworld.png-514674c6cd214b3e6a5d7d27d4490688.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/sprites/npcs/zacharias_overworld.png"
-dest_files=["res://.godot/imported/zacharias_overworld.png-e564fe6d6dfa4e25bab0.ctex"]
+dest_files=["res://.godot/imported/zacharias_overworld.png-514674c6cd214b3e6a5d7d27d4490688.ctex"]
 
 [params]
 

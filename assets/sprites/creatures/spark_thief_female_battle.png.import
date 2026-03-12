@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ac36d0b7ba5c4926a689"
-path="res://.godot/imported/spark_thief_female_battle.png-ac36d0b7ba5c4926a689.ctex"
+uid="uid://juvk4pwxqd7u"
+path="res://.godot/imported/spark_thief_female_battle.png-0179d90f6cb4e1abe242621b2df81cb9.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/sprites/creatures/spark_thief_female_battle.png"
-dest_files=["res://.godot/imported/spark_thief_female_battle.png-ac36d0b7ba5c4926a689.ctex"]
+dest_files=["res://.godot/imported/spark_thief_female_battle.png-0179d90f6cb4e1abe242621b2df81cb9.ctex"]
 
 [params]
 

@@ -526,7 +526,9 @@
         "move_id": "venom_fang"
       }
     ],
-    "category": "wild"
+    "category": "wild",
+    "has_overworld_sprite": true,
+    "has_battle_sprite": true
   },
   "hex_weaver": {
     "name": "Hex Weaver",

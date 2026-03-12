@@ -7,6 +7,7 @@
     {"creature_id": "goblin_firebomber", "level_min": 2, "level_max": 4, "weight": 20},
     {"creature_id": "hex_weaver", "level_min": 2, "level_max": 4, "weight": 15},
     {"creature_id": "stone_sentinel", "level_min": 3, "level_max": 5, "weight": 5},
-    {"creature_id": "wind_scout", "level_min": 3, "level_max": 6, "weight": 10}
+    {"creature_id": "wind_scout", "level_min": 3, "level_max": 6, "weight": 10},
+    {"creature_id": "goblin_warrior", "level_min": 4, "level_max": 7, "weight": 8}
   ]
 }

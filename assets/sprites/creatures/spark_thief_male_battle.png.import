@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://33c951c735974e90b463"
-path="res://.godot/imported/spark_thief_male_battle.png-33c951c735974e90b463.ctex"
+uid="uid://bl0pb52wvhoyw"
+path="res://.godot/imported/spark_thief_male_battle.png-537ee7d8a38c7496d2597cc79f60dc5c.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/sprites/creatures/spark_thief_male_battle.png"
-dest_files=["res://.godot/imported/spark_thief_male_battle.png-33c951c735974e90b463.ctex"]
+dest_files=["res://.godot/imported/spark_thief_male_battle.png-537ee7d8a38c7496d2597cc79f60dc5c.ctex"]
 
 [params]
 

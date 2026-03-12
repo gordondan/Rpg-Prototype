@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1c3121e848d1458a859f"
-path="res://.godot/imported/aqua_monk_overworld.png-1c3121e848d1458a859f.ctex"
+uid="uid://duoyipjfqn082"
+path="res://.godot/imported/aqua_monk_overworld.png-0340fb4698344982b367186bc60e97a8.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/sprites/npcs/aqua_monk_overworld.png"
-dest_files=["res://.godot/imported/aqua_monk_overworld.png-1c3121e848d1458a859f.ctex"]
+dest_files=["res://.godot/imported/aqua_monk_overworld.png-0340fb4698344982b367186bc60e97a8.ctex"]
 
 [params]
 
