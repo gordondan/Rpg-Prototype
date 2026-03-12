@@ -23,26 +23,30 @@ func _ready() -> void:
 
 
 func _load_dialogue_data() -> void:
-	var dir_path := "res://data/dialogue/"
-	var dir := DirAccess.open(dir_path)
-	if not dir:
-		push_warning("Could not open dialogue directory: %s" % dir_path)
+	var path := "res://data/characters/characters.json"
+	if not FileAccess.file_exists(path):
+		push_warning("Characters file not found: %s" % path)
 		return
 
-	dir.list_dir_begin()
-	var file_name := dir.get_next()
-	while file_name != "":
-		if file_name.ends_with(".json"):
-			var path := dir_path + file_name
-			var file := FileAccess.open(path, FileAccess.READ)
-			if file:
-				var json := JSON.new()
-				if json.parse(file.get_as_text()) == OK and json.data is Dictionary:
-					_dialogue_data.merge(json.data)
-					print("[DialogueManager] Loaded dialogue from: %s" % file_name)
-		file_name = dir.get_next()
+	var file := FileAccess.open(path, FileAccess.READ)
+	if not file:
+		return
+	var json := JSON.new()
+	if json.parse(file.get_as_text()) != OK or not json.data is Dictionary:
+		push_error("Failed to parse characters file: %s" % path)
+		return
 
-	print("[DialogueManager] Total dialogue entries: %d" % _dialogue_data.size())
+	# Extract dialogue entries from each character's dialogues map
+	for character_id in json.data:
+		var character: Dictionary = json.data[character_id]
+		var dialogues: Dictionary = character.get("dialogues", {})
+		for dialogue_id in dialogues:
+			var dialogue_entry: Dictionary = dialogues[dialogue_id].duplicate(true)
+			dialogue_entry["name"] = character.get("name", character_id)
+			dialogue_entry["sprite"] = character.get("npc_sprite", "")
+			_dialogue_data[dialogue_id] = dialogue_entry
+
+	print("[DialogueManager] Loaded %d dialogue entries from characters.json" % _dialogue_data.size())
 
 
 # ─── Public API ──────────────────────────────────────────────────

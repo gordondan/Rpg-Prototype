@@ -7,11 +7,11 @@ REPO = Path(__file__).parent.parent.parent  # monster-game root
 
 
 def test_creature_schema():
-    data = json.loads((REPO / "data/creatures/creatures.json").read_text())
+    data = json.loads((REPO / "data/characters/characters.json").read_text())
     for cid, cdata in data.items():
         creature = Creature.model_validate(cdata)
         assert creature.name
-        assert cdata["category"] in ("starter", "wild")
+        assert cdata["category"] in ("starter", "wild", "npc")
 
 
 def test_move_schema():

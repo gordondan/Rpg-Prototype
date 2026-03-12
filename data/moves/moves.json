@@ -35,7 +35,11 @@
     "pp": 40,
     "target": "all_enemies",
     "description": "A fierce shout that shakes all enemies' resolve, lowering their Attack.",
-    "effect": {"stat": "attack", "stages": -1, "target": "enemy"}
+    "effect": {
+      "stat": "attack",
+      "stages": -1,
+      "target": "enemy"
+    }
   },
   "weaken_armor": {
     "name": "Weaken Armor",
@@ -45,7 +49,11 @@
     "accuracy": 100,
     "pp": 30,
     "description": "Finds gaps in the enemy's armor, lowering their Defense.",
-    "effect": {"stat": "defense", "stages": -1, "target": "enemy"}
+    "effect": {
+      "stat": "defense",
+      "stages": -1,
+      "target": "enemy"
+    }
   },
   "fire_bolt": {
     "name": "Fire Bolt",
@@ -56,7 +64,10 @@
     "pp": 25,
     "description": "Hurls a small bolt of fire. May inflict a burn.",
     "effect_chance": 10,
-    "effect": {"status": "burn", "target": "enemy"}
+    "effect": {
+      "status": "burn",
+      "target": "enemy"
+    }
   },
   "blazing_blade": {
     "name": "Blazing Blade",
@@ -176,7 +187,10 @@
     "accuracy": 75,
     "pp": 15,
     "description": "Releases a cloud of magical spores that put the enemy to sleep.",
-    "effect": {"status": "sleep", "target": "enemy"}
+    "effect": {
+      "status": "sleep",
+      "target": "enemy"
+    }
   },
   "solar_wrath": {
     "name": "Solar Wrath",
@@ -233,7 +247,11 @@
     "pp": 30,
     "target": "all_allies",
     "description": "Raises shields across the whole party, increasing Defense for all allies.",
-    "effect": {"stat": "defense", "stages": 1, "target": "ally"}
+    "effect": {
+      "stat": "defense",
+      "stages": 1,
+      "target": "ally"
+    }
   },
   "boulder_hurl": {
     "name": "Boulder Hurl",
@@ -261,7 +279,11 @@
     "accuracy": 95,
     "pp": 40,
     "description": "Weaves a sticky hex that greatly slows the target.",
-    "effect": {"stat": "speed", "stages": -2, "target": "enemy"}
+    "effect": {
+      "stat": "speed",
+      "stages": -2,
+      "target": "enemy"
+    }
   },
   "venom_fang": {
     "name": "Venom Fang",
@@ -281,7 +303,10 @@
     "pp": 25,
     "description": "Rakes the target with filthy, poisoned claws.",
     "effect_chance": 20,
-    "effect": {"status": "poison", "target": "enemy"}
+    "effect": {
+      "status": "poison",
+      "target": "enemy"
+    }
   },
   "dirty_trick": {
     "name": "Dirty Trick",
@@ -291,7 +316,11 @@
     "accuracy": 90,
     "pp": 20,
     "description": "Throws dirt in the enemy's eyes, sharply lowering their accuracy.",
-    "effect": {"stat": "accuracy", "stages": -1, "target": "enemy"}
+    "effect": {
+      "stat": "accuracy",
+      "stages": -1,
+      "target": "enemy"
+    }
   },
   "pixie_dust": {
     "name": "Pixie Dust",
@@ -310,7 +339,11 @@
     "accuracy": 95,
     "pp": 20,
     "description": "A mischievous curse that makes the target laugh uncontrollably, lowering their Sp.Attack.",
-    "effect": {"stat": "sp_attack", "stages": -1, "target": "enemy"}
+    "effect": {
+      "stat": "sp_attack",
+      "stages": -1,
+      "target": "enemy"
+    }
   },
   "fae_wind": {
     "name": "Fae Wind",
@@ -329,5 +362,15 @@
     "accuracy": 100,
     "pp": 10,
     "description": "Calls down a shower of brilliant falling stars upon the enemy."
+  },
+  "new_move_1": {
+    "name": "The Thunder Belly",
+    "type": "storm",
+    "category": "Physical",
+    "power": 400,
+    "accuracy": 150,
+    "pp": 200,
+    "description": "Danger danger",
+    "priority": 1
   }
 }

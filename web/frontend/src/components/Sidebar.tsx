@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   PawPrint,
   ScrollText,
+  Users,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -19,6 +20,7 @@ import { Button } from '@/components/ui/button'
 
 const dataEditorLinks = [
   { to: '/editor/creatures', label: 'Creatures', icon: PawPrint },
+  { to: '/editor/npcs', label: 'NPCs', icon: Users },
   { to: '/editor/moves', label: 'Moves', icon: Zap },
   { to: '/editor/items', label: 'Items', icon: Package },
   { to: '/editor/maps', label: 'Maps', icon: Map },

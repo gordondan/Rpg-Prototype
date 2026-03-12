@@ -19,7 +19,7 @@ class DataService:
     # --- Creatures ---
 
     def _creatures_path(self) -> Path:
-        return self.data_path / "creatures" / "creatures.json"
+        return self.data_path / "characters" / "characters.json"
 
     def get_all_creatures(self) -> dict[str, dict]:
         path = self._creatures_path()
@@ -71,6 +71,24 @@ class DataService:
         self._write_json(path, data)
         return True
 
+    def create_move(self, move_id: str, move_data: dict) -> bool:
+        path = self.data_path / "moves" / "moves.json"
+        data = self._read_json(path) if path.exists() else {}
+        if move_id in data:
+            return False
+        data[move_id] = move_data
+        self._write_json(path, data)
+        return True
+
+    def delete_move(self, move_id: str) -> bool:
+        path = self.data_path / "moves" / "moves.json"
+        data = self._read_json(path)
+        if move_id not in data:
+            return False
+        del data[move_id]
+        self._write_json(path, data)
+        return True
+
     # --- Items ---
 
     def get_all_items(self) -> dict[str, dict]:
@@ -116,7 +134,7 @@ class DataService:
 
     def get_changed_files(self) -> list[str]:
         changed = []
-        for pattern in ["creatures/*.json", "moves/*.json", "items/*.json", "maps/*.json", "shops/*.json"]:
+        for pattern in ["characters/*.json", "moves/*.json", "items/*.json", "maps/*.json", "shops/*.json"]:
             for f in (self.data_path).glob(pattern):
                 changed.append(str(f.relative_to(self.repo_path)))
         return changed

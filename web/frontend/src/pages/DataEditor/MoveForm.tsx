@@ -3,18 +3,22 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Trash2 } from 'lucide-react'
 import { TYPE_COLORS } from '@/theme/colors'
-import type { Move } from '@/api/moves'
+import { type Move, movesApi } from '@/api/moves'
 import { useChanges } from '@/context/ChangeContext'
+import { toast } from 'sonner'
 
 interface Props {
   id: string
   move: Move
+  onDelete?: () => void
 }
 
-export default function MoveForm({ id, move: initial }: Props) {
+export default function MoveForm({ id, move: initial, onDelete }: Props) {
   const [form, setForm] = useState<Move>(initial)
   const { markChanged } = useChanges()
 
@@ -26,6 +30,17 @@ export default function MoveForm({ id, move: initial }: Props) {
     const next = { ...form, ...patch }
     setForm(next)
     markChanged('moves', id, next, `${next.name}`)
+  }
+
+  const handleDelete = async () => {
+    if (!confirm(`Delete move "${form.name}"?`)) return
+    try {
+      await movesApi.delete(id)
+      toast.success('Move deleted')
+      onDelete?.()
+    } catch (err) {
+      toast.error(`Failed to delete: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    }
   }
 
   return (
@@ -51,7 +66,7 @@ export default function MoveForm({ id, move: initial }: Props) {
               />
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-right space-y-1">
             <Badge
               className="text-sm px-3 py-1 border-0"
               style={{
@@ -61,7 +76,16 @@ export default function MoveForm({ id, move: initial }: Props) {
             >
               {form.type}
             </Badge>
-            <p className="text-xs text-parchment/40 font-mono mt-1">{id}</p>
+            <p className="text-xs text-parchment/40 font-mono">{id}</p>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDelete}
+              className="text-parchment/40 hover:text-destructive text-xs"
+            >
+              <Trash2 className="size-3" />
+              Delete
+            </Button>
           </div>
         </div>
 

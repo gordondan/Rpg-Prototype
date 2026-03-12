@@ -14,7 +14,13 @@ def list_creatures():
     creatures = data_svc.get_all_creatures()
     sprites_dir = settings.repo_path / "assets" / "sprites" / "creatures"
     for cid, cdata in creatures.items():
-        cdata["has_overworld_sprite"] = (sprites_dir / f"{cid}.png").exists()
+        # For NPCs, check npc_sprite path; for creatures, use convention-based paths
+        npc_sprite = cdata.get("npc_sprite", "")
+        if npc_sprite:
+            sprite_path = settings.repo_path / npc_sprite.removeprefix("res://")
+            cdata["has_overworld_sprite"] = sprite_path.exists()
+        else:
+            cdata["has_overworld_sprite"] = (sprites_dir / f"{cid}.png").exists()
         cdata["has_battle_sprite"] = (sprites_dir / f"{cid}_battle.png").exists()
     return creatures
 
@@ -36,15 +42,16 @@ def update_creature(creature_id: str, body: dict):
 
 
 @router.post("/")
-def create_creature():
+def create_creature(category: str = "wild"):
     all_creatures = data_svc.get_all_creatures()
+    prefix = "new_npc" if category == "npc" else "new_creature"
     n = 1
-    while f"new_creature_{n}" in all_creatures:
+    while f"{prefix}_{n}" in all_creatures:
         n += 1
-    creature_id = f"new_creature_{n}"
+    creature_id = f"{prefix}_{n}"
 
     creature_data = {
-        "name": "New Creature",
+        "name": "New NPC" if category == "npc" else "New Creature",
         "description": "",
         "types": ["normal"],
         "base_hp": 50,
@@ -54,8 +61,8 @@ def create_creature():
         "base_sp_defense": 50,
         "base_speed": 50,
         "base_exp": 50,
-        "class": "monster",
-        "category": "wild",
+        "class": "npc" if category == "npc" else "monster",
+        "category": category,
         "learnset": [],
     }
     data_svc.create_creature(creature_id, creature_data)

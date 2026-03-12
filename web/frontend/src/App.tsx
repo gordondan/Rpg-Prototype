@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to="/editor/creatures" replace />} />
-            <Route path="/editor/:category" element={<DataEditor />} />
+            <Route path="/editor/:category/:id?" element={<DataEditor />} />
             <Route path="/assets/*" element={<AssetManager />} />
             <Route path="/gallery" element={<Gallery />} />
           </Route>

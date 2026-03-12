@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { creaturesApi, type Creature } from '@/api/creatures'
 import { movesApi, type Move } from '@/api/moves'
@@ -21,8 +21,8 @@ import QuestForm from './QuestForm'
 import { toast } from 'sonner'
 
 export default function DataEditor() {
-  const { category } = useParams<{ category: string }>()
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const { category, id: urlId } = useParams<{ category: string; id: string }>()
+  const navigate = useNavigate()
   const [creatures, setCreatures] = useState<Record<string, Creature>>({})
   const [moves, setMoves] = useState<Record<string, Move>>({})
   const [items, setItems] = useState<Record<string, Item>>({})
@@ -31,12 +31,22 @@ export default function DataEditor() {
   const [quests, setQuests] = useState<Record<string, Quest>>({})
   const [loading, setLoading] = useState(false)
 
+  const selectedId = urlId ?? null
+
+  const select = useCallback((id: string) => {
+    navigate(`/editor/${category}/${id}`, { replace: true })
+  }, [navigate, category])
+
+  const deselect = useCallback(() => {
+    navigate(`/editor/${category}`, { replace: true })
+  }, [navigate, category])
+
   const loadData = useCallback(async () => {
     setLoading(true)
-    setSelectedId(null)
     try {
       switch (category) {
-        case 'creatures': {
+        case 'creatures':
+        case 'npcs': {
           const data = await creaturesApi.list()
           setCreatures(data)
           break
@@ -91,22 +101,25 @@ export default function DataEditor() {
       {/* List panel */}
       <div className="w-[280px] shrink-0">
         {category === 'creatures' && (
-          <CreatureList creatures={creatures} selectedId={selectedId} onSelect={setSelectedId} onRefresh={loadData} />
+          <CreatureList creatures={creatures} selectedId={selectedId} onSelect={select} onRefresh={loadData} />
+        )}
+        {category === 'npcs' && (
+          <CreatureList creatures={creatures} selectedId={selectedId} onSelect={select} onRefresh={loadData} mode="npcs" />
         )}
         {category === 'moves' && (
-          <MovesList moves={moves} selectedId={selectedId} onSelect={setSelectedId} />
+          <MovesList moves={moves} selectedId={selectedId} onSelect={select} onRefresh={loadData} />
         )}
         {category === 'items' && (
-          <ItemsList items={items} selectedId={selectedId} onSelect={setSelectedId} />
+          <ItemsList items={items} selectedId={selectedId} onSelect={select} />
         )}
         {category === 'maps' && (
-          <MapsList maps={maps} selectedId={selectedId} onSelect={setSelectedId} onRefresh={loadData} />
+          <MapsList maps={maps} selectedId={selectedId} onSelect={select} onRefresh={loadData} />
         )}
         {category === 'shops' && (
-          <ShopsList shops={shops} selectedId={selectedId} onSelect={setSelectedId} />
+          <ShopsList shops={shops} selectedId={selectedId} onSelect={select} />
         )}
         {category === 'quests' && (
-          <QuestsList quests={quests} selectedId={selectedId} onSelect={setSelectedId} onRefresh={loadData} />
+          <QuestsList quests={quests} selectedId={selectedId} onSelect={select} onRefresh={loadData} />
         )}
       </div>
 
@@ -114,11 +127,15 @@ export default function DataEditor() {
       <div className="flex-1">
         {selectedId ? (
           <>
-            {category === 'creatures' && creatures[selectedId] && (
+            {(category === 'creatures' || category === 'npcs') && creatures[selectedId] && (
               <CreatureForm id={selectedId} creature={creatures[selectedId]} />
             )}
             {category === 'moves' && moves[selectedId] && (
-              <MoveForm id={selectedId} move={moves[selectedId]} />
+              <MoveForm
+                id={selectedId}
+                move={moves[selectedId]}
+                onDelete={() => { deselect(); loadData() }}
+              />
             )}
             {category === 'items' && items[selectedId] && (
               <ItemForm id={selectedId} item={items[selectedId]} />
@@ -127,7 +144,7 @@ export default function DataEditor() {
               <MapForm
                 id={selectedId}
                 map={maps[selectedId]}
-                onDelete={() => { setSelectedId(null); loadData() }}
+                onDelete={() => { deselect(); loadData() }}
               />
             )}
             {category === 'shops' && shops[selectedId] && (
@@ -137,7 +154,7 @@ export default function DataEditor() {
               <QuestForm
                 id={selectedId}
                 quest={quests[selectedId]}
-                onDelete={() => { setSelectedId(null); loadData() }}
+                onDelete={() => { deselect(); loadData() }}
               />
             )}
           </>

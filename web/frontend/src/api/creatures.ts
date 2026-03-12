@@ -1,5 +1,21 @@
 import { get, put, post, httpDelete } from './client'
 
+export interface DialogueChoice {
+  text: string
+  id: string
+  next: DialogueLine[]
+}
+
+export interface DialogueLine {
+  text: string
+  speaker: string
+  choices?: DialogueChoice[]
+}
+
+export interface DialogueEntry {
+  lines: DialogueLine[]
+}
+
 export interface Creature {
   name: string
   description: string
@@ -20,6 +36,8 @@ export interface Creature {
   has_overworld_sprite?: boolean
   has_battle_sprite?: boolean
   learnset: { level: number; move_id: string }[]
+  npc_sprite?: string
+  dialogues?: Record<string, DialogueEntry>
 }
 
 /** Convention-based sprite paths derived from creature ID */
@@ -32,6 +50,6 @@ export const creaturesApi = {
   list: () => get<Record<string, Creature>>('/creatures/'),
   getOne: (id: string) => get<Creature>(`/creatures/${id}`),
   update: (id: string, data: Creature) => put<Creature>(`/creatures/${id}`, data),
-  create: () => post<{ status: string; creature_id: string }>('/creatures/'),
+  create: (category?: string) => post<{ status: string; creature_id: string }>(`/creatures/${category ? `?category=${category}` : ''}`),
   delete: (id: string) => httpDelete<{ status: string }>(`/creatures/${id}`),
 }

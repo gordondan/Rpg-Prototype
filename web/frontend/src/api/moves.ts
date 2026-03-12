@@ -1,4 +1,4 @@
-import { get, put } from './client'
+import { get, put, post, httpDelete } from './client'
 
 export interface Move {
   name: string
@@ -17,4 +17,6 @@ export const movesApi = {
   list: () => get<Record<string, Move>>('/moves/'),
   getOne: (id: string) => get<Move>(`/moves/${id}`),
   update: (id: string, data: Move) => put<Move>(`/moves/${id}`, data),
+  create: () => post<{ status: string; move_id: string }>('/moves/'),
+  delete: (id: string) => httpDelete<{ status: string }>(`/moves/${id}`),
 }

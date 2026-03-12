@@ -46,9 +46,10 @@ interface Props {
   selectedId: string | null
   onSelect: (id: string) => void
   onRefresh?: () => void
+  mode?: 'creatures' | 'npcs'
 }
 
-export default function CreatureList({ creatures, selectedId, onSelect, onRefresh }: Props) {
+export default function CreatureList({ creatures, selectedId, onSelect, onRefresh, mode = 'creatures' }: Props) {
   const [search, setSearch] = useState('')
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
@@ -94,8 +95,8 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
       entries = entries.filter(([, c]) => filters.classes.includes(c.class))
     }
 
-    // Category filter — 'all' excludes npcs unless explicitly selected
-    if (filters.category === 'npc') {
+    // Category filter
+    if (mode === 'npcs') {
       entries = entries.filter(([, c]) => c.category === 'npc')
     } else if (filters.category !== 'all') {
       entries = entries.filter(([, c]) => c.category === filters.category)
@@ -144,12 +145,12 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
 
   const handleCreate = async () => {
     try {
-      const result = await creaturesApi.create()
-      toast.success('Creature created')
+      const result = await creaturesApi.create(mode === 'npcs' ? 'npc' : undefined)
+      toast.success(mode === 'npcs' ? 'NPC created' : 'Creature created')
       await onRefresh?.()
       onSelect(result.creature_id)
     } catch (err) {
-      toast.error(`Failed to create creature: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      toast.error(`Failed to create: ${err instanceof Error ? err.message : 'Unknown error'}`)
     }
   }
 
@@ -175,21 +176,23 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
           className="w-full text-gold/70 hover:text-gold justify-start"
         >
           <Plus className="size-3.5" />
-          New Creature
+          {mode === 'npcs' ? 'New NPC' : 'New Creature'}
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleReprocess}
-          className="w-full text-parchment/50 hover:text-parchment/70 justify-start text-xs"
-        >
-          <RefreshCw className="size-3.5" />
-          Reprocess Sprites
-        </Button>
+        {mode === 'creatures' && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleReprocess}
+            className="w-full text-parchment/50 hover:text-parchment/70 justify-start text-xs"
+          >
+            <RefreshCw className="size-3.5" />
+            Reprocess Sprites
+          </Button>
+        )}
         <div className="relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-parchment/40" />
           <Input
-            placeholder="Search creatures..."
+            placeholder={mode === 'npcs' ? 'Search NPCs...' : 'Search creatures...'}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8 bg-stone/50 border-stone-light/30 text-parchment placeholder:text-parchment/30"
@@ -256,26 +259,28 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
                 </div>
               </div>
 
-              {/* Category toggle */}
-              <div>
-                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Category</p>
-                <div className="flex gap-1">
-                  {(['all', 'starter', 'wild', 'npc'] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setFilters((f) => ({ ...f, category: opt }))}
-                      className={cn(
-                        'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
-                        filters.category === opt
-                          ? 'bg-gold/20 text-gold border-transparent'
-                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
-                      )}
-                    >
-                      {opt}
-                    </button>
-                  ))}
+              {/* Category toggle — creatures mode only */}
+              {mode === 'creatures' && (
+                <div>
+                  <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Category</p>
+                  <div className="flex gap-1">
+                    {(['all', 'starter', 'wild'] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => setFilters((f) => ({ ...f, category: opt }))}
+                        className={cn(
+                          'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
+                          filters.category === opt
+                            ? 'bg-gold/20 text-gold border-transparent'
+                            : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                        )}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Missing sprites checkboxes */}
               <div>
@@ -302,47 +307,51 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
                 </div>
               </div>
 
-              {/* Has Evolution toggle */}
-              <div>
-                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Has Evolution</p>
-                <div className="flex gap-1">
-                  {(['all', 'yes', 'no'] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setFilters((f) => ({ ...f, hasEvolution: opt }))}
-                      className={cn(
-                        'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
-                        filters.hasEvolution === opt
-                          ? 'bg-gold/20 text-gold border-transparent'
-                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
-                      )}
-                    >
-                      {opt}
-                    </button>
-                  ))}
+              {/* Has Evolution toggle — creatures mode only */}
+              {mode === 'creatures' && (
+                <div>
+                  <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Has Evolution</p>
+                  <div className="flex gap-1">
+                    {(['all', 'yes', 'no'] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => setFilters((f) => ({ ...f, hasEvolution: opt }))}
+                        className={cn(
+                          'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
+                          filters.hasEvolution === opt
+                            ? 'bg-gold/20 text-gold border-transparent'
+                            : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                        )}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Recruitable toggle */}
-              <div>
-                <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Recruitable</p>
-                <div className="flex gap-1">
-                  {(['all', 'yes', 'no'] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setFilters((f) => ({ ...f, recruitable: opt }))}
-                      className={cn(
-                        'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
-                        filters.recruitable === opt
-                          ? 'bg-gold/20 text-gold border-transparent'
-                          : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
-                      )}
-                    >
-                      {opt}
-                    </button>
-                  ))}
+              {/* Recruitable toggle — creatures mode only */}
+              {mode === 'creatures' && (
+                <div>
+                  <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Recruitable</p>
+                  <div className="flex gap-1">
+                    {(['all', 'yes', 'no'] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => setFilters((f) => ({ ...f, recruitable: opt }))}
+                        className={cn(
+                          'text-[10px] px-2 py-0.5 rounded-full border transition-colors capitalize',
+                          filters.recruitable === opt
+                            ? 'bg-gold/20 text-gold border-transparent'
+                            : 'border-stone-light/30 text-parchment/40 hover:text-parchment/60'
+                        )}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Clear filters */}
               {active && (
@@ -359,7 +368,7 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
         </div>
 
         <p className="mt-1.5 text-xs text-parchment/40">
-          {filtered.length} of {Object.keys(creatures).length} creatures
+          {filtered.length} {mode === 'npcs' ? 'NPCs' : 'creatures'}
         </p>
       </div>
 
@@ -378,7 +387,7 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
             >
               <div className="flex size-10 items-center justify-center rounded-lg bg-stone-light/30 overflow-hidden shrink-0">
                 <img
-                  src={`/api/assets/thumbnail/${spritePath(id, 'battle')}?size=64`}
+                  src={`/api/assets/thumbnail/${creature.npc_sprite ? creature.npc_sprite.replace('res://', '') : spritePath(id, 'battle')}?size=64`}
                   alt={creature.name}
                   className="size-8 object-contain"
                   onError={(e) => {

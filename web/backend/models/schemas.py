@@ -16,6 +16,10 @@ class Evolution(BaseModel):
     flavor: str
 
 
+class DialogueEntry(BaseModel):
+    lines: list[DialogueLine] = []
+
+
 class Creature(BaseModel):
     name: str
     description: str
@@ -35,6 +39,8 @@ class Creature(BaseModel):
     recruit_dialogue: str | None = None
     recruitable: bool | None = None
     learnset: list[LearnsetEntry] = []
+    npc_sprite: str | None = None
+    dialogues: dict[str, DialogueEntry] | None = None
 
     model_config = {"populate_by_name": True}
 
@@ -120,6 +126,8 @@ class NPC(BaseModel):
 
 # Rebuild for forward references
 DialogueChoice.model_rebuild()
+DialogueEntry.model_rebuild()
+Creature.model_rebuild()
 
 
 # --- Asset Metadata ---
