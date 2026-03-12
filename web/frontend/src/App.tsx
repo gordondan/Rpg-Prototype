@@ -6,9 +6,11 @@ import Gallery from './pages/Gallery'
 import { ChangeProvider } from './context/ChangeContext'
 
 function App() {
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+
   return (
     <ChangeProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to="/editor/creatures" replace />} />
