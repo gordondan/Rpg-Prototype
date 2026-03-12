@@ -115,7 +115,7 @@ class AssetService:
         full_path.write_bytes(content)
 
     def process_sprite(self, rel_path: str, content: bytes) -> None:
-        """Save original to original/ subdir, write resized game-ready PNG to rel_path."""
+        """Save original to original/ subdir, remove background, resize, write game-ready PNG."""
         from io import BytesIO
 
         full_path = self.repo_path / rel_path
@@ -126,6 +126,15 @@ class AssetService:
         original_dir.mkdir(parents=True, exist_ok=True)
         original_path = original_dir / full_path.name
         original_path.write_bytes(content)
+
+        # Remove background
+        try:
+            from rembg import remove
+            content = remove(content)
+        except Exception as e:
+            import traceback
+            print(f"[rembg] background removal failed: {e}")
+            traceback.print_exc()
 
         # Open, convert to RGBA PNG, resize if needed
         with Image.open(BytesIO(content)) as img:

@@ -123,14 +123,19 @@ func full_heal() -> void:
 		m["current_pp"] = m["max_pp"]
 
 
+const MAX_LEVEL := 100
+
 func gain_experience(amount: int) -> bool:
 	## Add experience and return true if the creature leveled up.
+	if level >= MAX_LEVEL:
+		return false
+
 	experience += amount
 	var needed := _exp_for_next_level()
 
 	if experience >= needed:
 		experience -= needed
-		level += 1
+		level = min(level + 1, MAX_LEVEL)
 		var old_max_hp := max_hp
 		_calculate_stats()
 		# Heal by the amount max_hp increased
@@ -147,6 +152,8 @@ func _exp_for_next_level() -> int:
 
 func level_up() -> void:
 	## Directly increment level, recalculate stats, learn any new moves, and restore HP.
+	if level >= MAX_LEVEL:
+		return
 	level += 1
 	var old_max_hp := max_hp
 	_calculate_stats()

@@ -196,7 +196,7 @@
         "move_id": "fae_wind"
       }
     ],
-    "category": "starter"
+    "category": "npc"
   },
   "zacharias": {
     "name": "Zacharias Lightningsworn",
@@ -230,9 +230,9 @@
         "move_id": "lightning_stab"
       }
     ],
-    "category": "starter",
+    "category": "npc",
     "has_overworld_sprite": false,
-    "has_battle_sprite": false
+    "has_battle_sprite": true
   },
   "aqua_monk": {
     "name": "Aqua Monk",
@@ -278,7 +278,7 @@
         "move_id": "war_cry"
       }
     ],
-    "category": "starter",
+    "category": "npc",
     "has_overworld_sprite": true,
     "has_battle_sprite": true
   },
@@ -443,6 +443,51 @@
       }
     ],
     "category": "wild"
+  },
+  "goblin_warrior": {
+    "name": "Goblin Warrior",
+    "description": "A battle-hardened goblin that has survived enough fights to earn crude armor and a real blade. Slower than its kin but far harder to put down.",
+    "types": [
+      "poison"
+    ],
+    "base_hp": 50,
+    "base_attack": 60,
+    "base_defense": 48,
+    "base_sp_attack": 20,
+    "base_sp_defense": 35,
+    "base_speed": 40,
+    "base_exp": 55,
+    "class": "monster",
+    "recruitable": false,
+    "learnset": [
+      {
+        "level": 1,
+        "move_id": "dagger_jab"
+      },
+      {
+        "level": 1,
+        "move_id": "war_cry"
+      },
+      {
+        "level": 4,
+        "move_id": "swift_strike"
+      },
+      {
+        "level": 8,
+        "move_id": "weaken_armor"
+      },
+      {
+        "level": 12,
+        "move_id": "headbutt"
+      },
+      {
+        "level": 16,
+        "move_id": "cross_slash"
+      }
+    ],
+    "category": "wild",
+    "has_overworld_sprite": false,
+    "has_battle_sprite": false
   },
   "goblin": {
     "name": "Goblin",

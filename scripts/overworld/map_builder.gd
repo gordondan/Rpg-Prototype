@@ -435,12 +435,18 @@ func _place_npcs() -> void:
 
 	# Recruitable NPCs — only show if not yet recruited
 	if not GameManager.get_flag("fairy_recruited"):
-		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14))
+		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14), {
+			"recruited_flag": "fairy_recruited",
+			"recruit_creature_id": "mischievous_fairy",
+			"recruit_creature_level": 5,
+		})
 
 	# Aqua Monk — peaceful recruitable, meditating near the spring
 	if not GameManager.get_flag("aqua_monk_recruited"):
 		_create_npc("Aqua Monk", "aqua_monk", Vector2i(8, 12), {
 			"recruited_flag": "aqua_monk_recruited",
+			"recruit_creature_id": "aqua_monk",
+			"recruit_creature_level": 7,
 		})
 
 	# Zacharias — aggressive gang leader with two Spark Thief wingmen

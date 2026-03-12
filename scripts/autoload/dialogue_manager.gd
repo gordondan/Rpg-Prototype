@@ -13,6 +13,9 @@ const DIALOGUE_BOX_SCENE := "res://scenes/ui/dialogue_box.tscn"
 var _dialogue_data: Dictionary = {}
 var _dialogue_box: Node = null
 var _is_active := false
+## The NPC currently in conversation — set before any dialogue starts.
+## Gives the manager access to the NPC's persistent creature_instance.
+var _active_npc = null
 
 
 func _ready() -> void:
@@ -94,6 +97,12 @@ func is_active() -> bool:
 	return _is_active
 
 
+func set_active_npc(npc) -> void:
+	## Register the NPC currently being talked to so recruitment can access
+	## its persistent creature_instance rather than creating a fresh one.
+	_active_npc = npc
+
+
 # ─── Internal ────────────────────────────────────────────────────
 
 func _begin_dialogue(lines: Array) -> void:
@@ -122,6 +131,7 @@ func _begin_dialogue(lines: Array) -> void:
 
 func _on_dialogue_finished() -> void:
 	_is_active = false
+	_active_npc = null
 	GameManager.set_state(GameManager.GameState.OVERWORLD)
 	dialogue_ended.emit()
 
@@ -149,46 +159,43 @@ func _on_choice_made(choice_index: int, choice_id: String) -> void:
 						{"text": "You don't have enough gold for a room. Come back when you've got 25 gold.", "speaker": "Tavern Keeper"}
 					])
 		"recruit_fairy":
-			_recruit_creature("mischievous_fairy", 5, "fairy_recruited", "MischievousFairy")
+			_handle_recruit("fairy_recruited")
 		"recruit_alexia":
-			_recruit_creature("alexia", 8, "alexia_recruited", "AlexiaRanger")
+			_handle_recruit("alexia_recruited")
 		"recruit_aqua_monk":
-			_recruit_creature("aqua_monk", 7, "aqua_monk_recruited", "AquaMonk")
+			_handle_recruit("aqua_monk_recruited")
 		"recruit_zacharias":
-			_recruit_creature("zacharias", 5, "zacharias_recruited", "Zacharias")
+			_handle_recruit("zacharias_recruited")
 
 
-func _recruit_creature(creature_id: String, level: int, flag_name: String, npc_node_name: String = "") -> void:
-	## Create a creature and add it to the player's party. Sets a story flag to track recruitment.
-	## If npc_node_name is provided, removes that NPC from the map once dialogue ends.
-	var creature := CreatureInstance.create(creature_id, level)
+func _handle_recruit(flag_name: String) -> void:
+	## Recruit the active NPC's persistent creature_instance into the player's party.
+	## Uses the same object that existed on the map (and fought in battle if applicable),
+	## so level, moves, and any battle-state changes are preserved.
+	if _active_npc == null or _active_npc.creature_instance == null:
+		push_error("[DialogueManager] Cannot recruit: no active NPC or creature_instance set.")
+		return
+
+	var creature = _active_npc.creature_instance
+	creature.full_heal()  # Restore HP/PP so they join at full strength
+
 	var added_to_party := GameManager.add_creature_to_party(creature)
-
 	GameManager.set_flag(flag_name)
 
 	if added_to_party:
-		print("[DialogueManager] Recruited %s (Lv.%d) — added to party!" % [creature.nickname, level])
+		print("[DialogueManager] Recruited %s (Lv.%d) — added to party!" % [creature.nickname, creature.level])
 	else:
-		print("[DialogueManager] Recruited %s (Lv.%d) — party full, sent to barracks." % [creature.nickname, level])
-		# Replace all upcoming dialogue with a clear party-full notification
+		print("[DialogueManager] Recruited %s (Lv.%d) — party full, sent to barracks." % [creature.nickname, creature.level])
+		# Notify the player their party is full
 		if _dialogue_box and is_instance_valid(_dialogue_box):
 			_dialogue_box.replace_upcoming_lines([
 				{"text": "%s joined your company!" % creature.nickname, "speaker": ""},
 				{"text": "Your party is full. %s will wait in the barracks until you make room." % creature.nickname, "speaker": ""},
 			])
 
-	# Remove the NPC from the map after dialogue finishes
-	if npc_node_name != "":
-		dialogue_ended.connect(_remove_npc_node.bind(npc_node_name), CONNECT_ONE_SHOT)
-
-
-func _remove_npc_node(npc_node_name: String) -> void:
-	## Find and remove a recruited NPC from the scene tree.
-	for npc in get_tree().get_nodes_in_group("npc"):
-		if npc.name == npc_node_name:
-			npc.queue_free()
-			print("[DialogueManager] Removed NPC node: %s" % npc_node_name)
-			return
+	# Remove the NPC from the scene once the conversation closes
+	var npc_ref = _active_npc
+	dialogue_ended.connect(func(): if is_instance_valid(npc_ref): npc_ref.queue_free(), CONNECT_ONE_SHOT)
 
 
 func get_dialogue_data(dialogue_id: String) -> Dictionary:

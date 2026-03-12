@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 interface Filters {
   types: string[]
   classes: string[]
-  category: 'all' | 'starter' | 'wild'
+  category: 'all' | 'starter' | 'wild' | 'npc'
   missingOverworld: boolean
   missingBattle: boolean
   hasEvolution: 'all' | 'yes' | 'no'
@@ -94,9 +94,13 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
       entries = entries.filter(([, c]) => filters.classes.includes(c.class))
     }
 
-    // Category filter
-    if (filters.category !== 'all') {
+    // Category filter — 'all' excludes npcs unless explicitly selected
+    if (filters.category === 'npc') {
+      entries = entries.filter(([, c]) => c.category === 'npc')
+    } else if (filters.category !== 'all') {
       entries = entries.filter(([, c]) => c.category === filters.category)
+    } else {
+      entries = entries.filter(([, c]) => c.category !== 'npc')
     }
 
     // Missing sprites
@@ -256,7 +260,7 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
               <div>
                 <p className="text-[10px] font-medium text-parchment/50 uppercase tracking-wide mb-1">Category</p>
                 <div className="flex gap-1">
-                  {(['all', 'starter', 'wild'] as const).map((opt) => (
+                  {(['all', 'starter', 'wild', 'npc'] as const).map((opt) => (
                     <button
                       key={opt}
                       onClick={() => setFilters((f) => ({ ...f, category: opt }))}

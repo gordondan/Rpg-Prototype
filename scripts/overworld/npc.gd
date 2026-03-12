@@ -28,18 +28,40 @@ const CreatureInstance = preload("res://scripts/battle/creature_instance.gd")
 @export var post_defeat_dialogue_id: String = ""  # Dialogue shown after the player beats this rival
 @export var defeat_quest_id: String = ""          # Quest to advance a step when this rival is defeated
 @export var recruited_flag: String = ""           # Set by DialogueManager when player recruits them
+## Creature ID/level for peaceful recruitable NPCs (no battle). Creates creature_instance on spawn.
+@export var recruit_creature_id: String = ""
+@export var recruit_creature_level: int = 1
 @export var line_of_sight_range: int = 4
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var sight_ray: RayCast2D = $SightRay
 
 var facing_direction := Vector2.DOWN
+## The persistent creature instance this NPC represents.
+## Created once on spawn — used in battle as the lead enemy, and transferred directly
+## to the player's party on recruitment rather than creating a fresh object.
+var creature_instance: CreatureInstance = null
 
 
 func _ready() -> void:
 	add_to_group("npc")
+	_create_creature_instance()
 	if is_rival and sight_ray:
 		_update_sight_ray()
+
+
+func _create_creature_instance() -> void:
+	## Build this NPC's creature instance once on spawn.
+	## Priority: recruit_creature_id (peaceful) → rival_party[0] (battle-first) → rival_creature_id (single rival)
+	if recruit_creature_id != "":
+		creature_instance = CreatureInstance.create(recruit_creature_id, recruit_creature_level)
+	elif rival_party.size() > 0:
+		var lead: Dictionary = rival_party[0]
+		creature_instance = CreatureInstance.create(
+			lead.get("creature_id", ""), lead.get("level", 1)
+		)
+	elif rival_creature_id != "":
+		creature_instance = CreatureInstance.create(rival_creature_id, rival_creature_level)
 
 
 func _physics_process(_delta: float) -> void:
@@ -57,6 +79,8 @@ func interact() -> void:
 		return
 	if GameManager.current_state == GameManager.GameState.MENU:
 		return
+	# Register ourselves so DialogueManager can access creature_instance during recruitment
+	DialogueManager.set_active_npc(self)
 
 	# Merchant: open the shop UI directly
 	if is_merchant and shop_id != "":
@@ -107,14 +131,25 @@ func _start_dialogue_then_battle() -> void:
 func _on_dialogue_ended_start_battle() -> void:
 	var enemies: Array = []
 	if rival_party.size() > 0:
-		# Multi-creature party defined — build each creature from the array
-		for entry in rival_party:
-			var cid: String = entry.get("creature_id", rival_creature_id)
-			var clv: int    = entry.get("level", rival_creature_level)
-			enemies.append(CreatureInstance.create(cid, clv))
+		# First creature = the NPC's persistent instance (carries battle damage through to recruit)
+		if creature_instance != null:
+			enemies.append(creature_instance)
+		else:
+			var lead: Dictionary = rival_party[0]
+			enemies.append(CreatureInstance.create(lead.get("creature_id", ""), lead.get("level", 1)))
+		# Remaining party members are created fresh each encounter
+		for i in range(1, rival_party.size()):
+			var entry: Dictionary = rival_party[i]
+			enemies.append(CreatureInstance.create(
+				entry.get("creature_id", rival_creature_id),
+				entry.get("level", rival_creature_level)
+			))
 	else:
-		# Single-creature fallback (existing behaviour)
-		enemies.append(CreatureInstance.create(rival_creature_id, rival_creature_level))
+		# Single-creature — use persistent instance
+		if creature_instance != null:
+			enemies.append(creature_instance)
+		else:
+			enemies.append(CreatureInstance.create(rival_creature_id, rival_creature_level))
 
 	# Build enemy reserve team if any are defined
 	var e_reserves: Array = []
@@ -130,6 +165,7 @@ func _on_dialogue_ended_start_battle() -> void:
 
 func _initiate_rival_duel() -> void:
 	print("[%s] challenges the player to a duel!" % npc_name)
+	DialogueManager.set_active_npc(self)
 	_start_dialogue_then_battle()
 
 
