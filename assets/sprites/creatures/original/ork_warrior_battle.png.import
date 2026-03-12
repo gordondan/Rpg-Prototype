@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84nbyo6le07n"
-path="res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"
+uid="uid://dm0pfcwsrs8c"
+path="res://.godot/imported/ork_warrior_battle.png-e9e10438ff526dd08dc9e8cfbea89526.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/creatures/original/new_creature_2.png"
-dest_files=["res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"]
+source_file="res://assets/sprites/creatures/original/ork_warrior_battle.png"
+dest_files=["res://.godot/imported/ork_warrior_battle.png-e9e10438ff526dd08dc9e8cfbea89526.ctex"]
 
 [params]
 

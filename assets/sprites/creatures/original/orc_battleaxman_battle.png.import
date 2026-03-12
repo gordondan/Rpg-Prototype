@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84nbyo6le07n"
-path="res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"
+uid="uid://ciau2nrtax7x7"
+path="res://.godot/imported/orc_battleaxman_battle.png-5b94f01ecd13e669f9d151e901a9c5d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/creatures/original/new_creature_2.png"
-dest_files=["res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"]
+source_file="res://assets/sprites/creatures/original/orc_battleaxman_battle.png"
+dest_files=["res://.godot/imported/orc_battleaxman_battle.png-5b94f01ecd13e669f9d151e901a9c5d1.ctex"]
 
 [params]
 

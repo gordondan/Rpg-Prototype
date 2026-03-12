@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84nbyo6le07n"
-path="res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"
+uid="uid://cbsq2yyssrnvk"
+path="res://.godot/imported/giant_bat.png-e9672a7d2e715ba7e08c4d14639fada3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/creatures/original/new_creature_2.png"
-dest_files=["res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"]
+source_file="res://assets/sprites/creatures/original/giant_bat.png"
+dest_files=["res://.godot/imported/giant_bat.png-e9672a7d2e715ba7e08c4d14639fada3.ctex"]
 
 [params]
 

@@ -3,11 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c4hnui22q3j8a"
-valid=false
+path="res://.godot/imported/new_creature_2_battle.png-6a03e2020c7e1c31d96a25e0dbc2f216.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/sprites/creatures/original/new_creature_2_battle.png"
+dest_files=["res://.godot/imported/new_creature_2_battle.png-6a03e2020c7e1c31d96a25e0dbc2f216.ctex"]
 
 [params]
 

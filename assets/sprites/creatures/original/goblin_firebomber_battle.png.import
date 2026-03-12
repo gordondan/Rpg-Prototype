@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84nbyo6le07n"
-path="res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"
+uid="uid://y1nhttfdlxjd"
+path="res://.godot/imported/goblin_firebomber_battle.png-d008a2396cc7c4f4454463c3e33c8a84.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/creatures/original/new_creature_2.png"
-dest_files=["res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"]
+source_file="res://assets/sprites/creatures/original/goblin_firebomber_battle.png"
+dest_files=["res://.godot/imported/goblin_firebomber_battle.png-d008a2396cc7c4f4454463c3e33c8a84.ctex"]
 
 [params]
 

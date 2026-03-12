@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84nbyo6le07n"
-path="res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"
+uid="uid://cxplu8gd5gd23"
+path="res://.godot/imported/tide_cleric.png-b72b16e84c889d644b297b23c0e7d00a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/creatures/original/new_creature_2.png"
-dest_files=["res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"]
+source_file="res://assets/sprites/creatures/original/tide_cleric.png"
+dest_files=["res://.godot/imported/tide_cleric.png-b72b16e84c889d644b297b23c0e7d00a.ctex"]
 
 [params]
 
