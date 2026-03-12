@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
-export default defineConfig({
-  base: '/monsta-quest/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/monsta-quest/' : '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -19,4 +19,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
