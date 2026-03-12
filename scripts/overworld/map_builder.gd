@@ -279,7 +279,9 @@ func _place_sprite(key: String, pixel_pos: Vector2, collision_size := Vector2.ZE
 func _place_sprite_at_tile(key: String, tile_x: int, tile_y: int, collision_size := Vector2.ZERO) -> Sprite2D:
 	var px := tile_x * TILE + TILE / 2.0
 	var py := tile_y * TILE + TILE
-	return _place_sprite(key, Vector2(px, py), collision_size, 0)
+	# Use the sprite's foot Y position as z_index so objects further down the screen
+	# (higher Y) render in front of objects further up (lower Y) — Y-sort depth.
+	return _place_sprite(key, Vector2(px, py), collision_size, int(py))
 
 
 # --- Building placement ---

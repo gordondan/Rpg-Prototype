@@ -65,6 +65,9 @@ func _create_creature_instance() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	# Y-sort: depth tracks Y position so NPCs behind the player render behind them.
+	z_index = int(position.y)
+
 	if is_rival and sight_ray and not _is_defeated() and not _is_recruited():
 		sight_ray.force_raycast_update()
 		if sight_ray.is_colliding():

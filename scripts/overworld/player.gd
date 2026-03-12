@@ -35,7 +35,6 @@ signal player_interacted(facing_tile: Vector2)
 
 func _ready() -> void:
 	add_to_group("player")
-	z_index = 5  # Render above map objects (trees, buildings, props are z_index 0)
 	position = position.snapped(Vector2(TILE_SIZE, TILE_SIZE))
 	_load_character_sprites()
 	_update_sprite_frame()
@@ -94,6 +93,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Y-sort: keep z_index in sync with Y so the player renders behind objects
+	# above them and in front of objects below them.
+	z_index = int(position.y)
+
 	# Handle walk animation frame cycling
 	if _is_walking:
 		_anim_timer += delta
