@@ -1,4 +1,4 @@
-const BASE = '/api'
+export const BASE = `${import.meta.env.BASE_URL}api`
 
 export async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`)

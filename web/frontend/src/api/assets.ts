@@ -1,4 +1,4 @@
-import { get, post, httpDelete } from './client'
+import { get, post, httpDelete, BASE } from './client'
 
 export interface AssetInfo {
   path: string
@@ -16,10 +16,10 @@ export const assetsApi = {
     get<AssetInfo[]>(`/assets/${category ? `?category=${category}` : ''}`),
   summary: () => get<Record<string, number>>('/assets/summary'),
   thumbnailUrl: (path: string, size = 128) =>
-    `/api/assets/thumbnail/${path}?size=${size}`,
-  fileUrl: (path: string) => `/api/assets/file/${path}`,
+    `${BASE}/assets/thumbnail/${path}?size=${size}`,
+  fileUrl: (path: string) => `${BASE}/assets/file/${path}`,
   updateStatus: (path: string, status: string, notes = '') =>
-    fetch(`/api/assets/status/${path}`, {
+    fetch(`${BASE}/assets/status/${path}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, notes }),
@@ -27,7 +27,7 @@ export const assetsApi = {
   upload: (path: string, file: File) => {
     const fd = new FormData()
     fd.append('file', file)
-    return fetch(`/api/assets/upload/${path}`, { method: 'POST', body: fd })
+    return fetch(`${BASE}/assets/upload/${path}`, { method: 'POST', body: fd })
   },
   delete: (path: string) => httpDelete(`/assets/${path}`),
   rename: (oldPath: string, newPath: string) =>

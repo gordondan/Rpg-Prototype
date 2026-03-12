@@ -8,10 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Slider } from '@/components/ui/slider'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash2, Upload, Download, ChevronDown, ChevronRight } from 'lucide-react'
+import { Plus, Trash2, Upload, Download, ChevronDown, ChevronRight, Volume2 } from 'lucide-react'
 import StatRadarChart from '@/components/RadarChart'
 import { TYPE_COLORS, STAT_LABELS } from '@/theme/colors'
-import { type Creature, type DialogueEntry, spritePath } from '@/api/creatures'
+import { type Creature, type DialogueEntry, type SoundEntry, spritePath } from '@/api/creatures'
+import { BASE } from '@/api/client'
 import { type Move, movesApi } from '@/api/moves'
 import { useChanges } from '@/context/ChangeContext'
 import { toast } from 'sonner'
@@ -53,7 +54,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
     const formData = new FormData()
     formData.append('file', file)
     try {
-      const res = await fetch(`/api/assets/upload/${path}`, { method: 'POST', body: formData })
+      const res = await fetch(`${BASE}/assets/upload/${path}`, { method: 'POST', body: formData })
       if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
       setSpriteRev((r) => r + 1)
       markChanged('creatures', id, form, `${form.name}`)
@@ -67,7 +68,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
     const path = spritePath(id, variant)
     const originalPath = path.replace('assets/sprites/creatures/', 'assets/sprites/creatures/original/')
     const a = document.createElement('a')
-    a.href = `/api/assets/file/${originalPath}`
+    a.href = `${BASE}/assets/file/${originalPath}`
     a.download = path.split('/').pop() ?? `${id}.png`
     a.click()
   }
@@ -89,7 +90,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
               <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
                 <img
                   key={`npc-${spriteRev}`}
-                  src={`/api/assets/thumbnail/${form.npc_sprite.replace('res://', '')}?size=128&v=${spriteRev}`}
+                  src={`${BASE}/assets/thumbnail/${form.npc_sprite.replace('res://', '')}?size=128&v=${spriteRev}`}
                   alt={form.name}
                   className="size-20 object-contain"
                   onError={(e) => {
@@ -106,7 +107,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
                 <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
                   <img
                     key={`ow-${spriteRev}`}
-                    src={`/api/assets/thumbnail/${spritePath(id)}?size=128&v=${spriteRev}`}
+                    src={`${BASE}/assets/thumbnail/${spritePath(id)}?size=128&v=${spriteRev}`}
                     alt={`${form.name} overworld`}
                     className="size-20 object-contain"
                     onError={(e) => {
@@ -127,7 +128,7 @@ export default function CreatureForm({ id, creature: initial }: Props) {
                 <div className="size-24 rounded-xl bg-stone-light/20 border border-stone-light/30 flex items-center justify-center overflow-hidden">
                   <img
                     key={`bt-${spriteRev}`}
-                    src={`/api/assets/thumbnail/${spritePath(id, 'battle')}?size=128&v=${spriteRev}`}
+                    src={`${BASE}/assets/thumbnail/${spritePath(id, 'battle')}?size=128&v=${spriteRev}`}
                     alt={`${form.name} battle`}
                     className="size-20 object-contain"
                     onError={(e) => {
@@ -312,6 +313,44 @@ export default function CreatureForm({ id, creature: initial }: Props) {
           </CardContent>
         </Card>
 
+        {/* Sounds */}
+        <Card className="bg-stone/30 border-stone-light/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-gold font-heading text-base">Sounds</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {(form.sounds ?? []).map((entry, i) => (
+                <SoundRow
+                  key={i}
+                  entry={entry}
+                  characterId={id}
+                  onUpdate={(updated) => {
+                    const next = [...(form.sounds ?? [])]
+                    next[i] = updated
+                    update({ sounds: next })
+                  }}
+                  onDelete={() => {
+                    const next = (form.sounds ?? []).filter((_, j) => j !== i)
+                    update({ sounds: next })
+                  }}
+                />
+              ))}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() =>
+                  update({ sounds: [...(form.sounds ?? []), { type: 'attack', path: '' }] })
+                }
+                className="text-gold/70 hover:text-gold"
+              >
+                <Plus className="size-3.5" />
+                Add Sound
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Evolution */}
         <Card className="bg-stone/30 border-stone-light/30">
           <CardHeader className="pb-2">
@@ -453,6 +492,107 @@ export default function CreatureForm({ id, creature: initial }: Props) {
         )}
       </div>
     </ScrollArea>
+  )
+}
+
+const SOUND_TYPES = ['attack', 'defend', 'greet'] as const
+
+function SoundRow({
+  entry,
+  characterId,
+  onUpdate,
+  onDelete,
+}: {
+  entry: SoundEntry
+  characterId: string
+  onUpdate: (entry: SoundEntry) => void
+  onDelete: () => void
+}) {
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const handleUpload = async (file: File) => {
+    const ext = file.name.split('.').pop() ?? 'mp3'
+    const path = `assets/audio/sfx/${characterId}_${entry.type}.${ext}`
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      const res = await fetch(`${BASE}/assets/upload/${path}`, { method: 'POST', body: formData })
+      if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
+      const result = await res.json()
+      const finalPath = result.path ?? path
+      onUpdate({ ...entry, path: `res://${finalPath}` })
+      toast.success(`${entry.type} sound uploaded`)
+    } catch (err) {
+      toast.error(`Upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    }
+  }
+
+  const filename = entry.path ? entry.path.split('/').pop() : null
+
+  return (
+    <div className="flex items-center gap-2">
+      <select
+        value={entry.type}
+        onChange={(e) => onUpdate({ ...entry, type: e.target.value })}
+        className="w-24 bg-stone/50 border border-stone-light/30 text-parchment text-sm h-7 rounded-md px-2"
+      >
+        {SOUND_TYPES.map((t) => (
+          <option key={t} value={t} className="bg-stone text-parchment">
+            {t}
+          </option>
+        ))}
+      </select>
+      <div className="flex-1 flex items-center gap-2 min-w-0">
+        {filename ? (
+          <span className="text-xs text-parchment/60 font-mono truncate">{filename}</span>
+        ) : (
+          <span className="text-xs text-parchment/30 italic">No file</span>
+        )}
+        {entry.path && (
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            title="Play"
+            onClick={() => {
+              const audioPath = entry.path.replace('res://', '')
+              const audio = new Audio(`${BASE}/assets/file/${audioPath}`)
+              audio.play()
+            }}
+            className="text-parchment/40 hover:text-gold shrink-0"
+          >
+            <Volume2 className="size-3" />
+          </Button>
+        )}
+      </div>
+      <input
+        ref={fileRef}
+        type="file"
+        accept=".mp3,.ogg,.wav"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0]
+          if (f) handleUpload(f)
+          e.target.value = ''
+        }}
+      />
+      <Button
+        variant="ghost"
+        size="icon-xs"
+        title="Upload sound"
+        onClick={() => fileRef.current?.click()}
+        className="text-parchment/40 hover:text-gold shrink-0"
+      >
+        <Upload className="size-3" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-xs"
+        onClick={onDelete}
+        className="text-parchment/40 hover:text-destructive shrink-0"
+      >
+        <Trash2 className="size-3" />
+      </Button>
+    </div>
   )
 }
 

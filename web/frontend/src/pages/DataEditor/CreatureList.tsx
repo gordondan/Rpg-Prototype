@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Search, Plus, ChevronDown, ChevronRight, X, RefreshCw } from 'lucide-react'
 import { TYPE_COLORS } from '@/theme/colors'
 import { type Creature, spritePath, creaturesApi } from '@/api/creatures'
+import { BASE } from '@/api/client'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 
@@ -156,7 +157,7 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
 
   const handleReprocess = async () => {
     try {
-      const res = await fetch('/api/assets/reprocess-sprites', { method: 'POST' })
+      const res = await fetch(`${BASE}/assets/reprocess-sprites`, { method: 'POST' })
       if (!res.ok) throw new Error(`Reprocess failed: ${res.status}`)
       const data = await res.json()
       toast.success(`Reprocessed ${data.count} sprites`)
@@ -387,7 +388,7 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
             >
               <div className="flex size-10 items-center justify-center rounded-lg bg-stone-light/30 overflow-hidden shrink-0">
                 <img
-                  src={`/api/assets/thumbnail/${creature.npc_sprite ? creature.npc_sprite.replace('res://', '') : spritePath(id, 'battle')}?size=64`}
+                  src={`${BASE}/assets/thumbnail/${creature.npc_sprite ? creature.npc_sprite.replace('res://', '') : spritePath(id, 'battle')}?size=64`}
                   alt={creature.name}
                   className="size-8 object-contain"
                   onError={(e) => {
