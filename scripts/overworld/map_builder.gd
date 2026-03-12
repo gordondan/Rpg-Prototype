@@ -594,13 +594,6 @@ func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extr
 		for key in extras:
 			npc.set(key, extras[key])
 
-	# Collision
-	var col := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = Vector2(14, 14)
-	col.shape = rect
-	npc.add_child(col)
-
 	# AnimatedSprite2D (required by npc.gd)
 	var sprite := AnimatedSprite2D.new()
 	sprite.name = "AnimatedSprite2D"
@@ -612,17 +605,19 @@ func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extr
 	sight_ray.target_position = Vector2(0, 64)
 	npc.add_child(sight_ray)
 
-	# Load sprite from dialogue data if available
+	# Load sprite from dialogue data if available — do this before collision so
+	# we can size the hitbox to match the actual sprite width.
 	var npc_data: Dictionary = DialogueManager.get_dialogue_data(dialogue_id)
 	var sprite_path: String = npc_data.get("sprite", "")
 	var sprite_loaded := false
+	var loaded_tex: Texture2D = null
 	if sprite_path != "":
-		var tex := _load_texture(sprite_path)
-		if tex:
+		loaded_tex = _load_texture(sprite_path)
+		if loaded_tex:
 			var npc_sprite := Sprite2D.new()
 			npc_sprite.name = "NPCSprite"
-			npc_sprite.texture = tex
-			npc_sprite.offset = Vector2(0, -tex.get_height() / 2.0)
+			npc_sprite.texture = loaded_tex
+			npc_sprite.offset = Vector2(0, -loaded_tex.get_height() / 2.0)
 			npc_sprite.z_index = 1
 			npc.add_child(npc_sprite)
 			sprite_loaded = true
@@ -635,6 +630,21 @@ func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extr
 		placeholder.position = Vector2(-6, -6)
 		placeholder.color = _get_npc_color(npc_name)
 		npc.add_child(placeholder)
+
+	# Collision — sized to match the sprite footprint.
+	# Width mirrors the sprite width (clamped to a sensible range).
+	# Height is a fixed 12 px representing the character's feet at ground level.
+	# The shape is offset upward by half its height so it sits at the base of the sprite.
+	var col_w := 14.0
+	var col_h := 12.0
+	if loaded_tex:
+		col_w = clampf(float(loaded_tex.get_width()), 10.0, 32.0)
+	var col := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2(col_w, col_h)
+	col.position = Vector2(0, -col_h / 2.0)
+	col.shape = rect
+	npc.add_child(col)
 
 	add_child(npc)
 	npc.add_to_group("npc")
