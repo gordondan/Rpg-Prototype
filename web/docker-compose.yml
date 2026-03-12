@@ -1,6 +1,7 @@
 services:
   api:
     build: .
+    container_name: monsta-quest-api
     volumes:
       - ${REPO_PATH:-/Users/gordon/Documents/Tyrell/monster-game}:/repo
     environment:
@@ -9,6 +10,7 @@ services:
 
   nginx:
     image: nginx:alpine
+    container_name: monsta-quest-nginx
     ports:
       - "8080:80"
     volumes:
