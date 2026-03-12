@@ -1339,7 +1339,7 @@
     "learnset": [
       {
         "level": 1,
-        "move_id": ""
+        "move_id": "new_move_1"
       }
     ],
     "has_overworld_sprite": true,
