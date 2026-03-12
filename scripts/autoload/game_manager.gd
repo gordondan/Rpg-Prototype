@@ -30,6 +30,7 @@ var story_flags: Dictionary = {}
 
 # Quest tracking
 var quests: Dictionary = {}  # {quest_id: {"status": "active"/"completed", "step": int}}
+var _pending_quest_advances: Dictionary = {}  # steps banked before the quest was started
 
 # Saved player position for returning from battles
 var _saved_player_position: Vector2 = Vector2.ZERO
@@ -226,12 +227,20 @@ func get_flag(flag_name: String) -> bool:
 func start_quest(quest_id: String) -> void:
 	if quest_id in quests:
 		return
-	quests[quest_id] = {"status": "active", "step": 0}
-	print("[GameManager] Quest started: %s" % quest_id)
+	# Apply any steps that were banked before this quest was given.
+	# This handles the case where a quest target (e.g. a boss) was defeated
+	# before the player ever picked up the quest.
+	var banked: int = _pending_quest_advances.get(quest_id, 0)
+	_pending_quest_advances.erase(quest_id)
+	quests[quest_id] = {"status": "active", "step": banked}
+	print("[GameManager] Quest started: %s (step %d)" % [quest_id, banked])
 
 
 func advance_quest_step(quest_id: String) -> void:
 	if quests.get(quest_id, {}).get("status") != "active":
+		# Quest not yet started — bank the advance so start_quest can apply it later.
+		_pending_quest_advances[quest_id] = _pending_quest_advances.get(quest_id, 0) + 1
+		print("[GameManager] Quest '%s' not active — step advance banked" % quest_id)
 		return
 	quests[quest_id]["step"] = quests[quest_id]["step"] + 1
 	print("[GameManager] Quest %s advanced to step %d" % [quest_id, quests[quest_id]["step"]])
