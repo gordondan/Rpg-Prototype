@@ -1340,6 +1340,14 @@
       {
         "level": 1,
         "move_id": "new_move_1"
+      },
+      {
+        "level": 1,
+        "move_id": "dirty_trick"
+      },
+      {
+        "level": 1,
+        "move_id": "dagger_jab"
       }
     ],
     "has_overworld_sprite": true,
