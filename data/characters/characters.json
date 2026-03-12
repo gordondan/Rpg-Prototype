@@ -1911,5 +1911,29 @@
         ]
       }
     }
+  },
+  "new_creature_3": {
+    "name": "Bad news Rabbit",
+    "description": "What a rabbit!? 1,2 5",
+    "types": [
+      "normal"
+    ],
+    "base_hp": 50,
+    "base_attack": 50,
+    "base_defense": 50,
+    "base_sp_attack": 50,
+    "base_sp_defense": 50,
+    "base_speed": 50,
+    "base_exp": 50,
+    "class": "monster",
+    "category": "wild",
+    "learnset": [
+      {
+        "level": 1,
+        "move_id": "dirty_trick"
+      }
+    ],
+    "has_overworld_sprite": false,
+    "has_battle_sprite": false
   }
 }
