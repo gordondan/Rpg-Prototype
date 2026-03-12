@@ -371,6 +371,9 @@
     "accuracy": 150,
     "pp": 200,
     "description": "Danger danger",
-    "priority": 1
+    "priority": 1,
+    "effect": {
+      "target": "enemy"
+    }
   }
 }
