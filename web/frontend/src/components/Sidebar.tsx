@@ -13,6 +13,7 @@ import {
   PawPrint,
   ScrollText,
   Users,
+  Gamepad2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -105,6 +106,25 @@ export default function Sidebar({
                 {!collapsed && link.label}
               </NavLink>
             ))}
+
+          {/* Separator */}
+          <div className="mx-2 my-2 h-px bg-stone-light/30" />
+
+          {/* Play Game */}
+          <a
+            href={`${import.meta.env.BASE_URL}game/`.replace(/\/\/$/, '/')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors',
+              collapsed && 'justify-center px-0',
+              'text-parchment/70 hover:text-parchment hover:bg-stone-light/30'
+            )}
+            title={collapsed ? 'Play Game' : undefined}
+          >
+            <Gamepad2 className="size-4 shrink-0" />
+            {!collapsed && 'Play Game'}
+          </a>
 
           {/* Separator */}
           <div className="mx-2 my-2 h-px bg-stone-light/30" />

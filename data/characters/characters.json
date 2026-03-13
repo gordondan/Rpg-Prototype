@@ -1943,5 +1943,24 @@
     ],
     "has_overworld_sprite": false,
     "has_battle_sprite": false
+  },
+  "new_creature_4": {
+    "name": "Morginson",
+    "description": "An evil ogre who lives in a castle and terrorises the surrounding countryside",
+    "types": [
+      "normal"
+    ],
+    "base_hp": 50,
+    "base_attack": 50,
+    "base_defense": 50,
+    "base_sp_attack": 50,
+    "base_sp_defense": 50,
+    "base_speed": 50,
+    "base_exp": 50,
+    "class": "monster",
+    "category": "wild",
+    "learnset": [],
+    "has_overworld_sprite": false,
+    "has_battle_sprite": false
   }
 }
