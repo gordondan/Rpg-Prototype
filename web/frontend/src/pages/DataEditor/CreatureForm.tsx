@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Slider } from '@/components/ui/slider'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash2, Upload, Download, ChevronDown, ChevronRight, Volume2 } from 'lucide-react'
+import { Plus, Trash2, Upload, ChevronDown, ChevronRight, Volume2 } from 'lucide-react'
 import StatRadarChart from '@/components/RadarChart'
 import { TYPE_COLORS, STAT_LABELS } from '@/theme/colors'
 import { type Creature, type DialogueEntry, type SoundEntry, type RosterEntry, spritePath, creaturesApi } from '@/api/creatures'
@@ -16,6 +16,8 @@ import { BASE } from '@/api/client'
 import { type Move, movesApi } from '@/api/moves'
 import { useChanges } from '@/context/ChangeContext'
 import { toast } from 'sonner'
+import ImageUpload from '@/components/ImageUpload'
+import { type AnimationInfo, assetsApi } from '@/api/assets'
 
 interface Props {
   id: string
@@ -28,8 +30,6 @@ export default function CreatureForm({ id, creature: initial }: Props) {
   const [moves, setMoves] = useState<Record<string, Move>>({})
   const [allCreatures, setAllCreatures] = useState<Record<string, Creature>>({})
   const { markChanged } = useChanges()
-  const owUploadRef = useRef<HTMLInputElement>(null)
-  const btUploadRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     movesApi.list().then(setMoves)
@@ -49,30 +49,6 @@ export default function CreatureForm({ id, creature: initial }: Props) {
 
   const updateStat = (key: string, value: number) => {
     update({ [key]: value } as unknown as Partial<Creature>)
-  }
-
-  const uploadSprite = async (file: File, variant: 'overworld' | 'battle') => {
-    const path = spritePath(id, variant)
-    const formData = new FormData()
-    formData.append('file', file)
-    try {
-      const res = await fetch(`${BASE}/assets/upload/${path}`, { method: 'POST', body: formData })
-      if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
-      setSpriteRev((r) => r + 1)
-      markChanged('creatures', id, form, `${form.name}`)
-      toast.success(`${variant} sprite uploaded`)
-    } catch (err) {
-      toast.error(`Upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
-    }
-  }
-
-  const downloadSprite = (variant: 'overworld' | 'battle') => {
-    const path = spritePath(id, variant)
-    const originalPath = path.replace('assets/sprites/creatures/', 'assets/sprites/creatures/original/')
-    const a = document.createElement('a')
-    a.href = `${BASE}/assets/file/${originalPath}`
-    a.download = path.split('/').pop() ?? `${id}.png`
-    a.click()
   }
 
   const statKeys = Object.keys(STAT_LABELS) as (keyof Creature)[]
@@ -122,11 +98,6 @@ export default function CreatureForm({ id, creature: initial }: Props) {
                   />
                 </div>
                 <span className="text-[10px] text-parchment/40">Overworld</span>
-                <div className="flex gap-1">
-                  <input ref={owUploadRef} type="file" accept="image/png,image/jpeg,image/gif" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'overworld'); e.target.value = '' }} />
-                  <Button variant="ghost" size="icon-xs" title="Upload" onClick={() => owUploadRef.current?.click()} className="text-parchment/40 hover:text-gold"><Upload className="size-3" /></Button>
-                  <Button variant="ghost" size="icon-xs" title="Download" onClick={() => downloadSprite('overworld')} className="text-parchment/40 hover:text-gold"><Download className="size-3" /></Button>
-                </div>
               </div>
 
               {/* Battle sprite */}
@@ -143,11 +114,6 @@ export default function CreatureForm({ id, creature: initial }: Props) {
                   />
                 </div>
                 <span className="text-[10px] text-parchment/40">Battle</span>
-                <div className="flex gap-1">
-                  <input ref={btUploadRef} type="file" accept="image/png,image/jpeg,image/gif" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSprite(f, 'battle'); e.target.value = '' }} />
-                  <Button variant="ghost" size="icon-xs" title="Upload" onClick={() => btUploadRef.current?.click()} className="text-parchment/40 hover:text-gold"><Upload className="size-3" /></Button>
-                  <Button variant="ghost" size="icon-xs" title="Download" onClick={() => downloadSprite('battle')} className="text-parchment/40 hover:text-gold"><Download className="size-3" /></Button>
-                </div>
               </div>
             </>
           )}
@@ -213,6 +179,55 @@ export default function CreatureForm({ id, creature: initial }: Props) {
         </div>
 
         <Separator className="bg-stone-light/30" />
+
+        {/* Sprites & Animations */}
+        <Card className="bg-stone/30 border-stone-light/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-gold font-heading text-base">Sprites & Animations</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {/* Character sprite uploads */}
+              {!form.npc_sprite && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-parchment/60 text-xs mb-2 block">Overworld Sprite</Label>
+                    <ImageUpload
+                      allowedTypes={['character']}
+                      entityId={id}
+                      variant="overworld"
+                      onUpload={() => setSpriteRev((r) => r + 1)}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-parchment/60 text-xs mb-2 block">Battle Sprite</Label>
+                    <ImageUpload
+                      allowedTypes={['character']}
+                      entityId={id}
+                      variant="battle"
+                      onUpload={() => setSpriteRev((r) => r + 1)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <Separator className="bg-stone-light/30" />
+
+              {/* Animation uploads */}
+              <div>
+                <Label className="text-parchment/60 text-xs mb-2 block">Add Animation</Label>
+                <ImageUpload
+                  allowedTypes={['sprite2d', 'player']}
+                  entityId={id}
+                  onUpload={() => setSpriteRev((r) => r + 1)}
+                />
+              </div>
+
+              {/* List existing animations */}
+              <AnimationList creatureId={id} rev={spriteRev} />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Stats */}
         <Card className="bg-stone/30 border-stone-light/30">
@@ -853,6 +868,51 @@ function DialogueBlock({
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function AnimationList({ creatureId, rev }: { creatureId: string; rev: number }) {
+  const [animations, setAnimations] = useState<AnimationInfo[]>([])
+
+  useEffect(() => {
+    assetsApi.listAnimations(creatureId).then(setAnimations).catch(() => setAnimations([]))
+  }, [creatureId, rev])
+
+  if (animations.length === 0) return null
+
+  return (
+    <div className="space-y-2">
+      <Label className="text-parchment/60 text-xs">Existing Animations</Label>
+      {animations.map((anim) => (
+        <div
+          key={anim.name}
+          className="flex items-center gap-3 rounded-md border border-stone-light/20 bg-stone/20 px-3 py-2"
+        >
+          <div className="size-10 rounded bg-stone-light/10 border border-stone-light/20 flex items-center justify-center overflow-hidden">
+            <img
+              src={assetsApi.thumbnailUrl(
+                `assets/sprites/creatures/${creatureId}/${anim.name}/spritesheet.png`,
+                64,
+              )}
+              alt={anim.name}
+              className="size-8 object-contain"
+              style={{ imageRendering: 'pixelated' }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm text-parchment font-mono">{anim.name}</p>
+            <p className="text-xs text-parchment/40">
+              {anim.meta.frame_count} frames, {anim.meta.fps} FPS, {anim.meta.frame_width}x{anim.meta.frame_height}px
+              {anim.meta.loop ? ', loop' : ''}
+            </p>
+          </div>
+          <span className={`text-xs ${anim.has_tres ? 'text-green-400' : 'text-amber-400'}`}>
+            {anim.has_tres ? '.tres' : 'no .tres'}
+          </span>
+        </div>
+      ))}
     </div>
   )
 }
