@@ -164,8 +164,10 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
     } catch {
       setViewOrder(prev => [id, ...prev.filter(x => x !== id)])
     }
-    const viewport = listRef.current?.querySelector('[data-slot="scroll-area-viewport"]')
-    viewport?.scrollTo({ top: 0 })
+    requestAnimationFrame(() => {
+      const viewport = listRef.current?.querySelector('[data-slot="scroll-area-viewport"]')
+      viewport?.scrollTo({ top: 0 })
+    })
   }
 
   const handleCreate = async () => {
