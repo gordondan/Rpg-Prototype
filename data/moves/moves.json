@@ -433,5 +433,19 @@
       "stages": 2,
       "target": "ally"
     }
+  },
+
+  "venom_cloud": {
+    "name": "Venom Cloud",
+    "type": "poison",
+    "category": "status",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 20,
+    "description": "Exhales a dense cloud of corrosive venom that poisons the target.",
+    "effect": {
+      "status": "poison",
+      "target": "enemy"
+    }
   }
 }
