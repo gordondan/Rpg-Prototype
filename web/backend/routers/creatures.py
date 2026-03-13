@@ -25,6 +25,19 @@ def list_creatures():
     return creatures
 
 
+@router.get("/view-order")
+def get_view_order():
+    return data_svc.get_view_order()
+
+
+@router.put("/view-order/{creature_id}")
+def select_view_order(creature_id: str):
+    if not data_svc.get_creature(creature_id):
+        raise HTTPException(404, f"Creature '{creature_id}' not found")
+    order = data_svc.select_view_order(creature_id)
+    return order
+
+
 @router.get("/{creature_id}")
 def get_creature(creature_id: str):
     creature = data_svc.get_creature(creature_id)
@@ -66,6 +79,7 @@ def create_creature(category: str = "wild"):
         "learnset": [],
     }
     data_svc.create_creature(creature_id, creature_data)
+    data_svc.add_to_view_order(creature_id)
     return {"status": "created", "creature_id": creature_id}
 
 
@@ -73,4 +87,5 @@ def create_creature(category: str = "wild"):
 def delete_creature(creature_id: str):
     if not data_svc.delete_creature(creature_id):
         raise HTTPException(404, f"Creature '{creature_id}' not found")
+    data_svc.remove_from_view_order(creature_id)
     return {"status": "deleted", "creature_id": creature_id}
