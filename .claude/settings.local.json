@@ -53,7 +53,12 @@
       "Bash(\"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/web/.venv/Scripts/python\" -c \"\nfrom PIL import Image\nimport numpy as np\nimg = Image.open\\('C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype/assets/sprites/creatures/alexia_battle.png'\\)\na = np.array\\(img.split\\(\\)[3]\\)\nprint\\('Transparent px:', \\(a==0\\).sum\\(\\), '/', a.size\\)\n\" 2>&1)",
       "Bash(powershell.exe -NoProfile -Command \"Get-Process python* | Stop-Process -Force\" 2>&1; sleep 2 && echo \"All Python killed\")",
       "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && grep -A2 '\"category\": \"npc\"' data/creatures/creatures.json)",
-      "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && grep '\"name\"' data/creatures/creatures.json)"
+      "Bash(cd \"C:/Users/tyrel/Documents/monster-quest/Rpg-Prototype\" && grep '\"name\"' data/creatures/creatures.json)",
+      "Bash(find \"/c/Users/tyrel/Documents/monster-quest/Rpg-Prototype/web\" -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.env*\" -o -name \"docker*\" -o -name \"nginx*\" \\\\\\) 2>/dev/null | head -20)",
+      "Bash(start https://rpg.dagordons.com/monsta-quest)",
+      "Bash(where godot:*)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)"
     ]
   }
 }

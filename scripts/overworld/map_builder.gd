@@ -3,8 +3,9 @@ extends Node2D
 ## Creates TileMapLayers for ground and roads, places buildings/trees/props as sprites.
 
 const TILE := 16
-const MAP_W := 40
-const MAP_H := 30
+const MAP_W := 80  # West half (cols 0-39) + Route 3 east half (cols 40-79)
+const MAP_H := 60  # Village (rows 0-29) + Route 2/3 (rows 30-59)
+const VILLAGE_W := 40  # Columns belonging to the village / Route 2
 
 # --- Tileset image paths ---
 const GROUND_IMG := "res://assets/sprites/tilesets/The Fan-tasy Tileset (Free)/Art/Ground Tileset/Tileset_Ground.png"
@@ -84,6 +85,9 @@ func _ready() -> void:
 	_place_encounter_areas()
 	_place_npcs()
 	_place_map_borders()
+	_build_route_2()
+	_build_route_3()
+	_update_camera_limits()
 
 
 # --- Texture loading (bypasses Godot import system) ---
@@ -134,6 +138,16 @@ func _define_road_layout() -> void:
 	for x in range(20, 28):
 		_road_cells[Vector2i(x, 7)] = true
 		_road_cells[Vector2i(x, 8)] = true
+
+	# Route 2 south path — continues the central road through the wilderness
+	for y in range(28, 57):
+		_road_cells[Vector2i(19, y)] = true
+		_road_cells[Vector2i(20, y)] = true
+
+	# Route 3 east path — horizontal branch from the south road into Route 3
+	for x in range(21, 74):
+		_road_cells[Vector2i(x, 43)] = true
+		_road_cells[Vector2i(x, 44)] = true
 
 
 # --- TileMap construction ---
@@ -306,10 +320,24 @@ func _place_trees() -> void:
 		if x < 8 or x > 32:
 			_place_sprite_at_tile(key, x, 3, Vector2(24, 16))
 
-	# Bottom border trees
+	# Bottom border trees (actual map edge)
 	for x in range(0, MAP_W, 2):
 		var key: String = tree_keys[randi() % tree_keys.size()]
 		_place_sprite_at_tile(key, x, MAP_H - 1, Vector2(24, 16))
+
+	# Village south boundary at row 29 — tree wall with a gap for the south exit
+	for x in range(0, VILLAGE_W, 2):
+		if x >= 18 and x <= 20:
+			continue  # Leave exit path open (aligns with central road cols 19-20)
+		var key: String = tree_keys[randi() % tree_keys.size()]
+		_place_sprite_at_tile(key, x, 29, Vector2(24, 16))
+
+	# Village east boundary at col 39-41 — tree wall stopping players from
+	# walking east into Route 3 from inside the village (rows 0-29)
+	for y in range(2, 29, 2):
+		var key: String = tree_keys[randi() % tree_keys.size()]
+		_place_sprite_at_tile(key, VILLAGE_W - 1, y, Vector2(24, 16))
+		_place_sprite_at_tile(key, VILLAGE_W + 1, y, Vector2(24, 16))
 
 	# Left border trees
 	for y in range(2, MAP_H - 1, 2):
@@ -381,14 +409,14 @@ func _place_encounter_areas() -> void:
 	_create_encounter_area("east_grass", 27, 21, 8, 5)
 
 
-func _create_encounter_area(area_name: String, tile_x: int, tile_y: int, width: int, height: int) -> void:
+func _create_encounter_area(area_name: String, tile_x: int, tile_y: int, width: int, height: int, table_id: String = "route_1") -> void:
 	var area := Area2D.new()
 	area.name = area_name
 	var script := load("res://scripts/overworld/grass_area.gd")
 	if script:
 		area.set_script(script)
 		area.set("encounter_rate", 0.15)
-		area.set("encounter_table_id", "route_1")
+		area.set("encounter_table_id", table_id)
 
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
@@ -502,25 +530,25 @@ func _place_npcs() -> void:
 	# FUTURE ROUTE BOSSES — uncomment and set tile_pos when building each route
 	# -------------------------------------------------------------------------
 
-	# Grix — bat tamer, early route boss (bats + goblin fodder)
-	# if not GameManager.get_flag("grix_defeated"):
-	# 	_create_npc("Grix", "grix", Vector2i(0, 0), {
-	# 		"is_rival": true,
-	# 		"rival_party": [
-	# 			{"creature_id": "goblin", "level": 5},
-	# 			{"creature_id": "giant_bat", "level": 4},
-	# 			{"creature_id": "giant_bat", "level": 4},
-	# 		],
-	# 		"rival_reserves": [
-	# 			{"creature_id": "giant_bat", "level": 3},
-	# 			{"creature_id": "goblin", "level": 2},
-	# 			{"creature_id": "goblin", "level": 2},
-	# 		],
-	# 		"defeated_flag": "grix_defeated",
-	# 		"post_defeat_dialogue_id": "grix_defeated",
-	# 		"disappear_on_defeat": true,
-	# 		"line_of_sight_range": 4,
-	# 	})
+	# Grix — bat tamer, Route 2 boss
+	if not GameManager.get_flag("grix_defeated"):
+		_create_npc("Grix", "grix", Vector2i(19, 53), {
+			"is_rival": true,
+			"rival_party": [
+				{"creature_id": "goblin", "level": 5},
+				{"creature_id": "giant_bat", "level": 4},
+				{"creature_id": "giant_bat", "level": 4},
+			],
+			"rival_reserves": [
+				{"creature_id": "giant_bat", "level": 3},
+				{"creature_id": "goblin", "level": 2},
+				{"creature_id": "goblin", "level": 2},
+			],
+			"defeated_flag": "grix_defeated",
+			"post_defeat_dialogue_id": "grix_defeated",
+			"disappear_on_defeat": true,
+			"line_of_sight_range": 5,
+		})
 
 	# Skrag — mixed raider, uses ork_grunt + ork_warrior alongside firebomber
 	# if not GameManager.get_flag("skrag_defeated"):
@@ -690,6 +718,14 @@ func _place_map_borders() -> void:
 	_add_wall(Vector2(MAP_W * TILE + border_thickness / 2.0, MAP_H * TILE / 2.0),
 			  Vector2(border_thickness, MAP_H * TILE + border_thickness * 2))
 
+	# Internal east village wall — blocks access into the eastern wilderness
+	# from inside the village (rows 0-29). Route 3 is only reachable via Route 2.
+	var village_wall_height := float(30 * TILE)
+	_add_wall(
+		Vector2(VILLAGE_W * TILE, village_wall_height / 2.0),
+		Vector2(border_thickness, village_wall_height)
+	)
+
 
 func _add_wall(pos: Vector2, size: Vector2) -> void:
 	var body := StaticBody2D.new()
@@ -700,3 +736,156 @@ func _add_wall(pos: Vector2, size: Vector2) -> void:
 	col.shape = rect
 	body.add_child(col)
 	add_child(body)
+
+
+# ─── Route 2 — The Deepwood ─────────────────────────────────────────────────
+
+func _build_route_2() -> void:
+	## Populate the wilderness south of the village (rows 30-58).
+	## The central road is already extended by _define_road_layout().
+	_place_route2_marker()
+	_place_route2_encounter_areas()
+	_place_route2_trees()
+	_place_route2_props()
+
+
+func _place_route2_marker() -> void:
+	## Waymarker sign at the top of Route 2, just past the village exit.
+	_place_sprite_at_tile("sign2", 21, 31, Vector2(16, 14))
+
+
+func _place_route2_encounter_areas() -> void:
+	## Three tall-grass encounter zones using the route_2 table.
+	# West wilderness patch
+	_create_encounter_area("route2_west",  4, 36, 10, 9, "route_2")
+	# East wilderness patch
+	_create_encounter_area("route2_east", 26, 36, 10, 9, "route_2")
+	# South patch near Grix — more dangerous area
+	_create_encounter_area("route2_south", 9, 50,  8, 6, "route_2")
+
+
+func _place_route2_trees() -> void:
+	## Sparse trees for the open-wilderness feel — fewer than the village.
+	var tree_keys := ["tree1", "tree2", "tree3", "tree4"]
+	var bush_keys := ["bush1", "bush2", "bush3"]
+
+	# Northern scatter (just past the village boundary)
+	var north_trees := [
+		Vector2i(6, 32), Vector2i(13, 31), Vector2i(24, 32), Vector2i(34, 31),
+	]
+	for pos in north_trees:
+		_place_sprite_at_tile(tree_keys[randi() % tree_keys.size()], pos.x, pos.y, Vector2(24, 16))
+
+	# Mid scatter (flanking the encounter zones)
+	var mid_trees := [
+		Vector2i(4, 39), Vector2i(8, 42), Vector2i(30, 40), Vector2i(36, 38),
+		Vector2i(5, 45), Vector2i(35, 44),
+	]
+	for pos in mid_trees:
+		_place_sprite_at_tile(tree_keys[randi() % tree_keys.size()], pos.x, pos.y, Vector2(24, 16))
+
+	# Southern scatter (approaches Grix)
+	var south_trees := [
+		Vector2i(6, 49), Vector2i(14, 51), Vector2i(25, 52), Vector2i(34, 50),
+		Vector2i(10, 56), Vector2i(29, 57),
+	]
+	for pos in south_trees:
+		_place_sprite_at_tile(tree_keys[randi() % tree_keys.size()], pos.x, pos.y, Vector2(24, 16))
+
+	# Sparse bushes
+	var bushes := [
+		Vector2i(11, 35), Vector2i(28, 34),
+		Vector2i(7, 44), Vector2i(33, 45),
+		Vector2i(22, 49),
+	]
+	for pos in bushes:
+		_place_sprite_at_tile(bush_keys[randi() % bush_keys.size()], pos.x, pos.y, Vector2(16, 12))
+
+
+func _place_route2_props() -> void:
+	## Wilderness props: old stumps, abandoned gear, and a rough camp feel.
+	# Old chopped tree stumps — travelers have passed through
+	_place_sprite_at_tile("chopped_tree", 12, 34, Vector2(20, 12))
+	_place_sprite_at_tile("chopped_tree", 27, 35, Vector2(20, 12))
+	_place_sprite_at_tile("chopped_tree",  7, 47, Vector2(20, 12))
+	_place_sprite_at_tile("chopped_tree", 32, 46, Vector2(20, 12))
+
+	# Abandoned gear along the road
+	_place_sprite_at_tile("barrel",  16, 38, Vector2(14, 14))  # Old barrel by the path
+	_place_sprite_at_tile("crate",   23, 42, Vector2(16, 14))  # Abandoned crate
+	_place_sprite_at_tile("sack",    17, 47, Vector2(12, 12))  # Dropped sack
+
+	# Rough camp near the south encounter area
+	_place_sprite_at_tile("haystack", 11, 51, Vector2(20, 14))
+	_place_sprite_at_tile("barrel",   13, 52, Vector2(14, 14))
+
+
+# ─── Route 3 — Eastern Wilderness ───────────────────────────────────────────
+
+func _build_route_3() -> void:
+	## Populate the eastern wilderness (cols 40-79, rows 30-59).
+	## Accessible via the horizontal path from Route 2 at rows 43-44.
+	## Uses the route_1 encounter pool (village-tier creatures).
+	_place_route3_encounter_areas()
+	_place_route3_trees()
+	_place_route3_props()
+
+
+func _place_route3_encounter_areas() -> void:
+	## Three encounter zones spread across the eastern wilderness.
+	_create_encounter_area("route3_north", 44, 32, 10, 9, "route_1")
+	_create_encounter_area("route3_south", 60, 47, 10, 8, "route_1")
+	_create_encounter_area("route3_far",   44, 50,  8, 6, "route_1")
+
+
+func _place_route3_trees() -> void:
+	## Sparse trees mirroring the open-wilderness feel of Route 2.
+	var tree_keys := ["tree1", "tree2", "tree3", "tree4"]
+	var bush_keys := ["bush1", "bush2", "bush3"]
+
+	var trees := [
+		Vector2i(42, 31), Vector2i(52, 30), Vector2i(63, 32), Vector2i(73, 31),
+		Vector2i(41, 40), Vector2i(56, 39), Vector2i(70, 41), Vector2i(77, 38),
+		Vector2i(43, 50), Vector2i(58, 52), Vector2i(68, 49), Vector2i(76, 51),
+		Vector2i(48, 57), Vector2i(66, 56),
+	]
+	for pos in trees:
+		_place_sprite_at_tile(tree_keys[randi() % tree_keys.size()], pos.x, pos.y, Vector2(24, 16))
+
+	var bushes := [
+		Vector2i(55, 36), Vector2i(67, 35),
+		Vector2i(46, 47), Vector2i(73, 46),
+		Vector2i(59, 54),
+	]
+	for pos in bushes:
+		_place_sprite_at_tile(bush_keys[randi() % bush_keys.size()], pos.x, pos.y, Vector2(16, 12))
+
+
+func _place_route3_props() -> void:
+	## Scattered props giving the eastern wilderness its own identity.
+	# Chopped stumps
+	_place_sprite_at_tile("chopped_tree", 50, 35, Vector2(20, 12))
+	_place_sprite_at_tile("chopped_tree", 69, 37, Vector2(20, 12))
+	_place_sprite_at_tile("chopped_tree", 53, 53, Vector2(20, 12))
+
+	# Abandoned traveller gear
+	_place_sprite_at_tile("barrel",    64, 42, Vector2(14, 14))
+	_place_sprite_at_tile("crate",     54, 46, Vector2(16, 14))
+	_place_sprite_at_tile("sack",      72, 50, Vector2(12, 12))
+
+	# Small waymarker at the entrance from Route 2
+	_place_sprite_at_tile("sign1", 42, 43, Vector2(16, 14))
+
+
+# ─── Camera ─────────────────────────────────────────────────────────────────
+
+func _update_camera_limits() -> void:
+	## Sync the player's Camera2D limits to the full map dimensions.
+	## Called after building so the camera covers the expanded map.
+	var player := get_parent().get_node_or_null("Player")
+	if not player:
+		return
+	var cam := player.get_node_or_null("Camera2D")
+	if cam is Camera2D:
+		cam.limit_right = MAP_W * TILE
+		cam.limit_bottom = MAP_H * TILE

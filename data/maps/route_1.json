@@ -1,6 +1,6 @@
 {
-  "name": "The King's Road",
-  "description": "A well-worn trade road leading from the village to the frontier. Bandits and wanderers frequent the tall brush.",
+  "name": "Village",
+  "description": "The village outskirts. Goblins and wanderers lurk in the tall brush around the settlement.",
   "encounters": [
     {"creature_id": "goblin", "level_min": 2, "level_max": 5, "weight": 45},
     {"creature_id": "spark_thief", "level_min": 2, "level_max": 5, "weight": 15},

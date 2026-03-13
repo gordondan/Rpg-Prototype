@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84nbyo6le07n"
-path="res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"
+uid="uid://bicjsxstvf1fd"
+path="res://.godot/imported/wind_scout.png-f77706d5720ca989e0876625141f75ad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/creatures/original/new_creature_2.png"
-dest_files=["res://.godot/imported/new_creature_2.png-1ce5e776ea91f922633e0131bbd06ddf.ctex"]
+source_file="res://assets/sprites/creatures/original/wind_scout.png"
+dest_files=["res://.godot/imported/wind_scout.png-f77706d5720ca989e0876625141f75ad.ctex"]
 
 [params]
 

@@ -1,6 +1,6 @@
 {
-  "name": "The Deepwood",
-  "description": "A dense and untamed wilderness beyond the King's Road. Orc warbands patrol the treeline and things with wings hunt from above.",
+  "name": "Village Road",
+  "description": "The road south of the village. Orc warbands patrol the treeline and things with wings hunt from above.",
   "encounters": [
     {"creature_id": "ork_grunt", "level_min": 4, "level_max": 7, "weight": 30},
     {"creature_id": "goblin", "level_min": 4, "level_max": 7, "weight": 22},

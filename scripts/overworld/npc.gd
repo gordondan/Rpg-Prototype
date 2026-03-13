@@ -184,8 +184,10 @@ func _on_rival_defeated(result: String) -> void:
 	if result == "win":
 		if defeated_flag != "":
 			GameManager.set_flag(defeated_flag)
-		# Advance any quest that requires defeating this rival
-		if defeat_quest_id != "" and GameManager.is_quest_active(defeat_quest_id):
+		# Advance (or bank) the quest step for defeating this rival.
+		# advance_quest_step handles the case where the quest hasn't been
+		# started yet — the step is banked and applied when the quest is given.
+		if defeat_quest_id != "":
 			GameManager.advance_quest_step(defeat_quest_id)
 		# Disappear-on-defeat: show optional farewell dialogue, then remove from scene
 		if disappear_on_defeat:
