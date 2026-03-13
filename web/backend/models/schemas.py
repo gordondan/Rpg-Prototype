@@ -16,6 +16,11 @@ class Evolution(BaseModel):
     flavor: str
 
 
+class RosterEntry(BaseModel):
+    creature_id: str
+    level: int
+
+
 class DialogueEntry(BaseModel):
     lines: list[DialogueLine] = []
 
@@ -47,6 +52,10 @@ class Creature(BaseModel):
     sounds: list[SoundEntry] = []
     npc_sprite: str | None = None
     dialogues: dict[str, DialogueEntry] | None = None
+    is_hostile: bool = False
+    lead_creature: RosterEntry | None = None
+    roster: list[RosterEntry] = []
+    reserves: list[RosterEntry] = []
 
     model_config = {"populate_by_name": True}
 
