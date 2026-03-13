@@ -3,7 +3,8 @@
 publish.py - Build and deploy MonstaQuest via Docker Compose.
 
 Usage:
-    python publish.py              # Build and run (default)
+    python publish.py              # Export game, build and run (default)
+    python publish.py export       # Export Godot game for web only
     python publish.py build        # Build images only
     python publish.py run          # Start existing images
     python publish.py stop         # Stop all containers
@@ -134,7 +135,7 @@ def main():
         ACTIONS[action]()
     else:
         err(f"Unknown action: {action}")
-        print(f"Usage: {sys.argv[0]} {{build|run|stop|logs|status}}")
+        print(f"Usage: {sys.argv[0]} {{export|build|run|stop|logs|status}}")
         sys.exit(1)
 
 
