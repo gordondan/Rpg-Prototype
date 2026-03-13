@@ -31,3 +31,7 @@ web/frontend/node_modules/
 
 # Editor metadata
 data/characters/view_order.json
+
+# Environment secrets
+.env
+web/.env
