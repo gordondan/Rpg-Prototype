@@ -14,7 +14,7 @@
 
 # Exported builds
 export/
-export_presets.cfg
+web/game/
 
 # Mono-specific ignores
 .mono/
