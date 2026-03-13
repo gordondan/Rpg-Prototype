@@ -36,11 +36,19 @@ func _load_dialogue_data() -> void:
 		push_error("Failed to parse characters file: %s" % path)
 		return
 
-	# Extract dialogue entries from each character's dialogues map
+	# Extract dialogue entries from each character's dialogues map.
+	# Dialogue IDs must be unique across all characters — prefix them with
+	# the character ID to avoid collisions (e.g. "zacharias_defeated" not "defeated").
 	for character_id in json.data:
 		var character: Dictionary = json.data[character_id]
 		var dialogues: Dictionary = character.get("dialogues", {})
 		for dialogue_id in dialogues:
+			if _dialogue_data.has(dialogue_id):
+				push_error(
+					"[DialogueManager] Dialogue ID collision: '%s' (character '%s') overwrites an existing entry. " +
+					"Prefix dialogue IDs with the character ID to prevent this (e.g. '%s_%s')."
+					% [dialogue_id, character_id, character_id, dialogue_id]
+				)
 			var dialogue_entry: Dictionary = dialogues[dialogue_id].duplicate(true)
 			dialogue_entry["name"] = character.get("name", character_id)
 			dialogue_entry["sprite"] = character.get("npc_sprite", "")
@@ -153,28 +161,25 @@ func _on_dialogue_finished() -> void:
 func _on_choice_made(choice_index: int, choice_id: String) -> void:
 	choice_selected.emit(choice_id)
 
-	# Handle special choice actions
-	match choice_id:
-		"rest":
-			var cost := 25
-			if GameManager.gold >= cost:
-				GameManager.gold -= cost
-				GameManager.heal_all_party()
-				print("[DialogueManager] Party healed! -%d gold (remaining: %d)" % [cost, GameManager.gold])
-			else:
-				# Not enough gold — swap the follow-up lines to a rejection
-				if _dialogue_box and is_instance_valid(_dialogue_box):
-					_dialogue_box.replace_upcoming_lines([
-						{"text": "You don't have enough gold for a room. Come back when you've got 25 gold.", "speaker": "Tavern Keeper"}
-					])
-		"recruit_fairy":
-			_handle_recruit("fairy_recruited")
-		"recruit_alexia":
-			_handle_recruit("alexia_recruited")
-		"recruit_aqua_monk":
-			_handle_recruit("aqua_monk_recruited")
-		"recruit_zacharias":
-			_handle_recruit("zacharias_recruited")
+	# Handle special choice actions.
+	# Recruitment is data-driven: any choice ID of the form "recruit_X"
+	# automatically sets the flag "X_recruited" — no code change needed
+	# when adding new recruitable NPCs.
+	if choice_id == "rest":
+		var cost := 25
+		if GameManager.gold >= cost:
+			GameManager.gold -= cost
+			GameManager.heal_all_party()
+			print("[DialogueManager] Party healed! -%d gold (remaining: %d)" % [cost, GameManager.gold])
+		else:
+			# Not enough gold — swap the follow-up lines to a rejection
+			if _dialogue_box and is_instance_valid(_dialogue_box):
+				_dialogue_box.replace_upcoming_lines([
+					{"text": "You don't have enough gold for a room. Come back when you've got 25 gold.", "speaker": "Tavern Keeper"}
+				])
+	elif choice_id.begins_with("recruit_"):
+		var recruit_id := choice_id.substr("recruit_".length())
+		_handle_recruit(recruit_id + "_recruited")
 
 
 func _handle_recruit(flag_name: String) -> void:
