@@ -1,0 +1,93 @@
+[
+  {
+    "name": "Grix",
+    "dialogue_id": "grix",
+    "tile_x": 19,
+    "tile_y": 53,
+    "hide_if_flag": "grix_defeated",
+    "is_rival": true,
+    "rival_party": [
+      { "creature_id": "goblin",    "level": 5 },
+      { "creature_id": "giant_bat", "level": 4 },
+      { "creature_id": "giant_bat", "level": 4 }
+    ],
+    "rival_reserves": [
+      { "creature_id": "giant_bat", "level": 3 },
+      { "creature_id": "goblin",    "level": 2 },
+      { "creature_id": "goblin",    "level": 2 }
+    ],
+    "defeated_flag": "grix_defeated",
+    "post_defeat_dialogue_id": "grix_defeated",
+    "disappear_on_defeat": true,
+    "line_of_sight_range": 5
+  },
+  {
+    "name": "Skrag",
+    "dialogue_id": "skrag",
+    "tile_x": 0,
+    "tile_y": 0,
+    "enabled": false,
+    "hide_if_flag": "skrag_defeated",
+    "is_rival": true,
+    "rival_party": [
+      { "creature_id": "goblin_firebomber", "level": 6 },
+      { "creature_id": "ork_warrior",       "level": 5 },
+      { "creature_id": "ork_grunt",         "level": 4 }
+    ],
+    "rival_reserves": [
+      { "creature_id": "ork_grunt", "level": 4 },
+      { "creature_id": "goblin",    "level": 3 },
+      { "creature_id": "goblin",    "level": 3 }
+    ],
+    "defeated_flag": "skrag_defeated",
+    "post_defeat_dialogue_id": "skrag_defeated",
+    "disappear_on_defeat": true,
+    "line_of_sight_range": 4
+  },
+  {
+    "name": "Urk",
+    "dialogue_id": "urk",
+    "tile_x": 0,
+    "tile_y": 0,
+    "enabled": false,
+    "hide_if_flag": "urk_defeated",
+    "is_rival": true,
+    "rival_party": [
+      { "creature_id": "orc_battleaxman", "level": 7 },
+      { "creature_id": "ork_warrior",     "level": 6 },
+      { "creature_id": "ork_grunt",       "level": 5 }
+    ],
+    "rival_reserves": [
+      { "creature_id": "ork_grunt", "level": 4 },
+      { "creature_id": "goblin",    "level": 4 },
+      { "creature_id": "goblin",    "level": 4 }
+    ],
+    "defeated_flag": "urk_defeated",
+    "post_defeat_dialogue_id": "urk_defeated",
+    "disappear_on_defeat": true,
+    "line_of_sight_range": 5
+  },
+  {
+    "name": "Zog",
+    "dialogue_id": "zog",
+    "tile_x": 0,
+    "tile_y": 0,
+    "enabled": false,
+    "hide_if_flag": "zog_defeated",
+    "is_rival": true,
+    "rival_party": [
+      { "creature_id": "goblin_firebomber", "level": 8 },
+      { "creature_id": "orc_battleaxman",   "level": 7 },
+      { "creature_id": "ork_warrior",       "level": 7 }
+    ],
+    "rival_reserves": [
+      { "creature_id": "ork_grunt", "level": 6 },
+      { "creature_id": "goblin",    "level": 5 },
+      { "creature_id": "goblin",    "level": 5 }
+    ],
+    "defeated_flag": "zog_defeated",
+    "post_defeat_dialogue_id": "zog_defeated",
+    "disappear_on_defeat": true,
+    "line_of_sight_range": 5
+  }
+]

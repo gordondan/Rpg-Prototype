@@ -444,168 +444,8 @@ func _create_encounter_area(area_name: String, tile_x: int, tile_y: int, width: 
 
 # --- NPC placement ---
 func _place_npcs() -> void:
-	_create_npc("Village Guard", "village_guard", Vector2i(19, 5), {
-		"quest_id": "defeat_zacharias",
-		"quest_role": "giver",
-	})
-	_create_npc("Old Scholar", "old_scholar", Vector2i(23, 10))
-	_create_npc("Tavern Keeper", "tavern_keeper", Vector2i(10, 18))
-	_create_npc("Mysterious Stranger", "mysterious_stranger", Vector2i(34, 18))
-	_create_npc("Elara", "elara", Vector2i(13, 9), {"quest_id": "meet_elara", "quest_role": "step", "quest_step_index": 0})
-	_create_npc("Sylwen", "sylwen", Vector2i(22, 17), {"quest_id": "meet_elara", "quest_role": "giver"})
-
-	# Merchant — near the village plaza
-	_create_npc("Village Merchant", "village_merchant", Vector2i(25, 11), {
-		"is_merchant": true,
-		"shop_id": "village_merchant",
-	})
-
-	# Recruitable NPCs — only show if not yet recruited
-	if not GameManager.get_flag("fairy_recruited"):
-		_create_npc("Mischievous Fairy", "mischievous_fairy", Vector2i(15, 14), {
-			"recruited_flag": "fairy_recruited",
-			"recruit_creature_id": "mischievous_fairy",
-			"recruit_creature_level": 5,
-		})
-
-	# Aqua Monk — peaceful recruitable, meditating near the spring
-	if not GameManager.get_flag("aqua_monk_recruited"):
-		_create_npc("Aqua Monk", "aqua_monk", Vector2i(8, 12), {
-			"recruited_flag": "aqua_monk_recruited",
-			"recruit_creature_id": "aqua_monk",
-			"recruit_creature_level": 7,
-		})
-
-	# Zacharias — aggressive gang leader with two Spark Thief wingmen
-	if not GameManager.get_flag("zacharias_recruited"):
-		_create_npc("Zacharias", "zacharias", Vector2i(20, 25), {
-			"is_rival": true,
-			"rival_party": [
-				{"creature_id": "zacharias", "level": 5},
-				{"creature_id": "spark_thief", "level": 3},
-				{"creature_id": "spark_thief", "level": 3},
-			],
-			"defeated_flag": "zacharias_defeated",
-			"post_defeat_dialogue_id": "zacharias_defeated",
-			"recruited_flag": "zacharias_recruited",
-			"defeat_quest_id": "defeat_zacharias",
-			"line_of_sight_range": 5,
-		})
-
-	# Mog — goblin firebomber boss with a pack of goblins, disappears on defeat
-	if not GameManager.get_flag("mog_defeated"):
-		_create_npc("Mog", "mog", Vector2i(20, 20), {
-			"is_rival": true,
-			"rival_party": [
-				{"creature_id": "goblin_firebomber", "level": 5},
-				{"creature_id": "goblin", "level": 3},
-				{"creature_id": "goblin", "level": 3},
-			],
-			"rival_reserves": [
-				{"creature_id": "goblin", "level": 3},
-			],
-			"defeated_flag": "mog_defeated",
-			"post_defeat_dialogue_id": "mog_defeated",
-			"disappear_on_defeat": true,
-			"line_of_sight_range": 4,
-		})
-
-	# Alexia — aggressive rival elf, can be battled then recruited
-	if not GameManager.get_flag("alexia_recruited"):
-		_create_npc("Alexia Ranger", "alexia_ranger", Vector2i(30, 8), {
-			"is_rival": true,
-			"rival_creature_id": "alexia",
-			"rival_creature_level": 8,
-			"defeated_flag": "alexia_defeated",
-			"post_defeat_dialogue_id": "alexia_ranger_defeated",
-			"recruited_flag": "alexia_recruited",
-			"line_of_sight_range": 5,
-			"character_id": "alexia",
-		})
-
-	# -------------------------------------------------------------------------
-	# FUTURE ROUTE BOSSES — uncomment and set tile_pos when building each route
-	# -------------------------------------------------------------------------
-
-	# Grix — bat tamer, Route 2 boss
-	if not GameManager.get_flag("grix_defeated"):
-		_create_npc("Grix", "grix", Vector2i(19, 53), {
-			"is_rival": true,
-			"rival_party": [
-				{"creature_id": "goblin", "level": 5},
-				{"creature_id": "giant_bat", "level": 4},
-				{"creature_id": "giant_bat", "level": 4},
-			],
-			"rival_reserves": [
-				{"creature_id": "giant_bat", "level": 3},
-				{"creature_id": "goblin", "level": 2},
-				{"creature_id": "goblin", "level": 2},
-			],
-			"defeated_flag": "grix_defeated",
-			"post_defeat_dialogue_id": "grix_defeated",
-			"disappear_on_defeat": true,
-			"line_of_sight_range": 5,
-		})
-
-	# Skrag — mixed raider, uses ork_grunt + ork_warrior alongside firebomber
-	# if not GameManager.get_flag("skrag_defeated"):
-	# 	_create_npc("Skrag", "skrag", Vector2i(0, 0), {
-	# 		"is_rival": true,
-	# 		"rival_party": [
-	# 			{"creature_id": "goblin_firebomber", "level": 6},
-	# 			{"creature_id": "ork_warrior", "level": 5},
-	# 			{"creature_id": "ork_grunt", "level": 4},
-	# 		],
-	# 		"rival_reserves": [
-	# 			{"creature_id": "ork_grunt", "level": 4},
-	# 			{"creature_id": "goblin", "level": 3},
-	# 			{"creature_id": "goblin", "level": 3},
-	# 		],
-	# 		"defeated_flag": "skrag_defeated",
-	# 		"post_defeat_dialogue_id": "skrag_defeated",
-	# 		"disappear_on_defeat": true,
-	# 		"line_of_sight_range": 4,
-	# 	})
-
-	# Urk — all three orc tiers in one fight, goblin rabble in reserve
-	# if not GameManager.get_flag("urk_defeated"):
-	# 	_create_npc("Urk", "urk", Vector2i(0, 0), {
-	# 		"is_rival": true,
-	# 		"rival_party": [
-	# 			{"creature_id": "orc_battleaxman", "level": 7},
-	# 			{"creature_id": "ork_warrior", "level": 6},
-	# 			{"creature_id": "ork_grunt", "level": 5},
-	# 		],
-	# 		"rival_reserves": [
-	# 			{"creature_id": "ork_grunt", "level": 4},
-	# 			{"creature_id": "goblin", "level": 4},
-	# 			{"creature_id": "goblin", "level": 4},
-	# 		],
-	# 		"defeated_flag": "urk_defeated",
-	# 		"post_defeat_dialogue_id": "urk_defeated",
-	# 		"disappear_on_defeat": true,
-	# 		"line_of_sight_range": 5,
-	# 	})
-
-	# Zog — warchief, hardest goblin boss (all three orc tiers + firebomber)
-	# if not GameManager.get_flag("zog_defeated"):
-	# 	_create_npc("Zog", "zog", Vector2i(0, 0), {
-	# 		"is_rival": true,
-	# 		"rival_party": [
-	# 			{"creature_id": "goblin_firebomber", "level": 8},
-	# 			{"creature_id": "orc_battleaxman", "level": 7},
-	# 			{"creature_id": "ork_warrior", "level": 7},
-	# 		],
-	# 		"rival_reserves": [
-	# 			{"creature_id": "ork_grunt", "level": 6},
-	# 			{"creature_id": "goblin", "level": 5},
-	# 			{"creature_id": "goblin", "level": 5},
-	# 		],
-	# 		"defeated_flag": "zog_defeated",
-	# 		"post_defeat_dialogue_id": "zog_defeated",
-	# 		"disappear_on_defeat": true,
-	# 		"line_of_sight_range": 5,
-	# 	})
+	_load_npcs_from_file("res://data/npcs/village.json")
+	_load_npcs_from_file("res://data/npcs/route_2.json")
 
 
 func _create_npc(npc_name: String, dialogue_id: String, tile_pos: Vector2i, extras: Dictionary = {}) -> void:
@@ -830,26 +670,61 @@ func _build_route_3() -> void:
 
 
 func _place_route3_bosses() -> void:
-	## Morginson — Level 15 ogre warlord, the terror of the countryside.
-	## Positioned deep in the eastern wilderness at (68, 44).
-	if not GameManager.get_flag("morginson_defeated"):
-		_create_npc("Morginson", "morginson", Vector2i(68, 44), {
-			"is_rival": true,
-			"rival_party": [
-				{"creature_id": "morginson",   "level": 15},
-				{"creature_id": "ork_warrior", "level": 12},
-				{"creature_id": "ork_warrior", "level": 12},
-			],
-			"rival_reserves": [
-				{"creature_id": "ork_grunt",   "level": 11},
-				{"creature_id": "ork_grunt",   "level": 10},
-				{"creature_id": "goblin",       "level": 9},
-			],
-			"defeated_flag": "morginson_defeated",
-			"post_defeat_dialogue_id": "morginson_defeated",
-			"disappear_on_defeat": true,
-			"line_of_sight_range": 6,
-		})
+	_load_npcs_from_file("res://data/npcs/route_3.json")
+
+
+func _load_npcs_from_file(path: String) -> void:
+	## Load and spawn all NPCs defined in a JSON file.
+	## Each entry must have: name, dialogue_id, tile_x, tile_y.
+	## Optional control fields (not forwarded to _create_npc extras):
+	##   enabled       — false skips this entry entirely (default true)
+	##   hide_if_flag  — skip if GameManager flag is set
+	##   show_if_flag  — skip if GameManager flag is NOT set
+	## All other fields are forwarded as the extras dict.
+	if not FileAccess.file_exists(path):
+		push_warning("[MapBuilder] NPC file not found: %s" % path)
+		return
+
+	var file := FileAccess.open(path, FileAccess.READ)
+	var json := JSON.new()
+	if json.parse(file.get_as_text()) != OK or not json.data is Array:
+		push_error("[MapBuilder] Failed to parse NPC file: %s" % path)
+		return
+
+	# Keys consumed by the loader — everything else becomes NPC extras.
+	const LOADER_KEYS := ["name", "dialogue_id", "tile_x", "tile_y",
+						  "enabled", "hide_if_flag", "show_if_flag"]
+
+	for entry in json.data:
+		if not entry is Dictionary:
+			continue
+		# Skip disabled entries
+		if not entry.get("enabled", true):
+			continue
+		# Skip if a hide flag is already set
+		var hide_flag: String = entry.get("hide_if_flag", "")
+		if hide_flag != "" and GameManager.get_flag(hide_flag):
+			continue
+		# Skip if a required show flag is not yet set
+		var show_flag: String = entry.get("show_if_flag", "")
+		if show_flag != "" and not GameManager.get_flag(show_flag):
+			continue
+
+		var npc_name: String    = entry.get("name", "")
+		var dialogue_id: String = entry.get("dialogue_id", "")
+		var tile_pos := Vector2i(int(entry.get("tile_x", 0)), int(entry.get("tile_y", 0)))
+
+		if npc_name == "" or dialogue_id == "":
+			push_warning("[MapBuilder] NPC entry missing name or dialogue_id in %s" % path)
+			continue
+
+		# Build extras from all non-loader keys
+		var extras := {}
+		for key in entry:
+			if key not in LOADER_KEYS:
+				extras[key] = entry[key]
+
+		_create_npc(npc_name, dialogue_id, tile_pos, extras)
 
 
 func _place_route3_encounter_areas() -> void:

@@ -1,0 +1,126 @@
+[
+  {
+    "name": "Village Guard",
+    "dialogue_id": "village_guard",
+    "tile_x": 19,
+    "tile_y": 5,
+    "quest_id": "defeat_zacharias",
+    "quest_role": "giver"
+  },
+  {
+    "name": "Old Scholar",
+    "dialogue_id": "old_scholar",
+    "tile_x": 23,
+    "tile_y": 10
+  },
+  {
+    "name": "Tavern Keeper",
+    "dialogue_id": "tavern_keeper",
+    "tile_x": 10,
+    "tile_y": 18
+  },
+  {
+    "name": "Mysterious Stranger",
+    "dialogue_id": "mysterious_stranger",
+    "tile_x": 34,
+    "tile_y": 18
+  },
+  {
+    "name": "Elara",
+    "dialogue_id": "elara",
+    "tile_x": 13,
+    "tile_y": 9,
+    "quest_id": "meet_elara",
+    "quest_role": "step",
+    "quest_step_index": 0
+  },
+  {
+    "name": "Sylwen",
+    "dialogue_id": "sylwen",
+    "tile_x": 22,
+    "tile_y": 17,
+    "quest_id": "meet_elara",
+    "quest_role": "giver"
+  },
+  {
+    "name": "Village Merchant",
+    "dialogue_id": "village_merchant",
+    "tile_x": 25,
+    "tile_y": 11,
+    "is_merchant": true,
+    "shop_id": "village_merchant"
+  },
+  {
+    "name": "Mischievous Fairy",
+    "dialogue_id": "mischievous_fairy",
+    "tile_x": 15,
+    "tile_y": 14,
+    "hide_if_flag": "fairy_recruited",
+    "recruited_flag": "fairy_recruited",
+    "recruit_creature_id": "mischievous_fairy",
+    "recruit_creature_level": 5
+  },
+  {
+    "name": "Aqua Monk",
+    "dialogue_id": "aqua_monk",
+    "tile_x": 8,
+    "tile_y": 12,
+    "hide_if_flag": "aqua_monk_recruited",
+    "recruited_flag": "aqua_monk_recruited",
+    "recruit_creature_id": "aqua_monk",
+    "recruit_creature_level": 7
+  },
+  {
+    "name": "Zacharias",
+    "dialogue_id": "zacharias",
+    "tile_x": 20,
+    "tile_y": 25,
+    "hide_if_flag": "zacharias_recruited",
+    "is_rival": true,
+    "rival_party": [
+      { "creature_id": "zacharias",   "level": 5 },
+      { "creature_id": "spark_thief", "level": 3 },
+      { "creature_id": "spark_thief", "level": 3 }
+    ],
+    "defeated_flag": "zacharias_defeated",
+    "post_defeat_dialogue_id": "zacharias_defeated",
+    "recruited_flag": "zacharias_recruited",
+    "defeat_quest_id": "defeat_zacharias",
+    "line_of_sight_range": 5
+  },
+  {
+    "name": "Mog",
+    "dialogue_id": "mog",
+    "tile_x": 20,
+    "tile_y": 20,
+    "hide_if_flag": "mog_defeated",
+    "is_rival": true,
+    "rival_party": [
+      { "creature_id": "goblin_firebomber", "level": 5 },
+      { "creature_id": "goblin",            "level": 3 },
+      { "creature_id": "goblin",            "level": 3 }
+    ],
+    "rival_reserves": [
+      { "creature_id": "goblin", "level": 3 }
+    ],
+    "defeated_flag": "mog_defeated",
+    "post_defeat_dialogue_id": "mog_defeated",
+    "disappear_on_defeat": true,
+    "line_of_sight_range": 4
+  },
+  {
+    "name": "Alexia Ranger",
+    "dialogue_id": "alexia_ranger",
+    "tile_x": 30,
+    "tile_y": 8,
+    "hide_if_flag": "alexia_recruited",
+    "is_rival": true,
+    "rival_creature_id": "alexia",
+    "rival_creature_level": 8,
+    "defeated_flag": "alexia_defeated",
+    "post_defeat_dialogue_id": "alexia_ranger_defeated",
+    "recruited_flag": "alexia_recruited",
+    "character_id": "alexia",
+    "line_of_sight_range": 5
+  }
+]
