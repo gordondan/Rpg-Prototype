@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -54,6 +54,12 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
   const [search, setSearch] = useState('')
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
+  const [viewOrder, setViewOrder] = useState<string[]>([])
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    creaturesApi.getViewOrder().then(setViewOrder).catch(() => {})
+  }, [])
 
   const active = isFiltersActive(filters)
 
@@ -127,8 +133,14 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
       entries = entries.filter(([, c]) => c.recruit_method == null)
     }
 
+    // Sort by view order
+    if (viewOrder.length > 0) {
+      const orderMap = new Map(viewOrder.map((id, i) => [id, i]))
+      entries.sort((a, b) => (orderMap.get(a[0]) ?? Infinity) - (orderMap.get(b[0]) ?? Infinity))
+    }
+
     return entries
-  }, [creatures, search, filters])
+  }, [creatures, search, filters, viewOrder])
 
   const toggleType = (t: string) => {
     setFilters((f) => ({
@@ -144,11 +156,26 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
     }))
   }
 
+  const handleSelect = async (id: string) => {
+    onSelect(id)
+    try {
+      const newOrder = await creaturesApi.selectViewOrder(id)
+      setViewOrder(newOrder)
+    } catch {
+      setViewOrder(prev => [id, ...prev.filter(x => x !== id)])
+    }
+    requestAnimationFrame(() => {
+      const viewport = listRef.current?.querySelector('[data-slot="scroll-area-viewport"]')
+      viewport?.scrollTo({ top: 0 })
+    })
+  }
+
   const handleCreate = async () => {
     try {
       const result = await creaturesApi.create(mode === 'npcs' ? 'npc' : undefined)
       toast.success(mode === 'npcs' ? 'NPC created' : 'Creature created')
       await onRefresh?.()
+      creaturesApi.getViewOrder().then(setViewOrder).catch(() => {})
       onSelect(result.creature_id)
     } catch (err) {
       toast.error(`Failed to create: ${err instanceof Error ? err.message : 'Unknown error'}`)
@@ -373,50 +400,52 @@ export default function CreatureList({ creatures, selectedId, onSelect, onRefres
         </p>
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="flex flex-col gap-0.5 p-1.5">
-          {filtered.map(([id, creature]) => (
-            <button
-              key={id}
-              onClick={() => onSelect(id)}
-              className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-left transition-colors',
-                selectedId === id
-                  ? 'bg-gold/15 text-gold'
-                  : 'text-parchment/80 hover:bg-stone-light/20'
-              )}
-            >
-              <div className="flex size-10 items-center justify-center rounded-lg bg-stone-light/30 overflow-hidden shrink-0">
-                <img
-                  src={`${BASE}/assets/thumbnail/${creature.npc_sprite ? creature.npc_sprite.replace('res://', '') : spritePath(id, 'battle')}?size=64`}
-                  alt={creature.name}
-                  className="size-8 object-contain"
-                  onError={(e) => {
-                    ;(e.target as HTMLImageElement).style.display = 'none'
-                  }}
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{creature.name}</p>
-                <div className="flex gap-1 mt-0.5">
-                  {creature.types.map((t) => (
-                    <Badge
-                      key={t}
-                      className="text-[10px] px-1.5 py-0 h-4 border-0"
-                      style={{
-                        backgroundColor: `${TYPE_COLORS[t] ?? '#666'}22`,
-                        color: TYPE_COLORS[t] ?? '#999',
-                      }}
-                    >
-                      {t}
-                    </Badge>
-                  ))}
+      <div ref={listRef} className="flex-1">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col gap-0.5 p-1.5">
+            {filtered.map(([id, creature]) => (
+              <button
+                key={id}
+                onClick={() => handleSelect(id)}
+                className={cn(
+                  'flex items-center gap-3 rounded-md px-3 py-2 text-left transition-colors',
+                  selectedId === id
+                    ? 'bg-gold/15 text-gold'
+                    : 'text-parchment/80 hover:bg-stone-light/20'
+                )}
+              >
+                <div className="flex size-10 items-center justify-center rounded-lg bg-stone-light/30 overflow-hidden shrink-0">
+                  <img
+                    src={`${BASE}/assets/thumbnail/${creature.npc_sprite ? creature.npc_sprite.replace('res://', '') : spritePath(id, 'battle')}?size=64`}
+                    alt={creature.name}
+                    className="size-8 object-contain"
+                    onError={(e) => {
+                      ;(e.target as HTMLImageElement).style.display = 'none'
+                    }}
+                  />
                 </div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </ScrollArea>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{creature.name}</p>
+                  <div className="flex gap-1 mt-0.5">
+                    {creature.types.map((t) => (
+                      <Badge
+                        key={t}
+                        className="text-[10px] px-1.5 py-0 h-4 border-0"
+                        style={{
+                          backgroundColor: `${TYPE_COLORS[t] ?? '#666'}22`,
+                          color: TYPE_COLORS[t] ?? '#999',
+                        }}
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
     </div>
   )
 }

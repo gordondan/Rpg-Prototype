@@ -22,8 +22,8 @@ var facing_direction := Vector2.DOWN
 
 # Sprite references
 var _char_sprite: Sprite2D
-var _idle_texture: ImageTexture
-var _walk_texture: ImageTexture
+var _idle_texture: Texture2D
+var _walk_texture: Texture2D
 var _anim_timer := 0.0
 var _current_frame := 0
 var _is_walking := false
@@ -65,15 +65,12 @@ func _load_character_sprites() -> void:
 		add_child(placeholder)
 
 
-func _load_texture(res_path: String) -> ImageTexture:
-	var global_path := ProjectSettings.globalize_path(res_path)
-	var image := Image.load_from_file(global_path)
-	if image == null:
-		image = Image.load_from_file(res_path)
-	if image == null:
+func _load_texture(res_path: String) -> Texture2D:
+	var tex = load(res_path)
+	if tex == null:
 		push_warning("Player: Failed to load sprite: %s" % res_path)
 		return null
-	return ImageTexture.create_from_image(image)
+	return tex
 
 
 func _unhandled_input(event: InputEvent) -> void:

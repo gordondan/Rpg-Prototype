@@ -67,4 +67,6 @@ export const creaturesApi = {
   update: (id: string, data: Creature) => put<Creature>(`/creatures/${id}`, data),
   create: (category?: string) => post<{ status: string; creature_id: string }>(`/creatures/${category ? `?category=${category}` : ''}`),
   delete: (id: string) => httpDelete<{ status: string }>(`/creatures/${id}`),
+  getViewOrder: () => get<string[]>('/creatures/view-order'),
+  selectViewOrder: (id: string) => put<string[]>(`/creatures/view-order/${id}`, {}),
 }

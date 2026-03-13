@@ -14,7 +14,7 @@
 
 # Exported builds
 export/
-export_presets.cfg
+web/game/
 
 # Mono-specific ignores
 .mono/
@@ -28,3 +28,6 @@ __pycache__/
 
 # Node
 web/frontend/node_modules/
+
+# Editor metadata
+data/characters/view_order.json

@@ -66,7 +66,7 @@ const ROAD_BOT := Vector2i(2, 2)
 const ROAD_BR := Vector2i(3, 2)
 
 # Loaded textures cache
-var _tex_cache: Dictionary = {}
+var _tex_cache: Dictionary = {}  # String -> Texture2D
 
 # Road cell positions
 var _road_cells: Dictionary = {}
@@ -90,19 +90,16 @@ func _ready() -> void:
 	_update_camera_limits()
 
 
-# --- Texture loading (bypasses Godot import system) ---
-func _load_texture(res_path: String) -> ImageTexture:
-	var global_path := ProjectSettings.globalize_path(res_path)
-	var image := Image.load_from_file(global_path)
-	if image == null:
-		image = Image.load_from_file(res_path)
-	if image == null:
+# --- Texture loading ---
+func _load_texture(res_path: String) -> Texture2D:
+	var tex = load(res_path)
+	if tex == null:
 		push_warning("MapBuilder: Failed to load texture: %s" % res_path)
 		return null
-	return ImageTexture.create_from_image(image)
+	return tex
 
 
-func _get_sprite_tex(key: String) -> ImageTexture:
+func _get_sprite_tex(key: String) -> Texture2D:
 	if _tex_cache.has(key):
 		return _tex_cache[key]
 	var path: String = SPRITE_DIR + SPRITE_PATHS[key]
