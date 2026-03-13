@@ -255,17 +255,12 @@ func _load_creature_sprite(target: TextureRect, creature_id: String) -> void:
 	else:
 		path = SPRITE_PATH_TEMPLATE % creature_id
 
-	# Always load directly from the raw PNG — skips the import system entirely,
-	# which avoids crashes from stale .import files left over from older Godot versions.
-	var global_path := ProjectSettings.globalize_path(path)
-	var image := Image.load_from_file(global_path)
-	if image == null:
-		image = Image.load_from_file(path)
-	if image == null:
+	var tex = load(path)
+	if tex == null:
 		target.texture = null
 		return
 
-	target.texture = ImageTexture.create_from_image(image)
+	target.texture = tex
 
 
 # --- Action handling ---
