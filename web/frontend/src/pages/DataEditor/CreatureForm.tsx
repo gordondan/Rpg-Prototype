@@ -11,7 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Plus, Trash2, Upload, Download, ChevronDown, ChevronRight, Volume2 } from 'lucide-react'
 import StatRadarChart from '@/components/RadarChart'
 import { TYPE_COLORS, STAT_LABELS } from '@/theme/colors'
-import { type Creature, type DialogueEntry, type SoundEntry, spritePath } from '@/api/creatures'
+import { type Creature, type DialogueEntry, type SoundEntry, type RosterEntry, spritePath, creaturesApi } from '@/api/creatures'
 import { BASE } from '@/api/client'
 import { type Move, movesApi } from '@/api/moves'
 import { useChanges } from '@/context/ChangeContext'
@@ -26,12 +26,14 @@ export default function CreatureForm({ id, creature: initial }: Props) {
   const [form, setForm] = useState<Creature>(initial)
   const [spriteRev, setSpriteRev] = useState(0)
   const [moves, setMoves] = useState<Record<string, Move>>({})
+  const [allCreatures, setAllCreatures] = useState<Record<string, Creature>>({})
   const { markChanged } = useChanges()
   const owUploadRef = useRef<HTMLInputElement>(null)
   const btUploadRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     movesApi.list().then(setMoves)
+    creaturesApi.list().then(setAllCreatures)
   }, [])
 
   useEffect(() => {
@@ -78,6 +80,10 @@ export default function CreatureForm({ id, creature: initial }: Props) {
   for (const k of statKeys) {
     stats[k] = (form[k] as number) ?? 0
   }
+
+  const creatureOptions = Object.entries(allCreatures)
+    .filter(([, c]) => c.category !== 'npc')
+    .sort(([, a], [, b]) => a.name.localeCompare(b.name))
 
   return (
     <ScrollArea className="h-full">
@@ -437,6 +443,175 @@ export default function CreatureForm({ id, creature: initial }: Props) {
             </div>
           </CardContent>
         </Card>
+        {/* Battle Configuration — shown for NPCs */}
+        {form.category === 'npc' && (
+          <Card className="bg-stone/30 border-stone-light/30">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-gold font-heading text-base">Battle Configuration</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Hostile toggle */}
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.is_hostile ?? false}
+                    onChange={(e) => update({ is_hostile: e.target.checked })}
+                    className="rounded border-stone-light/30"
+                  />
+                  <span className="text-sm text-parchment/80">Is Hostile?</span>
+                </label>
+
+                {form.is_hostile && (
+                  <>
+                    {/* Lead Creature */}
+                    <div>
+                      <Label className="text-parchment/60 text-xs">Lead Creature (recruitable by player after defeat)</Label>
+                      <div className="flex gap-2 mt-1">
+                        <select
+                          value={form.lead_creature?.creature_id ?? ''}
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              update({ lead_creature: { creature_id: e.target.value, level: form.lead_creature?.level ?? 5 } })
+                            } else {
+                              update({ lead_creature: null as unknown as RosterEntry })
+                            }
+                          }}
+                          className="flex-1 bg-stone/50 border border-stone-light/30 text-parchment text-sm h-7 rounded-md px-2"
+                        >
+                          <option value="" className="bg-stone text-parchment">None</option>
+                          {creatureOptions.map(([cId, c]) => (
+                            <option key={cId} value={cId} className="bg-stone text-parchment">{c.name}</option>
+                          ))}
+                        </select>
+                        {form.lead_creature && (
+                          <Input
+                            type="number"
+                            value={form.lead_creature.level}
+                            onChange={(e) => update({ lead_creature: { ...form.lead_creature!, level: Number(e.target.value) } })}
+                            className="w-16 bg-stone/50 border-stone-light/30 text-parchment text-center text-sm h-7"
+                            placeholder="Lvl"
+                            min={1}
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Party */}
+                    <div>
+                      <Label className="text-parchment/60 text-xs">Party</Label>
+                      <div className="space-y-2 mt-1">
+                        {(form.roster ?? []).map((entry, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <select
+                              value={entry.creature_id}
+                              onChange={(e) => {
+                                const next = [...(form.roster ?? [])]
+                                next[i] = { ...next[i], creature_id: e.target.value }
+                                update({ roster: next })
+                              }}
+                              className="flex-1 bg-stone/50 border border-stone-light/30 text-parchment text-sm h-7 rounded-md px-2"
+                            >
+                              <option value="" className="bg-stone text-parchment">Select creature...</option>
+                              {creatureOptions.map(([cId, c]) => (
+                                <option key={cId} value={cId} className="bg-stone text-parchment">{c.name}</option>
+                              ))}
+                            </select>
+                            <Input
+                              type="number"
+                              value={entry.level}
+                              onChange={(e) => {
+                                const next = [...(form.roster ?? [])]
+                                next[i] = { ...next[i], level: Number(e.target.value) }
+                                update({ roster: next })
+                              }}
+                              className="w-16 bg-stone/50 border-stone-light/30 text-parchment text-center text-sm h-7"
+                              placeholder="Lvl"
+                              min={1}
+                            />
+                            <Button
+                              variant="ghost"
+                              size="icon-xs"
+                              onClick={() => update({ roster: (form.roster ?? []).filter((_, j) => j !== i) })}
+                              className="text-parchment/40 hover:text-destructive"
+                            >
+                              <Trash2 className="size-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => update({ roster: [...(form.roster ?? []), { creature_id: '', level: 5 }] })}
+                          className="text-gold/70 hover:text-gold"
+                        >
+                          <Plus className="size-3.5" />
+                          Add Party Member
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Reserves */}
+                    <div>
+                      <Label className="text-parchment/60 text-xs">Reserves (max 3)</Label>
+                      <div className="space-y-2 mt-1">
+                        {(form.reserves ?? []).map((entry, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <select
+                              value={entry.creature_id}
+                              onChange={(e) => {
+                                const next = [...(form.reserves ?? [])]
+                                next[i] = { ...next[i], creature_id: e.target.value }
+                                update({ reserves: next })
+                              }}
+                              className="flex-1 bg-stone/50 border border-stone-light/30 text-parchment text-sm h-7 rounded-md px-2"
+                            >
+                              <option value="" className="bg-stone text-parchment">Select creature...</option>
+                              {creatureOptions.map(([cId, c]) => (
+                                <option key={cId} value={cId} className="bg-stone text-parchment">{c.name}</option>
+                              ))}
+                            </select>
+                            <Input
+                              type="number"
+                              value={entry.level}
+                              onChange={(e) => {
+                                const next = [...(form.reserves ?? [])]
+                                next[i] = { ...next[i], level: Number(e.target.value) }
+                                update({ reserves: next })
+                              }}
+                              className="w-16 bg-stone/50 border-stone-light/30 text-parchment text-center text-sm h-7"
+                              placeholder="Lvl"
+                              min={1}
+                            />
+                            <Button
+                              variant="ghost"
+                              size="icon-xs"
+                              onClick={() => update({ reserves: (form.reserves ?? []).filter((_, j) => j !== i) })}
+                              className="text-parchment/40 hover:text-destructive"
+                            >
+                              <Trash2 className="size-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        {(form.reserves ?? []).length < 3 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => update({ reserves: [...(form.reserves ?? []), { creature_id: '', level: 5 }] })}
+                            className="text-gold/70 hover:text-gold"
+                          >
+                            <Plus className="size-3.5" />
+                            Add Reserve
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
         {/* Dialogues — shown for NPCs */}
         {form.category === 'npc' && (
           <Card className="bg-stone/30 border-stone-light/30">
