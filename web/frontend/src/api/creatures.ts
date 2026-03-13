@@ -21,6 +21,11 @@ export interface SoundEntry {
   path: string
 }
 
+export interface RosterEntry {
+  creature_id: string
+  level: number
+}
+
 export interface Creature {
   name: string
   description: string
@@ -44,6 +49,10 @@ export interface Creature {
   sounds: SoundEntry[]
   npc_sprite?: string
   dialogues?: Record<string, DialogueEntry>
+  is_hostile?: boolean
+  lead_creature?: RosterEntry | null
+  roster?: RosterEntry[]
+  reserves?: RosterEntry[]
 }
 
 /** Convention-based sprite paths derived from creature ID */
