@@ -178,8 +178,15 @@ func _on_choice_made(choice_index: int, choice_id: String) -> void:
 					{"text": "You don't have enough gold for a room. Come back when you've got 25 gold.", "speaker": "Tavern Keeper"}
 				])
 	elif choice_id.begins_with("recruit_"):
-		var recruit_id := choice_id.substr("recruit_".length())
-		_handle_recruit(recruit_id + "_recruited")
+		# Use the NPC's own recruited_flag as the authoritative source.
+		# The dialogue choice just signals intent — the NPC data defines the exact flag.
+		# Fall back to deriving the flag from the choice ID only if no NPC is registered.
+		var flag_name: String
+		if _active_npc != null and _active_npc.recruited_flag != "":
+			flag_name = _active_npc.recruited_flag
+		else:
+			flag_name = choice_id.substr("recruit_".length()) + "_recruited"
+		_handle_recruit(flag_name)
 
 
 func _handle_recruit(flag_name: String) -> void:
