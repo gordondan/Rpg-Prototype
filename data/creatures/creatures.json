@@ -1146,7 +1146,7 @@
       }
     ],
     "category": "npc",
-    "has_overworld_sprite": false,
-    "has_battle_sprite": false
+    "has_overworld_sprite": true,
+    "has_battle_sprite": true
   }
 }

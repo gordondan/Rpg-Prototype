@@ -679,7 +679,7 @@
 
   "morginson": {
     "name": "Morginson",
-    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "sprite": "res://assets/sprites/npcs/morginson_overworld.png",
     "lines": [
       {
         "text": "You dare approach MORGINSON?",
