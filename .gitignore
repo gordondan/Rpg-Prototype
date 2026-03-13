@@ -28,3 +28,6 @@ __pycache__/
 
 # Node
 web/frontend/node_modules/
+
+# Editor metadata
+data/characters/view_order.json

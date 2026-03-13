@@ -64,15 +64,20 @@ class DataService:
         """Return the view order list, auto-generating from characters.json keys if missing."""
         path = self._view_order_path()
         if path.exists():
-            order = json.loads(path.read_text())
+            raw = path.read_text()
+            order = json.loads(raw)
             # Sync: add any missing creature IDs at the end
             all_ids = set(self.get_all_creatures().keys())
             ordered_set = set(order)
             # Remove IDs that no longer exist
             order = [cid for cid in order if cid in all_ids]
             # Append any new IDs not yet in the order
-            for cid in all_ids - ordered_set:
+            for cid in sorted(all_ids - ordered_set):
                 order.append(cid)
+            # Persist if sync changed anything
+            synced = json.dumps(order, indent=2) + "\n"
+            if synced != raw:
+                path.write_text(synced)
             return order
         # No file yet — generate from characters.json key order
         return list(self.get_all_creatures().keys())
