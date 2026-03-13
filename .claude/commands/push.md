@@ -16,9 +16,9 @@ If the current branch IS the default branch:
 2. Generate a branch name:
    - Prefix: `feature/`, `fix/`, or `chore/` based on the nature of changes
    - Suffix: short kebab-case summary (3-6 words max)
-4. Run `git checkout -b <generated-branch-name>`
-5. Tell the user: "Moved your changes from `<default-branch>` to `<new-branch>`"
-6. If there are uncommitted changes:
+3. Run `git checkout -b <generated-branch-name>`
+4. Tell the user: "Moved your changes from `<default-branch>` to `<new-branch>`"
+5. If there are uncommitted changes:
    - Run `git add -A`
    - Review staged files for secrets (`.env`, `credentials`, `api_key`, `token`, `secret`, `password`, `private_key`). Warn if found and ask for confirmation. If the user declines, run `git reset HEAD <file>` to unstage the suspicious file(s).
    - Generate a commit message from the diff (concise, focus on "why")

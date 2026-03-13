@@ -11,10 +11,11 @@ Then check if the branch has an upstream: `git rev-parse --abbrev-ref @{upstream
 If there is no upstream, report: "This branch has no upstream tracking branch. Set one with `git branch --set-upstream-to=origin/<branch>` or use `git pull origin <branch>`." Then stop.
 
 If there ARE uncommitted changes (status output is non-empty):
-1. Run `git stash` and note the stash message
+1. Run `git stash push -m "auto-stash before pull"`
 2. Run `git pull`
-3. Run `git stash pop`
-4. If `git stash pop` fails with conflicts, run `git status` and report the conflicting files to the user. Tell them to resolve conflicts manually.
+3. If `git pull` fails with merge conflicts, run `git status` and report the conflicting files. Tell the user to resolve the pull conflicts first — do NOT attempt `git stash pop`. Stop here.
+4. If pull succeeded, run `git stash pop`
+5. If `git stash pop` fails with conflicts, run `git status` and report the conflicting files to the user. Tell them to resolve conflicts manually.
 
 If there are NO uncommitted changes:
 1. Just run `git pull`
