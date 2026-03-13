@@ -361,12 +361,19 @@ func load_game(slot: int = 0) -> bool:
 func _serialize_creatures(creatures: Array) -> Array:
 	var result := []
 	for creature in creatures:
+		# Snapshot current PP for every move so depleted PP persists across saves.
+		var move_pp := []
+		for m in creature.moves:
+			move_pp.append({"id": m["id"], "current_pp": m["current_pp"]})
 		result.append({
 			"creature_id": creature.creature_id,
 			"nickname": creature.nickname,
 			"level": creature.level,
 			"current_hp": creature.current_hp,
 			"experience": creature.experience,
+			"status_effect": creature.status_effect,
+			"status_turns": creature.status_turns,
+			"move_pp": move_pp,
 		})
 	return result
 
@@ -379,4 +386,14 @@ func _deserialize_creature(creature_data: Dictionary) -> CreatureInstance:
 	creature.nickname = creature_data.get("nickname", creature.nickname)
 	creature.current_hp = int(creature_data.get("current_hp", creature.max_hp))
 	creature.experience = int(creature_data.get("experience", 0))
+	creature.status_effect = creature_data.get("status_effect", "")
+	creature.status_turns = int(creature_data.get("status_turns", 0))
+	# Restore saved PP — create() populates moves at full PP, so we overwrite
+	# only the moves whose PP was saved, leaving any unknown moves at full PP.
+	var pp_lookup := {}
+	for entry in creature_data.get("move_pp", []):
+		pp_lookup[entry["id"]] = int(entry["current_pp"])
+	for m in creature.moves:
+		if m["id"] in pp_lookup:
+			m["current_pp"] = pp_lookup[m["id"]]
 	return creature
