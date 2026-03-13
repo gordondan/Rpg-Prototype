@@ -65,6 +65,14 @@ func _build_ui() -> void:
 
 	vbox.add_child(HSeparator.new())
 
+	var save_btn := Button.new()
+	save_btn.name = "SaveButton"
+	save_btn.text = "Save Game"
+	save_btn.pressed.connect(_save_game.bind(save_btn))
+	vbox.add_child(save_btn)
+
+	vbox.add_child(HSeparator.new())
+
 	var close_btn := Button.new()
 	close_btn.text = "Close"
 	close_btn.pressed.connect(_close)
@@ -95,6 +103,24 @@ func _open_quest_log() -> void:
 		var ql_node := CanvasLayer.new()
 		ql_node.set_script(ql_script)
 		get_tree().current_scene.add_child(ql_node)
+
+
+func _save_game(btn: Button) -> void:
+	# Grab the player's current overworld position before saving.
+	var scene := get_tree().current_scene
+	var player := scene.get_node_or_null("Player") if scene else null
+	if player:
+		GameManager.update_overworld_position(player.position, scene.scene_file_path)
+
+	GameManager.save_game()
+
+	# Show brief confirmation on the button, then restore the label.
+	btn.text = "Saved! ✓"
+	btn.disabled = true
+	await get_tree().create_timer(1.5).timeout
+	if is_instance_valid(btn):
+		btn.text = "Save Game"
+		btn.disabled = false
 
 
 func _close() -> void:

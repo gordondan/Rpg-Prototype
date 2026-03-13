@@ -297,6 +297,13 @@ func return_from_battle() -> void:
 	set_state(GameState.OVERWORLD)
 
 
+func update_overworld_position(player_pos: Vector2, map_path: String) -> void:
+	## Update the saved position without changing game state.
+	## Call this before save_game() when saving from the overworld menu.
+	_saved_player_position = player_pos
+	_saved_map_path = map_path
+
+
 # ─── Save / Load (basic) ─────────────────────────────────────────
 
 func save_game(slot: int = 0) -> void:
