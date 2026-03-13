@@ -829,6 +829,30 @@ func _build_route_3() -> void:
 	_place_route3_encounter_areas()
 	_place_route3_trees()
 	_place_route3_props()
+	_place_route3_bosses()
+
+
+func _place_route3_bosses() -> void:
+	## Morginson — Level 15 ogre warlord, the terror of the countryside.
+	## Positioned deep in the eastern wilderness at (68, 44).
+	if not GameManager.get_flag("morginson_defeated"):
+		_create_npc("Morginson", "morginson", Vector2i(68, 44), {
+			"is_rival": true,
+			"rival_party": [
+				{"creature_id": "morginson",   "level": 15},
+				{"creature_id": "ork_warrior", "level": 12},
+				{"creature_id": "ork_warrior", "level": 12},
+			],
+			"rival_reserves": [
+				{"creature_id": "ork_grunt",   "level": 11},
+				{"creature_id": "ork_grunt",   "level": 10},
+				{"creature_id": "goblin",       "level": 9},
+			],
+			"defeated_flag": "morginson_defeated",
+			"post_defeat_dialogue_id": "morginson_defeated",
+			"disappear_on_defeat": true,
+			"line_of_sight_range": 6,
+		})
 
 
 func _place_route3_encounter_areas() -> void:

@@ -675,5 +675,43 @@
         "speaker": "Zog"
       }
     ]
+  },
+
+  "morginson": {
+    "name": "Morginson",
+    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "lines": [
+      {
+        "text": "You dare approach MORGINSON?",
+        "speaker": "Morginson"
+      },
+      {
+        "text": "I have crushed armies. I have shattered gates with my fists. Every village on this road pays tribute or burns.",
+        "speaker": "Morginson"
+      },
+      {
+        "text": "Whatever brought you here ends NOW.",
+        "speaker": "Morginson"
+      }
+    ]
+  },
+
+  "morginson_defeated": {
+    "name": "Morginson",
+    "sprite": "res://assets/sprites/npcs/mog_overworld.png",
+    "lines": [
+      {
+        "text": "...URGH. What... what ARE you?",
+        "speaker": "Morginson"
+      },
+      {
+        "text": "Morginson has not felt pain like this since... since nothing. Morginson has never lost.",
+        "speaker": "Morginson"
+      },
+      {
+        "text": "Go. Take your victory. But know that these lands are not safe — Morginson is only the beginning of what roams this wilderness.",
+        "speaker": "Morginson"
+      }
+    ]
   }
 }

@@ -375,5 +375,63 @@
     "effect": {
       "target": "enemy"
     }
+  },
+
+  "ogre_smash": {
+    "name": "Ogre Smash",
+    "type": "no_affinity",
+    "category": "physical",
+    "power": 90,
+    "accuracy": 85,
+    "pp": 10,
+    "description": "A bone-crushing blow that may shatter the target's defenses.",
+    "effect_chance": 30,
+    "effect": {
+      "stat": "defense",
+      "stages": -1,
+      "target": "enemy"
+    }
+  },
+
+  "ground_slam": {
+    "name": "Ground Slam",
+    "type": "no_affinity",
+    "category": "physical",
+    "power": 60,
+    "accuracy": 90,
+    "pp": 15,
+    "target": "all_enemies",
+    "description": "Slams the earth with massive fists, rattling the ground and striking all enemies at once."
+  },
+
+  "terror_roar": {
+    "name": "Terror Roar",
+    "type": "no_affinity",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "target": "all_enemies",
+    "description": "An earth-shaking roar of pure rage that terrifies all enemies, sharply lowering their Attack.",
+    "effect": {
+      "stat": "attack",
+      "stages": -2,
+      "target": "enemy"
+    }
+  },
+
+  "iron_hide": {
+    "name": "Iron Hide",
+    "type": "no_affinity",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "description": "Hardens its brutal hide, sharply raising its own Defense.",
+    "effect": {
+      "stat": "defense",
+      "stages": 2,
+      "target": "ally"
+    }
   }
 }
