@@ -1943,5 +1943,67 @@
     ],
     "has_overworld_sprite": false,
     "has_battle_sprite": false
+  },
+
+  "morginson": {
+    "name": "Morginson",
+    "description": "A massive ogre warlord who has carved a path of destruction through the countryside. His iron fists have toppled walls and broken armies. Villages whisper his name in fear.",
+    "types": [
+      "no_affinity"
+    ],
+    "base_hp": 92,
+    "base_attack": 88,
+    "base_defense": 72,
+    "base_sp_attack": 45,
+    "base_sp_defense": 48,
+    "base_speed": 28,
+    "base_exp": 160,
+    "class": "warlord",
+    "category": "npc",
+    "learnset": [
+      { "level": 1,  "move_id": "headbutt"    },
+      { "level": 1,  "move_id": "war_cry"     },
+      { "level": 5,  "move_id": "ogre_smash"  },
+      { "level": 10, "move_id": "terror_roar" },
+      { "level": 12, "move_id": "iron_hide"   },
+      { "level": 15, "move_id": "ground_slam" }
+    ],
+    "has_overworld_sprite": true,
+    "has_battle_sprite": true,
+    "npc_sprite": "res://assets/sprites/creatures/morginson.png",
+    "dialogues": {
+      "morginson": {
+        "lines": [
+          {
+            "text": "You dare approach MORGINSON?",
+            "speaker": "Morginson"
+          },
+          {
+            "text": "I have crushed armies. I have shattered gates with my fists. Every village on this road pays tribute or burns.",
+            "speaker": "Morginson"
+          },
+          {
+            "text": "Whatever brought you here ends NOW.",
+            "speaker": "Morginson"
+          }
+        ]
+      },
+      "morginson_defeated": {
+        "lines": [
+          {
+            "text": "...URGH. What... what ARE you?",
+            "speaker": "Morginson"
+          },
+          {
+            "text": "Morginson has not felt pain like this since... since nothing. Morginson has never lost.",
+            "speaker": "Morginson"
+          },
+          {
+            "text": "Go. Take your victory. But know that these lands are not safe — Morginson is only the beginning of what roams this wilderness.",
+            "speaker": "Morginson"
+          }
+        ]
+      }
+    }
   }
 }
