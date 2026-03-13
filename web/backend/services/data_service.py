@@ -55,6 +55,53 @@ class DataService:
         self._write_json(path, data)
         return True
 
+    # --- View Order ---
+
+    def _view_order_path(self) -> Path:
+        return self.data_path / "characters" / "view_order.json"
+
+    def get_view_order(self) -> list[str]:
+        """Return the view order list, auto-generating from characters.json keys if missing."""
+        path = self._view_order_path()
+        if path.exists():
+            order = json.loads(path.read_text())
+            # Sync: add any missing creature IDs at the end
+            all_ids = set(self.get_all_creatures().keys())
+            ordered_set = set(order)
+            # Remove IDs that no longer exist
+            order = [cid for cid in order if cid in all_ids]
+            # Append any new IDs not yet in the order
+            for cid in all_ids - ordered_set:
+                order.append(cid)
+            return order
+        # No file yet — generate from characters.json key order
+        return list(self.get_all_creatures().keys())
+
+    def select_view_order(self, creature_id: str) -> list[str]:
+        """Move creature_id to position 0 in the view order and persist."""
+        order = self.get_view_order()
+        if creature_id in order:
+            order.remove(creature_id)
+        order.insert(0, creature_id)
+        self._view_order_path().write_text(json.dumps(order, indent=2) + "\n")
+        return order
+
+    def add_to_view_order(self, creature_id: str) -> None:
+        """Prepend a new creature ID to the view order."""
+        order = self.get_view_order()
+        if creature_id not in order:
+            order.insert(0, creature_id)
+            self._view_order_path().write_text(json.dumps(order, indent=2) + "\n")
+
+    def remove_from_view_order(self, creature_id: str) -> None:
+        """Remove a creature ID from the view order."""
+        path = self._view_order_path()
+        if path.exists():
+            order = json.loads(path.read_text())
+            if creature_id in order:
+                order.remove(creature_id)
+                path.write_text(json.dumps(order, indent=2) + "\n")
+
     # --- Moves ---
 
     def get_all_moves(self) -> dict[str, dict]:
