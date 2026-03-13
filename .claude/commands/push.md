@@ -24,13 +24,21 @@ If the current branch IS the default branch:
    - Generate a commit message from the diff (concise, focus on "why")
    - Commit with `Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>` appended
 
-## Step 3: Push
+## Step 3: Update documentation
+
+Before pushing, run the `/update-docs` workflow to sync `docs/game-objects/` with any code changes. This ensures documentation stays current with every push.
+
+- Check recently changed files against the doc mapping in `/update-docs`
+- If any game object docs need updating, update them and commit
+- If no docs need updating, move on silently
+
+## Step 4: Push
 
 Check if a remote tracking branch exists: `git rev-parse --abbrev-ref @{upstream} 2>/dev/null`
 
 - If NO upstream exists: run `git push -u origin <current-branch>`
 - If upstream exists: run `git push`
 
-## Step 4: Report
+## Step 5: Report
 
 Report what was pushed: branch name, number of commits, and the remote URL.

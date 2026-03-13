@@ -1351,7 +1351,13 @@
       }
     ],
     "has_overworld_sprite": true,
-    "has_battle_sprite": true
+    "has_battle_sprite": true,
+    "sounds": [
+      {
+        "type": "attack",
+        "path": "res://assets/audio/sfx/new_creature_2_attack.ogg"
+      }
+    ]
   },
   "village_guard": {
     "name": "Village Guard",

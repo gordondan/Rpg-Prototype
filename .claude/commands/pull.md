@@ -20,7 +20,17 @@ If there ARE uncommitted changes (status output is non-empty):
 If there are NO uncommitted changes:
 1. Just run `git pull`
 
-## Step 2: Report summary
+## Step 2: Merge main into current branch
+
+Skip this step if the current branch IS main.
+
+1. Run `git fetch origin main`
+2. Check if there are new commits on main that aren't in the current branch: `git log HEAD..origin/main --oneline`
+3. If there are no new commits, report "Already up to date with main." and skip to Step 3.
+4. If there are new commits, run `git merge origin/main`
+5. If the merge fails with conflicts, run `git status` and report the conflicting files. Tell the user to resolve the merge conflicts manually. Stop here.
+
+## Step 3: Report summary
 
 Run `git log --oneline -5` to show recent commits. Report:
 - How many new commits were pulled (if any)
