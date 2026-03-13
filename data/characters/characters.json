@@ -793,6 +793,10 @@
         "move_id": "binding_hex"
       },
       {
+        "level": 5,
+        "move_id": "venom_cloud"
+      },
+      {
         "level": 7,
         "move_id": "venom_fang"
       }
