@@ -15,7 +15,7 @@ func _ready() -> void:
 
 
 func _load_all_data() -> void:
-	_load_creatures("res://data/characters/characters.json")
+	_load_creatures("res://data/creatures/creatures.json")
 	_load_moves("res://data/moves/moves.json")
 	_load_encounter_tables("res://data/maps/")
 	_load_json_into("res://data/items/items.json", _items)
@@ -28,15 +28,12 @@ func _load_all_data() -> void:
 
 
 func _load_creatures(path: String) -> void:
-	## Only store entries that have creature stats (base_hp).
-	## characters.json also contains dialogue-only NPC entries; those are
-	## handled by DialogueManager and must not pollute the creatures dict.
+	## Load all entries from creatures.json — every entry here is a creature.
+	## Dialogue and NPC presentation data live in data/characters/characters.json
+	## and are handled exclusively by DialogueManager.
 	var data = _load_json(path)
 	if data is Dictionary:
-		for key in data:
-			var entry: Dictionary = data[key]
-			if entry.has("base_hp"):
-				_creatures[key] = entry
+		_creatures.merge(data)
 
 
 func _load_moves(path: String) -> void:

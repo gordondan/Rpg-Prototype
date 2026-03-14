@@ -54,7 +54,7 @@ func _load_dialogue_data() -> void:
 			dialogue_entry["sprite"] = character.get("npc_sprite", "")
 			_dialogue_data[dialogue_id] = dialogue_entry
 
-	print("[DialogueManager] Loaded %d dialogue entries from characters.json" % _dialogue_data.size())
+	print("[DialogueManager] Loaded %d dialogue entries from data/characters/characters.json" % _dialogue_data.size())
 
 
 # ─── Public API ──────────────────────────────────────────────────

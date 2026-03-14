@@ -1,156 +1,7 @@
 {
-  "flame_squire": {
-    "name": "Flame Squire",
-    "description": "A young knight-in-training who wields a blazing short sword. Eager to prove themselves in battle.",
-    "types": [
-      "fire"
-    ],
-    "base_hp": 44,
-    "base_attack": 52,
-    "base_defense": 43,
-    "base_sp_attack": 60,
-    "base_sp_defense": 50,
-    "base_speed": 65,
-    "base_exp": 62,
-    "class": "warrior",
-    "evolution": {
-      "creature_id": "inferno_knight",
-      "level": 16,
-      "flavor": "After proving their valor, the Flame Squire is promoted to Inferno Knight."
-    },
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "sword_strike"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 6,
-        "move_id": "fire_bolt"
-      },
-      {
-        "level": 10,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 15,
-        "move_id": "blazing_blade"
-      },
-      {
-        "level": 20,
-        "move_id": "cross_slash"
-      },
-      {
-        "level": 25,
-        "move_id": "inferno"
-      }
-    ],
-    "category": "starter"
-  },
-  "tide_cleric": {
-    "name": "Tide Cleric",
-    "description": "A novice healer from the coastal temples. Commands the power of the sea to protect allies.",
-    "types": [
-      "aqua"
-    ],
-    "base_hp": 50,
-    "base_attack": 48,
-    "base_defense": 55,
-    "base_sp_attack": 55,
-    "base_sp_defense": 52,
-    "base_speed": 43,
-    "base_exp": 63,
-    "class": "cleric",
-    "evolution": {
-      "creature_id": "storm_priest",
-      "level": 16,
-      "flavor": "Through devotion and study, the Tide Cleric rises to become a Storm Priest."
-    },
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 6,
-        "move_id": "water_bolt"
-      },
-      {
-        "level": 10,
-        "move_id": "weaken_armor"
-      },
-      {
-        "level": 15,
-        "move_id": "shadow_bite"
-      },
-      {
-        "level": 20,
-        "move_id": "tidal_rush"
-      },
-      {
-        "level": 25,
-        "move_id": "tidal_wave"
-      }
-    ],
-    "category": "starter"
-  },
   "mischievous_fairy": {
     "name": "Mischievous Fairy",
-    "description": "A tiny, giggling trickster from the Feywild. Impossibly fast and loves playing pranks on anyone foolish enough to wander into the woods.",
-    "types": [
-      "wind"
-    ],
-    "base_hp": 38,
-    "base_attack": 35,
-    "base_defense": 30,
-    "base_sp_attack": 65,
-    "base_sp_defense": 55,
-    "base_speed": 75,
-    "base_exp": 60,
-    "class": "trickster",
-    "evolution": {
-      "creature_id": "archfey_sylph",
-      "level": 18,
-      "flavor": "Having caused enough chaos, the Mischievous Fairy ascends into an Archfey Sylph."
-    },
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "pixie_dust"
-      },
-      {
-        "level": 1,
-        "move_id": "giggle_hex"
-      },
-      {
-        "level": 5,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 9,
-        "move_id": "gale_shot"
-      },
-      {
-        "level": 14,
-        "move_id": "fae_wind"
-      },
-      {
-        "level": 20,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 25,
-        "move_id": "starfall"
-      }
-    ],
-    "category": "starter",
+    "npc_sprite": "res://assets/sprites/npcs/mischievous_fairy_overworld.png",
     "dialogues": {
       "mischievous_fairy": {
         "lines": [
@@ -202,54 +53,11 @@
           }
         ]
       }
-    },
-    "npc_sprite": "res://assets/sprites/npcs/mischievous_fairy_overworld.png"
+    }
   },
   "alexia": {
     "name": "Alexia the Ranger",
-    "description": "A seasoned elven ranger who patrols the roads alone. Deadly accurate with a bow and quicker than anyone expects.",
-    "types": [
-      "wind"
-    ],
-    "base_hp": 52,
-    "base_attack": 62,
-    "base_defense": 45,
-    "base_sp_attack": 38,
-    "base_sp_defense": 48,
-    "base_speed": 72,
-    "base_exp": 70,
-    "class": "ranger",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 5,
-        "move_id": "gale_shot"
-      },
-      {
-        "level": 10,
-        "move_id": "cross_slash"
-      },
-      {
-        "level": 15,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 20,
-        "move_id": "starfall"
-      },
-      {
-        "level": 28,
-        "move_id": "fae_wind"
-      }
-    ],
-    "category": "npc",
+    "npc_sprite": "res://assets/sprites/npcs/female_elf_overworld_aggressive.png",
     "dialogues": {
       "alexia_ranger": {
         "lines": [
@@ -313,44 +121,11 @@
           }
         ]
       }
-    },
-    "npc_sprite": "res://assets/sprites/npcs/female_elf_overworld_aggressive.png"
+    }
   },
   "zacharias": {
     "name": "Zacharias Lightningsworn",
-    "description": "A cunning rogue who channels stolen lightning through gemstone daggers. Commands a gang of spark thieves with sharp wit and sharper blades.",
-    "types": [
-      "storm"
-    ],
-    "base_hp": 35,
-    "base_attack": 40,
-    "base_defense": 30,
-    "base_sp_attack": 50,
-    "base_sp_defense": 35,
-    "base_speed": 60,
-    "base_exp": 55,
-    "class": "rogue",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 4,
-        "move_id": "shock_bolt"
-      },
-      {
-        "level": 8,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 12,
-        "move_id": "lightning_stab"
-      }
-    ],
-    "category": "npc",
-    "has_overworld_sprite": false,
-    "has_battle_sprite": true,
+    "npc_sprite": "res://assets/sprites/npcs/zacharias_overworld.png",
     "dialogues": {
       "zacharias": {
         "lines": [
@@ -414,56 +189,11 @@
           }
         ]
       }
-    },
-    "npc_sprite": "res://assets/sprites/npcs/zacharias_overworld.png"
+    }
   },
   "aqua_monk": {
     "name": "Aqua Monk",
-    "description": "A wandering monk who channels the flow of water through disciplined combat. Calm in battle, devastating in motion.",
-    "types": [
-      "aqua"
-    ],
-    "base_hp": 55,
-    "base_attack": 58,
-    "base_defense": 60,
-    "base_sp_attack": 62,
-    "base_sp_defense": 65,
-    "base_speed": 55,
-    "base_exp": 68,
-    "class": "monk",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 1,
-        "move_id": "water_bolt"
-      },
-      {
-        "level": 5,
-        "move_id": "iron_guard"
-      },
-      {
-        "level": 10,
-        "move_id": "tidal_rush"
-      },
-      {
-        "level": 15,
-        "move_id": "weaken_armor"
-      },
-      {
-        "level": 20,
-        "move_id": "tidal_wave"
-      },
-      {
-        "level": 28,
-        "move_id": "war_cry"
-      }
-    ],
-    "category": "npc",
-    "has_overworld_sprite": true,
-    "has_battle_sprite": true,
+    "npc_sprite": "res://assets/sprites/npcs/aqua_monk_overworld.png",
     "dialogues": {
       "aqua_monk": {
         "lines": [
@@ -515,862 +245,10 @@
           }
         ]
       }
-    },
-    "npc_sprite": "res://assets/sprites/npcs/aqua_monk_overworld.png"
-  },
-  "grove_druid": {
-    "name": "Grove Druid",
-    "description": "An apprentice of the ancient forest order. Draws power from the earth and living things.",
-    "types": [
-      "nature"
-    ],
-    "base_hp": 50,
-    "base_attack": 49,
-    "base_defense": 55,
-    "base_sp_attack": 55,
-    "base_sp_defense": 55,
-    "base_speed": 40,
-    "base_exp": 64,
-    "class": "druid",
-    "evolution": {
-      "creature_id": "elder_warden",
-      "level": 16,
-      "flavor": "Bonded deeply with nature, the Grove Druid becomes an Elder Warden."
-    },
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 6,
-        "move_id": "thorn_lash"
-      },
-      {
-        "level": 10,
-        "move_id": "life_drain"
-      },
-      {
-        "level": 15,
-        "move_id": "leaf_barrage"
-      },
-      {
-        "level": 20,
-        "move_id": "slumber_spore"
-      },
-      {
-        "level": 25,
-        "move_id": "solar_wrath"
-      }
-    ],
-    "category": "starter"
-  },
-  "spark_thief": {
-    "name": "Spark Thief",
-    "description": "A quick-fingered rogue who channels lightning through stolen gemstones. Found lurking on trade roads.",
-    "types": [
-      "storm"
-    ],
-    "base_hp": 35,
-    "base_attack": 40,
-    "base_defense": 30,
-    "base_sp_attack": 50,
-    "base_sp_defense": 35,
-    "base_speed": 60,
-    "base_exp": 55,
-    "class": "rogue",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.3,
-    "recruit_dialogue": "Heh... you're tougher than you look. Fine, I'll tag along. Could use the coin.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 4,
-        "move_id": "shock_bolt"
-      },
-      {
-        "level": 8,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 12,
-        "move_id": "lightning_stab"
-      }
-    ],
-    "category": "wild"
-  },
-  "goblin_firebomber": {
-    "name": "Goblin Firebomber",
-    "description": "A reckless goblin that hurls crude firebombs at anything that moves. Dangerously unpredictable.",
-    "types": [
-      "no_affinity"
-    ],
-    "base_hp": 40,
-    "base_attack": 45,
-    "base_defense": 35,
-    "base_sp_attack": 35,
-    "base_sp_defense": 35,
-    "base_speed": 50,
-    "base_exp": 50,
-    "class": "monster",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.35,
-    "recruit_dialogue": "Oi! You beat me fair n' square. Fine... I'll throw bombs for YOU now!",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 3,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 5,
-        "move_id": "firebomb"
-      },
-      {
-        "level": 11,
-        "move_id": "swift_strike"
-      }
-    ],
-    "category": "wild"
-  },
-  "stone_sentinel": {
-    "name": "Stone Sentinel",
-    "description": "A stoic guardian in heavy stone armor. Painfully slow but nearly impossible to bring down.",
-    "types": [
-      "construct"
-    ],
-    "base_hp": 45,
-    "base_attack": 55,
-    "base_defense": 70,
-    "base_sp_attack": 25,
-    "base_sp_defense": 40,
-    "base_speed": 20,
-    "base_exp": 58,
-    "class": "guardian",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.2,
-    "recruit_dialogue": "...You have strength. I will guard you, as I once guarded these ruins.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 4,
-        "move_id": "iron_guard"
-      },
-      {
-        "level": 8,
-        "move_id": "boulder_hurl"
-      },
-      {
-        "level": 12,
-        "move_id": "headbutt"
-      }
-    ],
-    "category": "wild"
-  },
-  "goblin_warrior": {
-    "name": "Goblin Warrior",
-    "description": "A battle-hardened goblin that has survived enough fights to earn crude armor and a real blade. Slower than its kin but far harder to put down.",
-    "types": [
-      "poison"
-    ],
-    "base_hp": 50,
-    "base_attack": 60,
-    "base_defense": 48,
-    "base_sp_attack": 20,
-    "base_sp_defense": 35,
-    "base_speed": 40,
-    "base_exp": 55,
-    "class": "monster",
-    "recruitable": false,
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 4,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 8,
-        "move_id": "weaken_armor"
-      },
-      {
-        "level": 12,
-        "move_id": "headbutt"
-      },
-      {
-        "level": 16,
-        "move_id": "cross_slash"
-      }
-    ],
-    "category": "wild",
-    "has_overworld_sprite": false,
-    "has_battle_sprite": false
-  },
-  "goblin": {
-    "name": "Goblin",
-    "description": "A scrappy, foul-tempered creature that attacks travelers on sight. Too wild and treacherous to ever be trusted.",
-    "types": [
-      "poison"
-    ],
-    "base_hp": 38,
-    "base_attack": 42,
-    "base_defense": 32,
-    "base_sp_attack": 25,
-    "base_sp_defense": 30,
-    "base_speed": 52,
-    "base_exp": 38,
-    "class": "monster",
-    "recruitable": false,
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 5,
-        "move_id": "poison_scratch"
-      },
-      {
-        "level": 9,
-        "move_id": "dirty_trick"
-      },
-      {
-        "level": 13,
-        "move_id": "venom_fang"
-      }
-    ],
-    "category": "wild",
-    "has_overworld_sprite": true,
-    "has_battle_sprite": true
-  },
-  "hex_weaver": {
-    "name": "Hex Weaver",
-    "description": "A timid apprentice witch found in the woods. Weaves minor curses and charms from spider silk.",
-    "types": [
-      "witch"
-    ],
-    "base_hp": 40,
-    "base_attack": 35,
-    "base_defense": 40,
-    "base_sp_attack": 30,
-    "base_sp_defense": 40,
-    "base_speed": 45,
-    "base_exp": 40,
-    "class": "witch",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.4,
-    "recruit_dialogue": "P-please don't hurt me anymore! I'll help you, I promise! I know useful spells!",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 3,
-        "move_id": "binding_hex"
-      },
-      {
-        "level": 5,
-        "move_id": "venom_cloud"
-      },
-      {
-        "level": 7,
-        "move_id": "venom_fang"
-      }
-    ],
-    "category": "wild"
-  },
-  "emberclaw_seductress": {
-    "name": "Emberclaw Seductress",
-    "description": "A dangerous demon from the shadow realm who lures wanderers with enchanted flames. Masters of dark fire magic and impossible to resist.",
-    "types": [
-      "shadow",
-      "fire"
-    ],
-    "base_hp": 42,
-    "base_attack": 45,
-    "base_defense": 38,
-    "base_sp_attack": 68,
-    "base_sp_defense": 45,
-    "base_speed": 58,
-    "base_exp": 72,
-    "class": "demon",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.15,
-    "recruit_dialogue": "Hmph... I didn't expect to lose. Very well \u2014 I'll grant you my power. Don't waste it.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      },
-      {
-        "level": 4,
-        "move_id": "shadow_bite"
-      },
-      {
-        "level": 8,
-        "move_id": "fire_bolt"
-      },
-      {
-        "level": 12,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 17,
-        "move_id": "inferno"
-      },
-      {
-        "level": 22,
-        "move_id": "blazing_blade"
-      }
-    ],
-    "category": "wild"
-  },
-  "voidblade_succubus": {
-    "name": "Voidblade Succubus",
-    "description": "A fearsome demon warrior who cleaves through enemies with a blade forged from shadow and hellfire. Encountered only deep in cursed ruins.",
-    "types": [
-      "shadow",
-      "fire"
-    ],
-    "base_hp": 58,
-    "base_attack": 80,
-    "base_defense": 52,
-    "base_sp_attack": 55,
-    "base_sp_defense": 52,
-    "base_speed": 68,
-    "base_exp": 95,
-    "class": "demon",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.08,
-    "recruit_dialogue": "You dare face me and live? ...I respect that. I'll fight alongside you. Once.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "sword_strike"
-      },
-      {
-        "level": 1,
-        "move_id": "shadow_bite"
-      },
-      {
-        "level": 5,
-        "move_id": "blazing_blade"
-      },
-      {
-        "level": 10,
-        "move_id": "cross_slash"
-      },
-      {
-        "level": 16,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 22,
-        "move_id": "inferno"
-      },
-      {
-        "level": 28,
-        "move_id": "inferno"
-      }
-    ],
-    "category": "wild"
-  },
-  "flame_squire_wild": {
-    "name": "Flame Squire",
-    "description": "A young soldier sworn to a fire order. Charges headlong into battle with blade ablaze and no fear in his eyes.",
-    "types": [
-      "fire"
-    ],
-    "base_hp": 55,
-    "base_attack": 60,
-    "base_defense": 55,
-    "base_sp_attack": 35,
-    "base_sp_defense": 40,
-    "base_speed": 45,
-    "base_exp": 60,
-    "class": "knight",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.3,
-    "recruit_dialogue": "You're... stronger than I expected. Maybe I've been fighting for the wrong cause.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "sword_strike"
-      },
-      {
-        "level": 4,
-        "move_id": "fire_bolt"
-      },
-      {
-        "level": 8,
-        "move_id": "iron_guard"
-      },
-      {
-        "level": 14,
-        "move_id": "blazing_blade"
-      },
-      {
-        "level": 20,
-        "move_id": "cross_slash"
-      }
-    ],
-    "category": "wild"
-  },
-  "grove_druid_wild": {
-    "name": "Grove Druid",
-    "description": "An ancient forest hermit who speaks to trees and coaxes spirits from the soil. Slow to anger, but his wrath shakes the roots.",
-    "types": [
-      "nature"
-    ],
-    "base_hp": 48,
-    "base_attack": 30,
-    "base_defense": 45,
-    "base_sp_attack": 62,
-    "base_sp_defense": 55,
-    "base_speed": 38,
-    "base_exp": 65,
-    "class": "druid",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.25,
-    "recruit_dialogue": "The forest shows me your heart. It is... acceptable. I will walk with you a while.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 3,
-        "move_id": "thorn_lash"
-      },
-      {
-        "level": 6,
-        "move_id": "slumber_spore"
-      },
-      {
-        "level": 10,
-        "move_id": "leaf_barrage"
-      },
-      {
-        "level": 14,
-        "move_id": "life_drain"
-      },
-      {
-        "level": 22,
-        "move_id": "solar_wrath"
-      }
-    ],
-    "category": "wild"
-  },
-  "succubus_mage": {
-    "name": "Succubus Mage",
-    "description": "A demon sorceress who commands both dark energy and arcane flame. Her glowing orb holds the power of a fallen star.",
-    "types": [
-      "shadow",
-      "fire"
-    ],
-    "base_hp": 45,
-    "base_attack": 35,
-    "base_defense": 38,
-    "base_sp_attack": 78,
-    "base_sp_defense": 50,
-    "base_speed": 62,
-    "base_exp": 80,
-    "class": "demon",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.12,
-    "recruit_dialogue": "How curious... you have power I can't explain. Very well. I'll study you \u2014 while fighting for you.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "shadow_bite"
-      },
-      {
-        "level": 4,
-        "move_id": "fire_bolt"
-      },
-      {
-        "level": 8,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 13,
-        "move_id": "inferno"
-      },
-      {
-        "level": 20,
-        "move_id": "solar_wrath"
-      }
-    ],
-    "category": "wild"
-  },
-  "succubus_sword": {
-    "name": "Succubus Sword",
-    "description": "A blade-wielding demoness whose dark sword cleaves through iron and spirit alike. Ruthless in combat and impossible to outrun.",
-    "types": [
-      "shadow",
-      "fire"
-    ],
-    "base_hp": 52,
-    "base_attack": 72,
-    "base_defense": 50,
-    "base_sp_attack": 42,
-    "base_sp_defense": 48,
-    "base_speed": 58,
-    "base_exp": 78,
-    "class": "demon",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.12,
-    "recruit_dialogue": "You actually drew blood. I haven't felt that in centuries. Impressive. I'll follow your blade.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "sword_strike"
-      },
-      {
-        "level": 1,
-        "move_id": "shadow_bite"
-      },
-      {
-        "level": 5,
-        "move_id": "blazing_blade"
-      },
-      {
-        "level": 11,
-        "move_id": "cross_slash"
-      },
-      {
-        "level": 16,
-        "move_id": "smoke_bomb"
-      },
-      {
-        "level": 22,
-        "move_id": "inferno"
-      }
-    ],
-    "category": "wild"
-  },
-  "tide_cleric_wild": {
-    "name": "Tide Cleric",
-    "description": "A devout cleric of the tidal order who channels the ocean's fury and its calming depths. Healers by nature, terrors in battle.",
-    "types": [
-      "aqua"
-    ],
-    "base_hp": 50,
-    "base_attack": 35,
-    "base_defense": 45,
-    "base_sp_attack": 65,
-    "base_sp_defense": 60,
-    "base_speed": 42,
-    "base_exp": 68,
-    "class": "cleric",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.28,
-    "recruit_dialogue": "The tide wills it. I will lend my power to your cause \u2014 but I won't abandon my faith.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 3,
-        "move_id": "water_bolt"
-      },
-      {
-        "level": 7,
-        "move_id": "tidal_rush"
-      },
-      {
-        "level": 12,
-        "move_id": "iron_guard"
-      },
-      {
-        "level": 18,
-        "move_id": "tidal_wave"
-      }
-    ],
-    "category": "wild"
-  },
-  "giant_bat": {
-    "name": "Giant Bat",
-    "description": "A massive cave bat that hunts at night. Its wingspan can blot out the moon, and its screech splits stone.",
-    "types": [
-      "wind",
-      "shadow"
-    ],
-    "base_hp": 42,
-    "base_attack": 50,
-    "base_defense": 30,
-    "base_sp_attack": 35,
-    "base_sp_defense": 38,
-    "base_speed": 72,
-    "base_exp": 48,
-    "class": "beast",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.3,
-    "recruit_dialogue": "*screeches and lands on your shoulder*",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 4,
-        "move_id": "shadow_bite"
-      },
-      {
-        "level": 8,
-        "move_id": "gale_shot"
-      },
-      {
-        "level": 14,
-        "move_id": "fae_wind"
-      }
-    ],
-    "category": "wild"
-  },
-  "orc_battleaxman": {
-    "name": "Orc Battleaxman",
-    "description": "A hulking orc warrior who wields a double-headed battleaxe like most wield a twig. Once he starts swinging, very little stops him.",
-    "types": [
-      "warrior"
-    ],
-    "base_hp": 65,
-    "base_attack": 75,
-    "base_defense": 55,
-    "base_sp_attack": 25,
-    "base_sp_defense": 40,
-    "base_speed": 28,
-    "base_exp": 72,
-    "class": "warrior",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.2,
-    "recruit_dialogue": "Ugh. You hit like a rock troll. Fine \u2014 I'll fight under your banner. Don't make me regret it.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 3,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 7,
-        "move_id": "boulder_hurl"
-      },
-      {
-        "level": 12,
-        "move_id": "headbutt"
-      },
-      {
-        "level": 18,
-        "move_id": "cross_slash"
-      }
-    ],
-    "category": "wild"
-  },
-  "ork_grunt": {
-    "name": "Ork Grunt",
-    "description": "A rowdy ork foot soldier who charges in swinging a spiked club. Not clever, but doesn't need to be.",
-    "types": [
-      "no_affinity"
-    ],
-    "base_hp": 58,
-    "base_attack": 62,
-    "base_defense": 48,
-    "base_sp_attack": 20,
-    "base_sp_defense": 35,
-    "base_speed": 32,
-    "base_exp": 52,
-    "class": "warrior",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.25,
-    "recruit_dialogue": "You strong. Grunt follow strong one. That is ork way.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "staff_bash"
-      },
-      {
-        "level": 3,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 8,
-        "move_id": "headbutt"
-      },
-      {
-        "level": 13,
-        "move_id": "weaken_armor"
-      }
-    ],
-    "category": "wild"
-  },
-  "ork_warrior": {
-    "name": "Ork Warrior",
-    "description": "A seasoned ork swordsman hardened by years of battle. Smarter and deadlier than the average grunt.",
-    "types": [
-      "no_affinity"
-    ],
-    "base_hp": 55,
-    "base_attack": 65,
-    "base_defense": 52,
-    "base_sp_attack": 25,
-    "base_sp_defense": 42,
-    "base_speed": 38,
-    "base_exp": 62,
-    "class": "warrior",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.22,
-    "recruit_dialogue": "You fight with purpose. A rare thing. I can respect that \u2014 and fight alongside it.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "sword_strike"
-      },
-      {
-        "level": 4,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 8,
-        "move_id": "weaken_armor"
-      },
-      {
-        "level": 13,
-        "move_id": "cross_slash"
-      },
-      {
-        "level": 18,
-        "move_id": "headbutt"
-      }
-    ],
-    "category": "wild"
-  },
-  "wind_scout": {
-    "name": "Elven Bandit",
-    "description": "A swift ranger who rides the gales. Scouts ahead of caravans and strikes from above.",
-    "types": [
-      "wind"
-    ],
-    "base_hp": 40,
-    "base_attack": 47,
-    "base_defense": 35,
-    "base_sp_attack": 35,
-    "base_sp_defense": 35,
-    "base_speed": 70,
-    "base_exp": 52,
-    "class": "ranger",
-    "recruit_method": "defeat",
-    "recruit_chance": 0.25,
-    "recruit_dialogue": "You caught me? Impressive speed. I'll fly with you \u2014 for now.",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "swift_strike"
-      },
-      {
-        "level": 1,
-        "move_id": "war_cry"
-      },
-      {
-        "level": 5,
-        "move_id": "gale_shot"
-      },
-      {
-        "level": 10,
-        "move_id": "cross_slash"
-      }
-    ],
-    "category": "wild"
-  },
-  "new_creature_1": {
-    "name": "Dancing Villager",
-    "description": "Dance dance dance",
-    "types": [
-      "normal"
-    ],
-    "base_hp": 200,
-    "base_attack": 200,
-    "base_defense": 200,
-    "base_sp_attack": 200,
-    "base_sp_defense": 200,
-    "base_speed": 200,
-    "base_exp": 50,
-    "class": "monster",
-    "category": "wild",
-    "learnset": []
-  },
-  "new_creature_2": {
-    "name": "The Loki",
-    "description": "Dog Gone",
-    "types": [
-      "normal"
-    ],
-    "base_hp": 200,
-    "base_attack": 200,
-    "base_defense": 200,
-    "base_sp_attack": 200,
-    "base_sp_defense": 200,
-    "base_speed": 200,
-    "base_exp": 50,
-    "class": "monster",
-    "category": "wild",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "new_move_1"
-      },
-      {
-        "level": 1,
-        "move_id": "dirty_trick"
-      },
-      {
-        "level": 1,
-        "move_id": "dagger_jab"
-      }
-    ],
-    "has_overworld_sprite": true,
-    "has_battle_sprite": true
+    }
   },
   "village_guard": {
     "name": "Village Guard",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/town_guard.png",
     "dialogues": {
       "village_guard": {
@@ -1425,18 +303,6 @@
   },
   "old_scholar": {
     "name": "Old Scholar",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/old_scholar.png",
     "dialogues": {
       "old_scholar": {
@@ -1459,18 +325,6 @@
   },
   "tavern_keeper": {
     "name": "Tavern Keeper",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/tavernkeeper.png",
     "dialogues": {
       "tavern_keeper": {
@@ -1529,18 +383,6 @@
   },
   "elara": {
     "name": "Elara",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/female_elf_overworld.png",
     "dialogues": {
       "elara": {
@@ -1579,18 +421,6 @@
   },
   "sylwen": {
     "name": "Sylwen",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/female_elf_overworld_rear.png",
     "dialogues": {
       "sylwen": {
@@ -1653,18 +483,6 @@
   },
   "mysterious_stranger": {
     "name": "???",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/mysterious_stranger.png",
     "dialogues": {
       "mysterious_stranger": {
@@ -1687,18 +505,6 @@
   },
   "village_merchant": {
     "name": "Village Merchant",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/merchant_npc.png",
     "dialogues": {
       "village_merchant": {
@@ -1708,18 +514,6 @@
   },
   "mog": {
     "name": "Mog",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/mog_overworld.png",
     "dialogues": {
       "mog": {
@@ -1750,18 +544,6 @@
   },
   "grix": {
     "name": "Grix",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/goblin_overworld.png",
     "dialogues": {
       "grix": {
@@ -1792,18 +574,6 @@
   },
   "skrag": {
     "name": "Skrag",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/goblin_overworld.png",
     "dialogues": {
       "skrag": {
@@ -1834,18 +604,6 @@
   },
   "urk": {
     "name": "Urk",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/goblin_overworld.png",
     "dialogues": {
       "urk": {
@@ -1876,18 +634,6 @@
   },
   "zog": {
     "name": "Zog",
-    "description": "",
-    "types": [],
-    "base_hp": 0,
-    "base_attack": 0,
-    "base_defense": 0,
-    "base_sp_attack": 0,
-    "base_sp_defense": 0,
-    "base_speed": 0,
-    "base_exp": 0,
-    "class": "npc",
-    "category": "npc",
-    "learnset": [],
     "npc_sprite": "res://assets/sprites/npcs/mog_overworld.png",
     "dialogues": {
       "zog": {
@@ -1924,56 +670,8 @@
       }
     }
   },
-  "new_creature_3": {
-    "name": "Bad news Rabbit",
-    "description": "What a rabbit!? 1,2 5",
-    "types": [
-      "normal"
-    ],
-    "base_hp": 50,
-    "base_attack": 50,
-    "base_defense": 50,
-    "base_sp_attack": 50,
-    "base_sp_defense": 50,
-    "base_speed": 50,
-    "base_exp": 50,
-    "class": "monster",
-    "category": "wild",
-    "learnset": [
-      {
-        "level": 1,
-        "move_id": "dirty_trick"
-      }
-    ],
-    "has_overworld_sprite": false,
-    "has_battle_sprite": false
-  },
-
   "morginson": {
     "name": "Morginson",
-    "description": "A massive ogre warlord who has carved a path of destruction through the countryside. His iron fists have toppled walls and broken armies. Villages whisper his name in fear.",
-    "types": [
-      "no_affinity"
-    ],
-    "base_hp": 92,
-    "base_attack": 88,
-    "base_defense": 72,
-    "base_sp_attack": 45,
-    "base_sp_defense": 48,
-    "base_speed": 28,
-    "base_exp": 160,
-    "class": "warlord",
-    "category": "npc",
-    "learnset": [
-      { "level": 1,  "move_id": "headbutt"    },
-      { "level": 1,  "move_id": "war_cry"     },
-      { "level": 5,  "move_id": "ogre_smash"  },
-      { "level": 10, "move_id": "terror_roar" },
-      { "level": 12, "move_id": "iron_hide"   },
-      { "level": 15, "move_id": "ground_slam" }
-    ],
-    "has_overworld_sprite": true,
-    "has_battle_sprite": true,
     "npc_sprite": "res://assets/sprites/creatures/morginson.png",
     "dialogues": {
       "morginson": {
@@ -2003,7 +701,7 @@
             "speaker": "Morginson"
           },
           {
-            "text": "Go. Take your victory. But know that these lands are not safe — Morginson is only the beginning of what roams this wilderness.",
+            "text": "Go. Take your victory. But know that these lands are not safe \u2014 Morginson is only the beginning of what roams this wilderness.",
             "speaker": "Morginson"
           }
         ]

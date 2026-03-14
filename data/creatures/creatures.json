@@ -557,6 +557,10 @@
         "move_id": "binding_hex"
       },
       {
+        "level": 5,
+        "move_id": "venom_cloud"
+      },
+      {
         "level": 7,
         "move_id": "venom_fang"
       }
@@ -1100,11 +1104,227 @@
     "base_exp": 50,
     "class": "monster",
     "category": "wild",
-    "learnset": [],
+    "learnset": [
+      {
+        "level": 1,
+        "move_id": "new_move_1"
+      },
+      {
+        "level": 1,
+        "move_id": "dirty_trick"
+      },
+      {
+        "level": 1,
+        "move_id": "dagger_jab"
+      }
+    ],
+    "has_overworld_sprite": true,
+    "has_battle_sprite": true
+  },
+  "village_guard": {
+    "name": "Village Guard",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "old_scholar": {
+    "name": "Old Scholar",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "tavern_keeper": {
+    "name": "Tavern Keeper",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "elara": {
+    "name": "Elara",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "sylwen": {
+    "name": "Sylwen",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "mysterious_stranger": {
+    "name": "???",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "village_merchant": {
+    "name": "Village Merchant",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "mog": {
+    "name": "Mog",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "grix": {
+    "name": "Grix",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "skrag": {
+    "name": "Skrag",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "urk": {
+    "name": "Urk",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "zog": {
+    "name": "Zog",
+    "description": "",
+    "types": [],
+    "base_hp": 0,
+    "base_attack": 0,
+    "base_defense": 0,
+    "base_sp_attack": 0,
+    "base_sp_defense": 0,
+    "base_speed": 0,
+    "base_exp": 0,
+    "class": "npc",
+    "category": "npc",
+    "learnset": []
+  },
+  "new_creature_3": {
+    "name": "Bad news Rabbit",
+    "description": "What a rabbit!? 1,2 5",
+    "types": [
+      "normal"
+    ],
+    "base_hp": 50,
+    "base_attack": 50,
+    "base_defense": 50,
+    "base_sp_attack": 50,
+    "base_sp_defense": 50,
+    "base_speed": 50,
+    "base_exp": 50,
+    "class": "monster",
+    "category": "wild",
+    "learnset": [
+      {
+        "level": 1,
+        "move_id": "dirty_trick"
+      }
+    ],
     "has_overworld_sprite": false,
     "has_battle_sprite": false
   },
-
   "morginson": {
     "name": "Morginson",
     "description": "A massive ogre warlord who has carved a path of destruction through the countryside. His iron fists have toppled walls and broken armies. Villages whisper his name in fear.",
@@ -1119,6 +1339,7 @@
     "base_speed": 28,
     "base_exp": 160,
     "class": "warlord",
+    "category": "npc",
     "learnset": [
       {
         "level": 1,
@@ -1145,7 +1366,6 @@
         "move_id": "ground_slam"
       }
     ],
-    "category": "npc",
     "has_overworld_sprite": true,
     "has_battle_sprite": true
   }
